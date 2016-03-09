@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?><note class="filter" maintenanceversion="1.4" replicaid="05257F710059B13D" version="9.0" xmlns="http://www.lotus.com/dxl">
+<noteinfo noteid="14e" sequence="10" unid="F2F80E4660E8E91285257747006AD2F0">
+<created><datetime dst="true">20100619T152648,16-04</datetime></created>
+<modified><datetime>20160309T111941,68-05</datetime></modified>
+<revised><datetime dst="true">20141110T172616,34-04</datetime></revised>
+<lastaccessed><datetime>20160309T111941,67-05</datetime></lastaccessed>
+<addedtofile><datetime>20160309T111941,67-05</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Jesse Gallagher/O=Frost</name><name>CN=Jesse Gallagher/O=IKSG</name></updatedby>
+<wassignedby><name>CN=Jesse Gallagher/O=IKSG</name></wassignedby>
+<item name="$DesignerVersion" sign="true"><text>7</text></item>
+<item name="$TITLE" sign="true"><text>Progress Bar</text></item>
+<item name="$Flags"><text>s34Q</text></item>
+<item name="$PublicAccess" sign="true"><text>1</text></item>
+
+
+<item name="$POID"><datetime>20130122T145537,01-05</datetime></item></note>

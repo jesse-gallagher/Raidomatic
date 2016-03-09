@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom">
+
+	<xp:div styleClass="#{compositeData.styleClass}" id="sidebar">
+		<div dojoType="dijit.layout.TabContainer" doLayout="false" tabBar="false">
+			<xp:repeat var="groupIndex" value="#{topic.eventGroups}">
+				<div dojoType="dijit.layout.ContentPane" title="#{groupIndex+1}">
+					<xc:sidebar_section renderBody="false">
+						<xp:this.facets>
+							<xp:text xp:key="header" disableTheme="true"
+								value="#{javascript:topic.signups.getSelectedCount(groupIndex+1)}">
+								<xp:this.converter>
+									<xp:customConverter
+										getAsObject="#{javascript:value}"
+										getAsString="#{javascript:value + ' Player' + (value == 1 ? '' : 's')}" />
+								</xp:this.converter>
+							</xp:text>
+						</xp:this.facets>
+					</xc:sidebar_section>
+			
+			
+					<xc:charlist sectionClass="tanks" title="Tanks" tag="PLS"
+						value="#{javascript:topic.signups.findByRole('Tank', true, groupIndex+1)}" />
+					<xc:charlist sectionClass="healers" title="Healers" tag="PLS"
+						value="#{javascript:topic.signups.findByRole('Healer', true, groupIndex+1)}" />
+					<xc:charlist sectionClass="dps" title="DPS" tag="PLS"
+						value="#{javascript:topic.signups.findByRole('DPS', true, groupIndex+1)}" />
+			
+<!--					<xc:sidebar_section sectionClass="buffs" bodyClass="bufflist">-->
+<!--						<xp:this.facets>-->
+<!--							<xp:text xp:key="header" disableTheme="true"-->
+<!--								value="Buffs" />-->
+<!--						</xp:this.facets>-->
+<!--						<xp:repeat var="buff">-->
+<!--							<xp:this.value><![CDATA[#{javascript:-->
+<!--								var buffs = @DbLookup(['', 'wow/common.nsf'], 'Buffs', 'Buff', 7)-->
+<!--								buffs = typeof buffs == 'string' ? [buffs] : buffs-->
+<!--								-->
+<!--								var result = []-->
+<!--								for(var buffIndex = 0; buffIndex < buffs.length; buffIndex++) {-->
+<!--									var buffInfo = buffs[buffIndex]-->
+<!--									buffInfo = eval("(" + buffInfo + ")")-->
+<!--									result.push({-->
+<!--										name: buffInfo.name,-->
+<!--										required: @IsMember("Required", buffInfo.traits),-->
+<!--										items: @IsMember("Items", buffInfo.traits),-->
+<!--										provided: topic.signups.providesBuff(buffInfo.unid, groupIndex+1)-->
+<!--									})-->
+<!--								}-->
+<!--								return result-->
+<!--							}]]></xp:this.value>-->
+<!--							<xp:div styleClass="#{javascript: buff.provided == 2 ? 'active' : buff.items || buff.provided == 1 ? 'maybe' : 'inactive'}">-->
+<!--								<xp:image-->
+<!--									url="#{javascript: buff.provided == 2 ? '/active.gif' : buff.items || buff.provided == 1 ? '/maybe.gif' : '/inactive.gif'}" />-->
+<!--								<xp:text value="#{buff.name}" />-->
+<!--							</xp:div>-->
+<!--						</xp:repeat>-->
+<!--					</xc:sidebar_section>-->
+<!--			-->
+<!--					<xc:sidebar_section sectionClass="buffs debuffs" bodyClass="bufflist">-->
+<!--						<xp:this.facets>-->
+<!--							<xp:text xp:key="header" disableTheme="true"-->
+<!--								value="Debuffs" />-->
+<!--						</xp:this.facets>-->
+<!--						<xp:repeat var="buff">-->
+<!--							<xp:this.value><![CDATA[#{javascript:-->
+<!--								var buffs = @DbLookup(['', 'wow/common.nsf'], 'Buffs', 'Debuff', 7)-->
+<!--								buffs = typeof buffs == 'string' ? [buffs] : buffs-->
+<!--								-->
+<!--								var result = []-->
+<!--								for(var buffIndex = 0; buffIndex < buffs.length; buffIndex++) {-->
+<!--									var buffInfo = buffs[buffIndex]-->
+<!--									buffInfo = eval("(" + buffInfo + ")")-->
+<!--									result.push({-->
+<!--										name: buffInfo.name,-->
+<!--										required: @IsMember("Required", buffInfo.traits),-->
+<!--										items: @IsMember("Items", buffInfo.traits),-->
+<!--										provided: topic.signups.providesBuff(buffInfo.unid, groupIndex+1)-->
+<!--									})-->
+<!--								}-->
+<!--								return result-->
+<!--							}]]></xp:this.value>-->
+<!--							<xp:div styleClass="#{javascript: buff.provided == 2 ? 'active' : buff.items || buff.provided == 1 ? 'maybe' : 'inactive'}">-->
+<!--								<xp:image-->
+<!--									url="#{javascript: buff.provided == 2 ? '/active.gif' : buff.items || buff.provided == 1 ? '/maybe.gif' : '/inactive.gif'}" />-->
+<!--								<xp:text value="#{buff.name}" />-->
+<!--							</xp:div>-->
+<!--						</xp:repeat>-->
+<!--					</xc:sidebar_section>-->
+<!--			-->
+<!--					<xc:sidebar_section sectionClass="buffs special" bodyClass="bufflist">-->
+<!--						<xp:this.facets>-->
+<!--							<xp:text xp:key="header" disableTheme="true"-->
+<!--								value="Special" />-->
+<!--						</xp:this.facets>-->
+<!--						<xp:repeat var="buff">-->
+<!--							<xp:this.value><![CDATA[#{javascript:-->
+<!--								var buffs = @DbLookup(['', 'wow/common.nsf'], 'Buffs', 'Special', 7)-->
+<!--								buffs = typeof buffs == 'string' ? [buffs] : buffs-->
+<!--								-->
+<!--								var result = []-->
+<!--								for(var buffIndex = 0; buffIndex < buffs.length; buffIndex++) {-->
+<!--									var buffInfo = buffs[buffIndex]-->
+<!--									buffInfo = eval("(" + buffInfo + ")")-->
+<!--									result.push({-->
+<!--										name: buffInfo.name,-->
+<!--										required: @IsMember("Required", buffInfo.traits),-->
+<!--										items: @IsMember("Items", buffInfo.traits),-->
+<!--										count: topic.signups.providesBuffCount(buffInfo.unid),-->
+<!--										sometimesCount: topic.signups.sometimesProvidesBuffCount(buffInfo.unid, groupIndex+1)-->
+<!--									})-->
+<!--								}-->
+<!--								return result-->
+<!--							}]]></xp:this.value>-->
+<!--							<xp:div styleClass="inactive">-->
+<!--								<span class="count">-->
+<!--									<xc:integer value="#{buff.count}"/>-->
+<!--									<xp:span rendered="#{buff.sometimesCount &gt; 0}">-->
+<!--										&#160;(<xc:integer value="#{buff.sometimesCount}"/>)-->
+<!--									</xp:span>-->
+<!--								</span>-->
+<!--								<xp:text value="#{buff.name}" />-->
+<!--							</xp:div>-->
+<!--						</xp:repeat>-->
+<!--					</xc:sidebar_section>-->
+				</div>
+			</xp:repeat>
+		</div>
+		
+
+	</xp:div>
+</xp:view>

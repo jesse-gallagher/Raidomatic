@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom" xmlns:xe="http://www.ibm.com/xsp/coreex" pageTitle="Application">
+
+	<xp:this.beforePageLoad><![CDATA[#{javascript:
+		viewScope.put("appData", {})
+	}]]></xp:this.beforePageLoad>
+	
+	
+	<xp:this.resources>
+		<xp:styleSheet href="/application.css"></xp:styleSheet>
+		<xp:script src="/spinner.js" clientSide="true"></xp:script>
+	</xp:this.resources>
+	
+	<xc:Layout>
+		<h1>Guild Application</h1>
+		
+		<iframe width="425" height="349" src="http://www.youtube.com/embed/LFsKhTE14iY" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+		
+		<xp:div styleClass="questionBlock" id="desiredUsernameBlock">
+			<xp:div styleClass="question">Desired Username:</xp:div>
+			<xp:div styleClass="field">
+				<xp:inputText value="#{appData.desiredUsername}" id="desiredUsername">
+					<xp:eventHandler event="onkeyup" submit="true" refreshMode="partial" refreshId="nameInUseBlock" execMode="partial">
+						<xp:this.onStart>spinner(document.getElementById("#{id:nameInUseBlock}"), {insideCaller: true})</xp:this.onStart>
+<!--						<xp:this.onComplete>var spinnerImg = document.getElementById("nameInUseSpinner"); spinnerImg.remove()</xp:this.onComplete>-->
+					</xp:eventHandler>
+				</xp:inputText>
+				<xp:span id="nameInUseBlock">
+					<xp:text styleClass="nameInUse" value="That name is in use">
+						<xp:this.rendered><![CDATA[#{javascript:
+							var names = sessionAsSigner.getDatabase("", "wownames")
+							var lookup = names.getView("($NamesFieldLookup)")
+							var value = getComponent("desiredUsername").value == null ? "" : getComponent("desiredUsername").value
+							return lookup.getDocumentByKey(value, true) != null
+						}]]></xp:this.rendered>
+					</xp:text>
+				</xp:span>
+			</xp:div>
+		</xp:div>
+		<xp:div styleClass="desiredPassword" id="desiredPasswordBlock">
+			<xp:div styleClass="question">Desired Password:</xp:div>
+			<xp:div styleClass="field">
+				<xp:inputText value="#{appData.desiredPassword}"
+					password="true">
+				</xp:inputText>
+			</xp:div>
+		</xp:div>
+		
+		<xp:panel>
+			<xp:this.data>
+				<xp:dominoView var="questions" viewName="Application Questions"/>
+			</xp:this.data>
+			<xp:repeat value="#{questions}" var="question" rows="1000">
+				<xp:div styleClass="questionBlock">
+					<xp:div styleClass="question"><xp:label for="field" value="#{question.Question}"></xp:label></xp:div>
+					<xp:div styleClass="field">
+						<xp:inputTextarea id="field" value="#{viewScope.appData[question.FieldName]}"/>
+					</xp:div>
+				</xp:div>
+			</xp:repeat>
+		</xp:panel>
+		
+		<xp:button id="savePost" value="Submit Application">
+			<xp:eventHandler event="onclick" submit="true"
+				refreshMode="complete" immediate="false" save="true">
+				<xp:this.action>
+					<xp:executeScript>
+						<xp:this.script><![CDATA[#{javascript:
+						var topic = new com.raidomatic.forum.model.Topic()
+						topic.setForumId(Configuration.getDocumentItemValue("Forum Options", "ForumApplicationsTargetForum")[0]);
+						topic.setTitle("New guild application from '" + viewScope.appData.desiredUsername + "'");
+						topic.setApplicationResponse("DesiredUsername", viewScope.appData.desiredUsername);
+						topic.setApplicationResponse("DesiredPassword", viewScope.appData.desiredPassword);
+						for(var appQuestion in viewScope.appData) {
+							topic.setApplicationResponse(appQuestion, viewScope.appData[appQuestion]);
+						}
+						topic.setEventDate(null);
+						topic.setEventTitle("");
+						topic.setEventType("");
+						topic.setApplicationStatus("New Application");
+						topic.save();
+						
+						var post = new com.raidomatic.forum.model.Post();
+						post.setTopicId(topic.getId());
+						post.setForumId(topic.getForumId());
+						post.setTitle("New guild application from '" + viewScope.appData.desiredUsername + "'");
+						post.save();
+						
+						facesContext.getExternalContext().redirect("/" + database.getFilePath().replace("\\", "/") + "/Forums.xsp");
+					}]]></xp:this.script>
+					</xp:executeScript>
+				</xp:this.action>
+			</xp:eventHandler>
+		</xp:button>
+	</xc:Layout>
+</xp:view>

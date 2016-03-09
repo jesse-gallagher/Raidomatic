@@ -1,0 +1,7 @@
+.questionBlock { margin: 1em 0 }
+.question { margin-bottom: 0.5em }
+.field { margin-left: 1em }
+.field textarea {
+	width: 40em;
+	height: 5em;
+}

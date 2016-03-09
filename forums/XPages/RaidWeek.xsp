@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom" pageTitle="Raid Week">
+
+	<xp:this.beforePageLoad><![CDATA[#{javascript:
+		/* Determine the raid week we're talking about, defaulting to the one starting this coming Tuesday */
+		var firstDay;
+		if(!param.firstDay) {
+			firstDay = @Today();
+			while(@Weekday(firstDay) != 3) {
+				firstDay = @Adjust(firstDay, 0, 0, 1, 0, 0, 0);
+			}
+		} else {
+			firstDay = @Date(session.createDateTime(param.firstDay).toJavaDate());
+		}
+		
+		var raids = [];
+		var groups = 0;
+		var raidDays = [];
+		for(var i = 0; i < 6; i++) {
+			var currentDay = @Adjust(firstDay, 0, 0, i, 0, 0, 0);
+			var dayRaids = Topics.getTopicsForEventDay(currentDay);
+			for(var j = 0; j < dayRaids.length; j++) {
+				if(dayRaids[j].eventType == "Raid") {
+					raids.push(dayRaids[j]);
+					if(dayRaids[j].eventGroups > groups) { groups = dayRaids[j].eventGroups; }
+				}
+			}
+		}
+		
+		viewScope.put("firstDay", firstDay);
+		viewScope.put("raids", raids);
+		viewScope.put("groups", groups);
+	}]]></xp:this.beforePageLoad>
+
+	<xc:Layout>
+	
+		<xp:link styleClass="calendarNext" text="Next">
+			<xp:this.value><![CDATA[#{javascript:
+				var nextWeek = @Adjust(viewScope.firstDay, 0, 0, 7, 0, 0, 0);
+				view.pageName + "?firstDay=" + @Year(nextWeek) + "-" + @Month(nextWeek) + "-" + @Day(nextWeek)
+			}]]></xp:this.value>
+		</xp:link>
+		<xp:link styleClass="calendarPrevious" text="Previous">
+			<xp:this.value><![CDATA[#{javascript:
+				var prevWeek = @Adjust(viewScope.firstDay, 0, 0, -7, 0, 0, 0);
+				view.pageName + "?firstDay=" + @Year(prevWeek) + "-" + @Month(prevWeek) + "-" + @Day(prevWeek)
+			}]]></xp:this.value>
+		</xp:link>
+		<div class="clear"/>
+	
+		<table class="fields lineup">
+			<thead>
+				<tr>
+					<th class="groups"></th>
+					<xp:repeat value="#{viewScope.raids}" var="titleRaid" rows="1000" disableTheme="true">
+						<th><xc:DateTime value="#{titleRaid.eventDate}"/></th>
+					</xp:repeat>
+				</tr>
+			</thead>
+			<tbody>
+				<xp:repeat value="#{viewScope.groups+1}" var="groupIndex" rows="1000" disableTheme="true">
+					<tr>
+						<td class="groups">
+							<xp:text value="Group #{groupIndex+1}" rendered="#{groupIndex!=viewScope.groups}"/>
+							<xp:text value="Unconfirmed" rendered="#{groupIndex==viewScope.groups}"/>
+						</td>
+						<xp:repeat value="#{viewScope.raids}" var="raid" rows="1000" disableTheme="true">
+							<td valign="top">
+								<ul>
+									<xp:repeat var="signup" rows="1000" disableTheme="true">
+										<xp:this.value><![CDATA[#{javascript:
+											groupIndex == viewScope.groups ? raid.signups.findBySelected(false) : raid.signups.findByGroup(groupIndex+1, true)
+										}]]></xp:this.value>
+										
+										<li><xp:text styleClass="#{javascript:signup.character.className.replace(' ', '_').toLowerCase()}" value="#{signup.character.name}"/></li>
+									</xp:repeat>
+								</ul>
+							</td>
+						</xp:repeat>
+					</tr>
+				</xp:repeat>
+			</tbody>
+		</table>
+	</xc:Layout>
+
+</xp:view>

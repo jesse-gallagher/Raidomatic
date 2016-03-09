@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><note class="filter" maintenanceversion="1.4" replicaid="05257F710059A2B6" version="9.0" xmlns="http://www.lotus.com/dxl">
+<noteinfo noteid="192" sequence="8" unid="32CCAD8126AEEAD985257758006BA84E">
+<created><datetime dst="true">20100706T153554,38-04</datetime></created>
+<modified><datetime>20160309T111904,89-05</datetime></modified>
+<revised><datetime dst="true">20100706T153546,96-04</datetime></revised>
+<lastaccessed><datetime>20160309T111904,88-05</datetime></lastaccessed>
+<addedtofile><datetime>20160309T111904,88-05</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Jesse Gallagher/O=MTC</name></updatedby>
+<wassignedby><name>CN=Jesse Gallagher/O=MTC</name></wassignedby>
+<item name="$TITLE" sign="true"><text>Text Manipulation</text></item>
+<item name="$PublicAccess" sign="true"><text>1</text></item>
+
+
+<item name="$Class"><text>WoW-Design</text></item>
+<item name="$Flags"><text>s34Q</text></item></note>

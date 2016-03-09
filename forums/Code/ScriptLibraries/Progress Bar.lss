@@ -1,0 +1,62 @@
+'++LotusScript Development Environment:2:5:(Options):0:74
+Option Public
+Option Explicit
+'++LotusScript Development Environment:2:5:(Forward):0:1
+Declare Class ProgressBar
+
+'++LotusScript Development Environment:2:5:(Declarations):0:10
+Const NPB_ONELINE% = 0
+Const NPB_TWOLINE% = 1
+'-- Procedures in nnotesws.dll 
+
+Declare Function NEMProgressBegin Lib "nnotesws" ( Byval wFlags As Integer ) As Long
+Declare Sub NEMProgressEnd Lib "nnotesws" ( Byval hwnd As Long )
+Declare Sub NEMProgressSetBarPos Lib "nnotesws" ( Byval hwnd As Long, Byval dwPos As Long)
+Declare Sub NEMProgressSetBarRange Lib "nnotesws" ( Byval hwnd As Long, Byval dwMax As Long )
+Declare Sub NEMProgressSetText Lib "nnotesws" ( Byval hwnd As Long, Byval pcszLine1 As String, Byval pcszLine2 As String )
+
+Class ProgressBar
+	hwnd As Variant
+	Position As Long
+	Title As String
+	SecondTitle As String
+	Max As Long
+	Enabled As Boolean
+	
+	Sub New(NewMax As Long)
+		Dim session As New NotesSession
+		If session.Platform="Windows/32" Then Enabled = True Else Enabled = False
+		
+		If enabled Then hwnd = NEMProgressBegin(NPB_ONELINE)
+		Max = NewMax
+		If enabled Then Call NEMProgressSetBarRange(hwnd, Max)
+	End Sub
+	
+	Sub SetText(NewTitle As String)
+		Title = NewTitle
+		If enabled Then Call NEMProgressSetText(hwnd, Title, "") Else Print Title
+	End Sub
+	Sub SetPosition(NewPos As Long)
+		Position = NewPos
+		If Position >= 0 And Position <= Max Then
+			If enabled Then Call NEMProgressSetBarPos(hwnd, Position)
+		End If
+	End Sub
+	Sub Inc
+		Call SetPosition(Position + 1)
+	End Sub
+	Sub Increment
+		Call Inc
+	End Sub
+	
+	Sub Close
+		If Enabled Then
+			Call NEMProgressEnd(hwnd)
+		End If
+	End Sub
+	Sub Delete
+		If Enabled Then
+			Call NEMProgressEnd(hwnd)
+		End If
+	End Sub
+End Class

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom" xmlns:xe="http://www.ibm.com/xsp/coreex"
+	beforePageLoad="#{pageController.beforePageLoad}" afterPageLoad="#{pageController.afterPageLoad}"
+	pageTitle="Event Calendar">
+	
+	<xp:eventHandler event="onClientLoad" submit="false">
+		<xp:this.script><![CDATA[
+			dojo.query("div.raid").forEach(function(div) {
+				div.parentNode.parentNode.className += " containsRaid";
+			})
+		]]></xp:this.script>
+	</xp:eventHandler>
+
+	<xc:Layout contentStyleClass="calendarPage">
+		<h1 class='calendarHeader'>Event Calendar</h1>
+
+		<xc:Calendar id="eventCalendar">
+			<xp:repeat var="topic" styleClass="#{pageController.cellStyleClass}" value="#{pageController.currentDayTopics}">
+				<xp:div styleClass="#{pageController.currentRaidStyleClass}">
+					<xp:checkBox id="signupCheckbox" value="#{viewScope.selectedEvents[topic.id]}" rendered="#{topic.canSignUp}">
+							<xp:eventHandler event="onchange" submit="true" refreshMode="norefresh"/>
+					</xp:checkBox>
+					<xp:link value="/topics/#{topic.id}">
+						<xp:text styleClass="instance" value="#{topic.title}" />
+					</xp:link>
+				</xp:div>
+			</xp:repeat>
+		</xc:Calendar>
+		
+		
+		<xp:panel rendered="#{context.user.name != 'anonymous'}">
+			<xp:link styleClass="button medium gray createRaidButton"
+				value="/NewTopic.xsp?type=raid&amp;forumId=#{pageController.raidsForumId}"
+				text="Create a Raid" />
+			&#160;
+			<xp:link styleClass="button medium gray createEventButton"
+				value="/NewTopic.xsp?type=event&amp;forumId=#{pageController.eventsForumId}"
+				text="Create an Event" />
+			
+			<xp:button id="multipleEventSignup" value="Hyper Signup" styleClass="multiEventSignupButton" rendered="#{javascript:Players.current.characters.length &gt; 0}">
+				<xp:eventHandler event="onclick" submit="false">
+					<xp:this.script><![CDATA[
+						XSP.openDialog("#{id:multipleEventDialog}");
+					]]></xp:this.script>
+				</xp:eventHandler>
+			</xp:button>
+		</xp:panel>
+		
+		<xe:dialog id="multipleEventDialog" title="Hyper Signup">
+			
+			<xp:div id="signupsBox">
+				<xp:table>
+					<xp:tr>
+						<xp:td>Character:</xp:td>
+						<xp:td>
+							<xp:comboBox id="signupPreferredCharacter">
+								<xp:selectItems value="#{pageController.availableCharacters}"/>
+							</xp:comboBox>
+						</xp:td>
+					</xp:tr>
+					<xp:tr>
+						<xp:td>Role:</xp:td>
+						<xp:td>
+							<xp:comboBox id="signupPreferredRole">
+								<xp:selectItem itemLabel="Any" itemValue=""/>
+								<xp:selectItem itemLabel="Tank"/>
+								<xp:selectItem itemLabel="Healer"/>
+								<xp:selectItem itemLabel="DPS"/>
+							</xp:comboBox>
+						</xp:td>
+					</xp:tr>
+					<xp:tr>
+						<xp:td>Status:</xp:td>
+						<xp:td>
+							<xp:comboBox id="signupStatus">
+								<xp:selectItem itemLabel="- Choose -" itemValue=""/>
+								<xp:selectItem itemLabel="Available"/>
+								<xp:selectItem itemLabel="Tentative"/>
+							</xp:comboBox>
+						</xp:td>
+					</xp:tr>
+				</xp:table>
+			</xp:div>
+			
+			<xp:button id="signMeUp" value="Sign Me Up!">
+				<xp:eventHandler event="onclick" submit="true" refreshMode="partial" refreshId="eventCalendar" immediate="false"
+					action="#{pageController.signMeUp}">
+					<xp:this.script><![CDATA[
+						spinner(thisEvent, { disableCaller: true });
+						XSP.closeDialog("#{id:multipleEventDialog}");
+						//XSP.partialRefreshPost("#{id:eventCalendar}");
+					]]></xp:this.script>
+					<xp:this.onComplete><![CDATA[
+						dojo.query("div.raid").forEach(function(div) {
+							div.parentNode.parentNode.className += " containsRaid";
+						}
+					)]]></xp:this.onComplete>
+				</xp:eventHandler>
+			</xp:button>
+		</xe:dialog>
+
+	</xc:Layout>
+</xp:view>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config>
+  <faces-config-extension>
+    <namespace-uri>http://www.ibm.com/xsp/custom</namespace-uri>
+    <default-prefix>xc</default-prefix>
+    <public>true</public>
+  </faces-config-extension>
+  <composite-component>
+    <component-type>raidcomp_addplayer</component-type>
+    <composite-name>raidcomp_addplayer</composite-name>
+    <composite-file>/raidcomp_addplayer.xsp</composite-file>
+    <composite-extension>
+      <designer-extension>
+        <in-palette>true</in-palette>
+      </designer-extension>
+    </composite-extension>
+    <property>
+      <property-name>refreshId</property-name>
+      <property-class>string</property-class>
+      <display-name>Refresh ID</display-name>
+    </property>
+    <property>
+      <property-name>styleClass</property-name>
+      <property-class>string</property-class>
+      <display-name>Style Class</display-name>
+    </property>
+    <property>
+      <property-name>topic</property-name>
+      <property-class>object</property-class>
+    </property>
+  </composite-component>
+</faces-config>

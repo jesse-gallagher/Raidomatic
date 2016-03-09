@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom"
+	beforePageLoad="#{pageController.beforePageLoad}" afterPageLoad="#{pageController.afterPageLoad}"
+	pageTitle="Favorite Topics">
+	
+	<xc:Layout>
+	
+		<xc:ForumHeader/>
+	
+		<xp:repeat value="#{pageController.favoriteTopics}" var="topic" rows="10000">
+			<xp:this.facets>
+				<xp:text xp:key="header" escape="false" disableTheme="true"><xp:this.value><![CDATA[
+					<table class="topics">
+						<tr>
+							<th class="unread"></th>
+							<th class="name">Title</th>
+							<th>Latest Post By</th>
+							<th class="latestPost">Date/Time</th>
+						</tr>
+				]]></xp:this.value></xp:text>
+				<xp:text xp:key="footer" escape="false" disableTheme="true"><xp:this.value><![CDATA[
+					</table>
+				]]></xp:this.value></xp:text>
+			</xp:this.facets>
+			
+			<xp:tr>
+				<td class="unread">
+					<xp:image url="/tango/x-office-calendar.svg"
+						rendered="#{topic.eventDate != null}"/>
+					<xp:image url="/tango/document-new.svg" rendered="#{!topic.isRead}"/>
+				</td>
+				<xp:td styleClass="name"><xp:link value="/Topics/#{topic.id}"><xp:text value="#{topic.title}"/></xp:link></xp:td>
+				<xp:td><xc:Username value="#{topic.latestPostBy}" titleBlock="false" /></xp:td>
+				<xp:td styleClass="latestPost"><xc:DateTime value="#{topic.latestPostAt}"/></xp:td>
+			</xp:tr>
+		</xp:repeat>
+	</xc:Layout>
+</xp:view>

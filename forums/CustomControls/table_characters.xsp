@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom">
+	
+
+<!--	<xp:pager layout="Previous Group Next" id="pager1" for="characterTable"-->
+<!--		partialRefresh="true" />-->
+
+	<xp:dataTable id="characterTable" var="character" indexVar="rindex" rows="#{javascript:Configuration.getDocumentItemValue('Forum Options', 'ForumDataTableRows')[0]}" value="#{compositeData.value}" styleClass="lineup loot">
+		
+		<xp:column style="width: 16px">
+			<xc:officialForumAvatar charName="#{character.name}" style="width: 16px; height: 16px"/>
+		</xp:column>
+		<xp:column>
+			<xp:this.facets><xp:text xp:key="header" value="Name"/></xp:this.facets>
+			<xc:characterName value="#{character.name}"/>
+		</xp:column>
+		<xp:column loaded="${compositeData.showPlayer}">
+			<xp:this.facets><xp:text xp:key="header" value="Player"/></xp:this.facets>
+			<xp:link rendered="#{javascript:character.player != null}" value="/players/#{javascript:RUtils.urlEncode(character.player.name)}" text="#{character.player.name}"/>
+		</xp:column>
+		<xp:column>
+			<xp:this.facets><xp:text xp:key="header" value="Class"/></xp:this.facets>
+			<xp:text value="#{character.className}"/>
+		</xp:column>
+		<xp:column>
+			<xp:this.facets><xp:text xp:key="header" value="Level"/></xp:this.facets>
+			<xc:integer value="#{character.level}"/>
+		</xp:column>
+		<xp:column>
+			<xp:this.facets><xp:text xp:key="header" value="Primary"/></xp:this.facets>
+			<xp:link value="http://us.battle.net/wow/en/character/thorium-brotherhood/#{character.name}/talent/primary" text="#{character.primarySpec}" rendered="#{character.primarySpec != ''}"/>
+		</xp:column>
+		<xp:column>
+			<xp:this.facets><xp:text xp:key="header" value="Secondary"/></xp:this.facets>
+			<xp:link value="http://us.battle.net/wow/en/character/thorium-brotherhood/#{character.name}/talent/secondary" text="#{character.secondarySpec}" rendered="#{character.secondarySpec != ''}"/>
+		</xp:column>
+		
+	</xp:dataTable>
+	
+	<xp:pager layout="Previous Group Next" id="pager2" for="characterTable"
+		partialRefresh="true" />
+</xp:view>

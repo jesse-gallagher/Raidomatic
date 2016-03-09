@@ -1,0 +1,77 @@
+<!--
+	The default theme contents use theme inheritance.
+
+	Application themes can extend an existing global theme using the
+	extends attribute.  Existing themes include the following options:
+
+	1. webstandard 2. oneui 3. notes
+-->
+<theme extends="webstandard">
+	<resources>
+		<styleSheet type="text/css" href="/.ibmxspres/dojoroot/dijit/themes/tundra/tundra.css"/>
+		<styleSheet type="text/css" href="/.ibmxspres/dojoroot/ibm/domino/widget/layout/css/domino-default.css"/>
+		<styleSheet type="text/css" href="/style.css"/>
+		<styleSheet type="text/css" href="/xspFixes.css"/>
+		
+		<script type="text/javascript" src="/spinner.js" clientSide="true"/>
+		<script type="text/javascript" src="http://static.wowhead.com/widgets/power.js" clientSide="true" />
+		
+		<dojoModule name="ibm.xsp.widget.layout.xspClientDojoUI" />
+		<dojoModule name="ibm.xsp.widget.layout.CKEditorWrapper" />
+		<dojoModule name="dijit.form.DropDownButton" />
+		<dojoModule name="dijit.form.Textarea" />
+		<dojoModule name="dijit.form.Select" />
+		<dojoModule name="dijit.TooltipDialog" />
+		<dojoModule name="dijit.Menu" />
+		<dojoModule name="dijit.MenuItem" />
+		<dojoModule name="dojo.cookie" />
+	</resources>
+	
+	<control override="true">
+		<name>ViewRoot</name>
+		<property>
+			<name>pageIcon</name>
+			<value>/$Icon</value>
+		</property>
+		<property mode="concat">
+			<name>pageTitle</name>
+			<value> - The Risen</value>
+		</property>
+		<property mode="concat">
+			<name>styleClass</name>
+			<value>tundra</value>
+		</property>
+	</control>
+	
+	<control>
+		<name>PagerControl.Pager.Group</name>
+		<property>
+			<name>pageCount</name>
+			<value>20</value>
+		</property>
+	</control>
+	
+	<control>
+		<name>Button.Command</name>
+		<property mode="concat">
+			<name>styleClass</name>
+			<value>button gray medium</value>
+		</property>
+	</control>
+	
+	<control>
+		<name>Button.Submit</name>
+		<property mode="concat">
+			<name>styleClass</name>
+			<value>button gray medium</value>
+		</property>
+	</control>
+	
+<!--	<control>-->
+<!--		<name>RadioButton</name>-->
+<!--		<property>-->
+<!--			<name>dojoType</name>-->
+<!--			<value>dijit.form.RadioButton</value>-->
+<!--		</property>-->
+<!--	</control>-->
+</theme>

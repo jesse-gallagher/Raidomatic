@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom">
+	<xp:this.dataContexts>
+		<xp:dataContext var="group">
+			<xp:this.value><![CDATA[${javascript:
+				try {
+					// The topic ID should be passed in as a sub-folder on the page (i.e. "/Topic.xsp/12345").
+					// Everything after ".xsp" shows up as the Path Info on the request
+					var req = facesContext.getExternalContext().getRequest();
+					if(req.getPathInfo() != null) {
+						var args = req.getPathInfo().split("/");
+						return Groups.getById(args[1]);
+					}
+					return null;
+				} catch(excep) { return null; }
+			}]]></xp:this.value>
+		</xp:dataContext>
+		<xp:dataContext var="baseURL">
+			<xp:this.value><![CDATA[${javascript:
+				var req = facesContext.getExternalContext().getRequest();
+				var pageName = view.getPageName();
+				return com.raidomatic.JSFUtil.pluralize(pageName.substring(0, pageName.length()-4)) + req.getPathInfo();
+			}]]></xp:this.value>
+		</xp:dataContext>
+	</xp:this.dataContexts>
+	<xp:this.beforePageLoad><![CDATA[#{javascript:
+		if(typeof group != "undefined" && group != null) {
+			view.setPageTitle(group.getName());
+		} else {
+			view.setPageTitle("Error");
+			viewScope.put("fatalErrors", ["The requested group does not exist or you are not permitted to access it."]);
+		}
+	}]]></xp:this.beforePageLoad>
+
+	<xc:Layout>
+		<h1><xp:text disableTheme="true" value="#{group.name}"/></h1>
+		
+		<xc:table_players value="#{group.members}"/>
+	</xc:Layout>
+
+</xp:view>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core"
+	xmlns:xc="http://www.ibm.com/xsp/custom" pageTitle="ModelCache"
+	xmlns:xe="http://www.ibm.com/xsp/coreex">
+
+	<xc:Layout>
+		<h1>ModelCache</h1>
+		
+		<xp:inputText id="secretLoginUsername"/>
+		<xp:button styleClass="small" id="testRPC" value="Log In">
+			<xp:eventHandler event="onclick" submit="false">
+				<xp:this.script><![CDATA[
+					var deferred = loginService.secretAuthenticate(dojo.byId("#{id:secretLoginUsername}").value);
+					deferred.addCallback(function(result) {
+						if(result) {
+							XSP.alert("Success1");
+						}
+					})
+				]]></xp:this.script>
+			</xp:eventHandler>
+		</xp:button>
+		
+		<br/><br/>
+
+		<p>
+			<xp:inputText id="clearRegex" />
+			<xp:br />
+			<xp:button id="clearCacheMatching" value="Clear by Regex">
+				<xp:eventHandler event="onclick" submit="true"
+					refreshMode="partial" refreshId="dataTable2">
+					<xp:this.action><![CDATA[#{javascript:
+						com.raidomatic.JSFUtil.getModelCache().clearMatches(getComponent("clearRegex").value)
+					}]]></xp:this.action>
+				</xp:eventHandler>
+			</xp:button>
+		</p>
+		<p>
+			<xp:button id="clearCache" value="Clear All">
+				<xp:eventHandler event="onclick" submit="true"
+					refreshMode="partial" refreshId="dataTable2"
+					action="#{javascript:com.raidomatic.JSFUtil.getModelCache().clear()}">
+				</xp:eventHandler>
+			</xp:button>
+		</p>
+
+		<xp:dataTable styleClass="topics" rows="30" id="dataTable2"
+			var="cacheKey">
+			<xp:this.value><![CDATA[#{javascript:
+				com.raidomatic.JSFUtil.getModelCache().keySet().toArray()
+			}]]></xp:this.value>
+
+			<xp:this.facets>
+				<xp:pager layout="First Previous Group Next Last"
+					xp:key="header" id="pager2" partialRefresh="true" />
+
+			</xp:this.facets>
+
+			<xp:column>
+				<xp:link id="link1">
+					X
+
+					<xp:eventHandler event="onclick" submit="true"
+						refreshMode="partial" refreshId="dataTable2" execMode="partial">
+						<xp:this.action><![CDATA[#{javascript:
+							com.raidomatic.JSFUtil.getModelCache().remove(cacheKey)
+						}]]></xp:this.action>
+					</xp:eventHandler>
+				</xp:link>
+			</xp:column>
+			<xp:column>
+				<xp:this.facets>
+					<xp:text xp:key="header" value="Key"
+						disableTheme="true" />
+				</xp:this.facets>
+
+				<xp:text value="#{cacheKey}" />
+			</xp:column>
+			<xp:column>
+				<xp:this.facets>
+					<xp:text xp:key="header" value="Class"
+						disableTheme="true" />
+				</xp:this.facets>
+
+				<xp:text
+					value="#{javascript:com.raidomatic.JSFUtil.getModelCache().get(cacheKey).getClass().getName()}" />
+			</xp:column>
+			<xp:column>
+				<xp:this.facets>
+					<xp:text xp:key="header" value="Created"
+						disableTheme="true" />
+				</xp:this.facets>
+
+				<xp:text
+					value="#{javascript:com.raidomatic.JSFUtil.getModelCache().get(cacheKey).getObjectCreated()}">
+					<xp:this.converter>
+						<xp:convertDateTime type="both"></xp:convertDateTime>
+					</xp:this.converter>
+				</xp:text>
+			</xp:column>
+		</xp:dataTable>
+	</xc:Layout>
+</xp:view>

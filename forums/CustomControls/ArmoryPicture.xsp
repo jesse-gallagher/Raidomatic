@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core">
+	<iframe
+		src="#{javascript:'http://www.wowarmory.com/character-model-embed.xml?r=' + java.net.URLEncoder.encode(compositeData.realmName, 'UTF-8') + '&amp;cn=' + java.net.URLEncoder.encode(compositeData.characterName, 'UTF-8') + '&amp;rhtml=true'}"
+		scrolling="no"
+		height="443"
+		width="321"
+		frameborder="0"
+	></iframe>
+</xp:view>

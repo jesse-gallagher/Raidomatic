@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core"
+	xmlns:xc="http://www.ibm.com/xsp/custom">
+	<xp:this.beforePageLoad><![CDATA[#{javascript:
+		// The topic ID should be passed in as a sub-folder on the page (i.e. "/Topic.xsp/12345").
+		// Everything after ".xsp" shows up as the Path Info on the request
+		var req = facesContext.getExternalContext().getRequest();
+		var args = req.getPathInfo() == null ? [] : req.getPathInfo().split("/");
+		viewScope.put("tag", args[1]);
+		
+		var pageName = view.getPageName()
+		viewScope.put("baseURL", com.raidomatic.JSFUtil.pluralize(pageName.substring(0, pageName.length()-4)) + req.getPathInfo());
+	
+		view.setPageTitle("Tag: " + viewScope.tag)
+		
+		viewScope.put("posts", Posts.getPostsForTag(viewScope.tag));
+	}]]></xp:this.beforePageLoad>
+	
+	<xc:Layout>
+		<xp:text value="Tag: #{tag}" tagName="h1"/>
+		
+		<xc:table_posts value="#{viewScope.posts}"/>
+	</xc:Layout>
+
+</xp:view>

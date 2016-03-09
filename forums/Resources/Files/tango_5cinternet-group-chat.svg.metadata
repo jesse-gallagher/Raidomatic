@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><note class="form" maintenanceversion="1.4" replicaid="05257F710059B13D" version="9.0" xmlns="http://www.lotus.com/dxl">
+<noteinfo noteid="a6a" sequence="13" unid="2558FA184FFA996B85257AF10050C023">
+<created><datetime dst="true">20130112T104200,67-04</datetime></created>
+<modified><datetime>20160309T112005,24-05</datetime></modified>
+<revised><datetime dst="true">20141110T172643,21-04</datetime></revised>
+<lastaccessed><datetime>20160309T112005,23-05</datetime></lastaccessed>
+<addedtofile><datetime>20160309T112005,23-05</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Jesse Gallagher/O=Frost</name><name>CN=Jesse Gallagher/O=IKSG</name></updatedby>
+<wassignedby><name>CN=Jesse Gallagher/O=IKSG</name></wassignedby>
+<item name="$FlagsExt"><text>D</text></item>
+<item name="$FileModDT" sign="true"><datetime>20090107T091712,00-05</datetime></item>
+<item name="$TITLE" sign="true"><text>tango\internet-group-chat.svg</text></item>
+<item name="$MimeType"><text>image/svg+xml</text></item>
+<item name="$Flags"><text>345CgQ&amp;</text></item>
+<item name="$DesignerVersion"><text>8.5.3</text></item>
+
+
+<item name="$FileNames" sign="true"><text>tango_5cinternet-group-chat.svg</text></item></note>

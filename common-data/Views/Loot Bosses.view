@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='utf-8'?>
+<note class='view' xmlns='http://www.lotus.com/dxl' version='9.0' maintenanceversion='1.4'
+ replicaid='05257F710059A2B6'>
+<noteinfo noteid='32a' unid='000DB260455BD9018525781A007BD9DB' sequence='6'>
+<created><datetime dst='true'>20110116T183246,99-04</datetime></created>
+<modified><datetime>20160309T111909,07-05</datetime></modified>
+<revised><datetime dst='true'>20121219T070624,63-04</datetime></revised>
+<lastaccessed><datetime>20160309T111909,06-05</datetime></lastaccessed>
+<addedtofile><datetime>20160309T111909,06-05</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Jesse Gallagher/O=MTC</name><name>CN=Jesse Gallagher/O=Frost</name></updatedby>
+<wassignedby><name>CN=Jesse Gallagher/O=Frost</name></wassignedby>
+<item name='$FormatNote' summary='true' sign='true'>
+<rawitemdata type='4'>
+AQA6ETS5B70PvVbyZABYdyWF
+</rawitemdata></item>
+<item name='$FormulaClass' sign='true'><text>1</text></item>
+<item name='$TITLE' sign='true'><text>Loot Bosses</text></item>
+<item name='$Index' sign='true'><text/></item>
+<item name='$Formula' summary='true' sign='true'><formula compiled='true'>
+VAAFACYAIgAEAAQABQAJAAQATmFtZU5QQ0lEJENvbmZsaWN0JFJFRgQABAAAAB4ABQAEAEZvcm0B
+AAkATG9vdCBCb3NzAAoCAwAHAAoABAAJTDFT
+</formula></item>
+<item name='$Collation' summary='true'>
+<rawitemdata type='2'>
+EQABAABEgGYAAAAEAE5hbWU=
+</rawitemdata></item>
+<item name='$ViewFormat' summary='true' sign='true'>
+<rawitemdata type='5'>
+AQACAAsACEgAAFZDAQAEAAQAAAAAAFAAAQAACgAAAAAAAAAAAAICAAAAVkMAAAUABQAAAAAAUAAB
+AAAKAAAAAAAAAAAAAgIAAABOYW1lTmFtZU5QQ0lETlBDSUQmAAEAAAABAQAJAQAACgEBDgoAAAEA
+rSsEAAEAAQAAAAAAAAAAAFdDAQUACQAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAP//AAAAAAAAAAAA
+AAAAAABXQwEBAAkAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAD//wAAAAAAAAAAAAAAAAAAQgAAAAAA
+AQD///8ABQD///8AAQAAAAAAAAAAAAAAAAABAP///wABAP///wAAAAEAAAAAAAEAAAAAAAEAAAAA
+AAAACAAAAAAAAQA=
+</rawitemdata></item>
+<item name='$Comment' sign='true'><text/></item>
+<item name='$Flags'><text>PY</text></item>
+<item name='$DesignerVersion' sign='true'><text>8.5.2</text></item>
+<item name='$V5ACTIONS' sign='true'>
+<rawitemdata type='1'>
+vRwjAAAAAQABAAAAAQAAAAAAAAAAAAAACAACAHn/bAABANTQyAABAAAAAAAJAAAAAAABANTQyAAA
+AB8AAAAAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAPz/OgAAAAAAAQAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAEAAAAAAAAAAAAAAAAAAAC+/1IAAAABAAAAnwEAABAAAAAAAAAAQ3JlYXRlIExvb3Qg
+Qm9zcywAAAAgAAIA6AMAAAAAAAABAAkATG9vdCBCb3NzAO0CAwAHAAoAAwAJNFMA
+</rawitemdata></item></note>
+

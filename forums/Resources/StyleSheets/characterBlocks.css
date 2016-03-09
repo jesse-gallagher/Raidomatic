@@ -1,0 +1,14 @@
+
+.characters .character {
+	min-height: 64px;
+	background-repeat: no-repeat;
+	padding-left: 70px;
+	border: 1px solid #555;
+	background-color: #333;
+	margin-bottom: 20px;
+}
+
+.characters .name {
+	font-weight: bold;
+	font-size: 16px;
+}

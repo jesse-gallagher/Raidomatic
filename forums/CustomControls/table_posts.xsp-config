@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config>
+  <faces-config-extension>
+    <namespace-uri>http://www.ibm.com/xsp/custom</namespace-uri>
+    <default-prefix>xc</default-prefix>
+  </faces-config-extension>
+  <composite-component>
+    <component-type>table_posts</component-type>
+    <composite-name>table_posts</composite-name>
+    <composite-file>/table_posts.xsp</composite-file>
+    <composite-extension>
+      <designer-extension>
+        <in-palette>true</in-palette>
+      </designer-extension>
+    </composite-extension>
+    <property>
+      <property-name>value</property-name>
+      <property-class>object</property-class>
+    </property>
+    <property>
+      <property-name>showForum</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <designer-extension>
+          <default-value>false</default-value>
+        </designer-extension>
+      </property-extension>
+    </property>
+    <property>
+      <property-name>showPager</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <designer-extension>
+          <default-value>false</default-value>
+        </designer-extension>
+      </property-extension>
+    </property>
+    <property>
+      <property-name>count</property-name>
+      <property-class>int</property-class>
+    </property>
+  </composite-component>
+</faces-config>

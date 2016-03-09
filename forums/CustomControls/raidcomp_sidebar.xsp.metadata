@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><note class="form" maintenanceversion="1.4" replicaid="05257F710059B13D" version="9.0" xmlns="http://www.lotus.com/dxl">
+<noteinfo noteid="bd2" sequence="173" unid="965F0BB73CED1B9485257AF10050C602">
+<created><datetime dst="true">20130112T104215,70-04</datetime></created>
+<modified><datetime>20160309T112008,78-05</datetime></modified>
+<revised><datetime dst="true">20141110T172618,48-04</datetime></revised>
+<lastaccessed><datetime>20160309T112008,77-05</datetime></lastaccessed>
+<addedtofile><datetime>20160309T112008,77-05</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Jesse Gallagher/O=Frost</name><name>CN=Jesse Gallagher/O=IKSG</name></updatedby>
+<wassignedby><name>CN=Jesse Gallagher/O=IKSG</name></wassignedby>
+<item name="$TITLE"><text>raidcomp_sidebar.xsp</text></item>
+<item name="$Flags"><text>gC~4;</text></item>
+<item name="$DesignerVersion"><text>8.5</text></item>
+
+
+
+
+<item name="$FileNames" sign="true"><text>raidcomp_sidebar.xsp</text></item>
+
+
+
+
+</note>

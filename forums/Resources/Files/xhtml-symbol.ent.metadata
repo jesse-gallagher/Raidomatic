@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><note class="form" maintenanceversion="1.4" replicaid="05257F710059B13D" version="9.0" xmlns="http://www.lotus.com/dxl">
+<noteinfo noteid="9fe" sequence="11" unid="124432676D98F8DA85257AF10050BF10">
+<created><datetime dst="true">20130112T104157,92-04</datetime></created>
+<modified><datetime>20160309T112004,26-05</datetime></modified>
+<revised><datetime dst="true">20141110T172731,64-04</datetime></revised>
+<lastaccessed><datetime>20160309T112004,25-05</datetime></lastaccessed>
+<addedtofile><datetime>20160309T112004,25-05</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Jesse Gallagher/O=Frost</name><name>CN=Jesse Gallagher/O=IKSG</name></updatedby>
+<wassignedby><name>CN=Jesse Gallagher/O=IKSG</name></wassignedby>
+<item name="$TITLE"><text>xhtml-symbol.ent</text></item>
+<item name="$Flags"><text>345CgQ</text></item>
+<item name="$FlagsExt"><text>D</text></item>
+<item name="$FileModDT" sign="true"><datetime dst="true">20020801T095603,00-04</datetime></item>
+<item name="$PublicAccess"><text>1</text></item>
+<item name="$MimeCharSet"><text>UTF-8</text></item>
+<item name="$DesignerVersion"><text>8.5.3</text></item>
+
+
+<item name="$FileNames" sign="true"><text>xhtml-symbol.ent</text></item></note>

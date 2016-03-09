@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom" xmlns:xe="http://www.ibm.com/xsp/coreex"
+	beforePageLoad="#{pageController.beforePageLoad}" afterPageLoad="#{pageController.afterPageLoad}">
+	<xp:this.dataContexts>
+		<xp:dataContext var="item" value="#{pageController.item}"/>
+	</xp:this.dataContexts>
+	
+	<xc:Layout>
+		<h1>Item</h1>
+		
+		<h2>
+			<xp:link value="http://www.wowhead.com/item=#{item.id}">
+				<xp:image
+					url="http://static.wowhead.com/images/wow/icons/large/#{javascript:item.iconName.toLowerCase()}.jpg" />
+				<xp:text value="#{item.name}" disableTheme="true"/>
+			</xp:link>
+		</h2>
+		
+		<xe:djTabContainer tabStrip="false" doLayout="false">
+			<xe:djTabPane id="lootsTab" title="Loots">
+				<xc:table_loots showItem="false" readOnly="true" value="#{item.loots}"/>
+			</xe:djTabPane>
+		</xe:djTabContainer>
+		
+	</xc:Layout>
+</xp:view>

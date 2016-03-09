@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core"  xmlns:xc="http://www.ibm.com/xsp/custom"
+	beforePageLoad="#{pageController.beforePageLoad}" afterPageLoad="#{pageController.afterPageLoad}"
+	pageTitle="Library">
+
+	<xc:Layout contentStyleClass="libraryPage">
+<!--		<div class="containerBox" title="Raid Strat Videos">-->
+<!--			<h1>Raid Strat Videos</h1>-->
+<!--			-->
+<!--			<ul>-->
+<!--				<li><xp:link title="Firelands" text="Firelands" value="/Topics/D47C439EB46292F88525789E005ED490"/></li>-->
+<!--				<li><xp:link title="The Bastion of Twilight" text="The Bastion of Twilight" value="/Topics/9367240"/></li>-->
+<!--				<li><xp:link title="Throne of the Four Winds" text="Throne of the Four Winds" value="/Topics/9367244"/></li>-->
+<!--				<li><xp:link title="Blackwing Descent" text="Blackwing Descent" value="/Topics/9367242"/></li>-->
+<!--			</ul>-->
+<!--		</div>-->
+		
+		<div class="containerBox" title="Photo Gallery" id="photoGallery">
+			<h1>Photo Gallery</h1>
+			<p>Recently uploaded</p>
+			
+			<xp:link styleClass="leftLink" text="Back" id="leftLink">
+				<xp:eventHandler event="onclick" submit="true" immediate="true" refreshMode="partial" refreshId="photos"
+					action="#{pageController.photosBack}"/>
+			</xp:link>
+			<xp:link styleClass="rightLink" text="Forward" id="rightLink">
+				<xp:eventHandler event="onclick" submit="true" immediate="true" refreshMode="partial" refreshId="photos"
+					action="#{pageController.photosForward}"/>
+			</xp:link>
+			
+			<xp:repeat styleClass="photos" value="#{Posts.screenshotPosts}" var="post" rows="6" first="0" id="photos">
+				<xp:this.facets>
+					<xp:text xp:key="header" escape="false"
+						disableTheme="true" value="&lt;ol&gt;" />
+					<xp:text xp:key="footer" escape="false"
+						disableTheme="true" value="&lt;/ol&gt;" />
+				</xp:this.facets>
+
+				<li>
+					<xp:link
+						value="/Topics/#{post.topicId}?showPost=#{post.id}#post-#{post.id}">
+						<xp:image url="#{post.screenshotUrl}" />
+					</xp:link>
+					<div class="caption">
+						In "
+						<xp:link value="/Topics/#{post.topicId}"
+							text="#{post.topic.title}" />
+						" by&#160;
+						<xc:Username value="#{post.createdBy}"
+							titleBlock="false" />
+						&#160;on&#160;
+						<xc:Date value="#{post.dateTime}" />
+					</div>
+				</li>
+			</xp:repeat>
+		</div>
+		
+		<div class="lootLinks">
+			<xp:link styleClass="airstripButton viewLootsButton" value="/Loots.xsp" text="View All Loots"/>
+			<xp:link styleClass="airstripButton viewLootScoresButton" value="/Players.xsp" text="View Loot Scores"/>
+		</div>
+	</xc:Layout>
+</xp:view>

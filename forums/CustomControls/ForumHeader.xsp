@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom">
+	
+	<xp:this.dataContexts>
+		<xp:dataContext var="newPostsCount" loaded="${UserPrefs.current.forumRecentMode == 'Posts'}">
+			<xp:this.value><![CDATA[#{javascript:
+				if(@UserName() == "Anonymous") { return 0; }
+				
+				var posts = Posts.postsByDateTimeDesc;
+				var unreadCount = 0;
+				for(var i = 0; i < 15 && i < posts.length; i++) {
+					if(!posts[i].topic.getIsRead()) { unreadCount++; }
+				}
+				return unreadCount;
+			}]]></xp:this.value>
+		</xp:dataContext>
+		<xp:dataContext var="newTopicsCount" loaded="${UserPrefs.current.forumRecentMode != 'Posts'}">
+			<xp:this.value><![CDATA[#{javascript:
+				if(@UserName() == "Anonymous") { return 0; }
+				
+				var topics = Topics.topicsByLatestPostAtDesc;
+				var unreadCount = 0;
+				for(var i = 0; i < 15 && i < topics.length; i++) {
+					if(!topics[i].getIsRead()) { unreadCount++; }
+				}
+				return unreadCount;
+			}]]></xp:this.value>
+		</xp:dataContext>
+	</xp:this.dataContexts>
+	
+	<div class="actionBar">
+		<xp:link id="switchForumIndex" title="Forum Index" styleClass="action #{javascript:view.pageName=='/Forums.xsp' &amp;&amp; forumPageMode=='' ? 'active' : ''}"
+			value="/Forums.xsp?mode=index" text="Forum Index">
+		</xp:link>
+		<xp:link id="switchNewPosts" title="Recent Posts" styleClass="action #{javascript:view.pageName=='/Forums.xsp' &amp;&amp; forumPageMode=='recent' ? 'active' : ''}"
+			value="/Forums.xsp?mode=recent" text="Recent Posts" rendered="#{UserPrefs.current.forumRecentMode == 'Posts'}">
+		</xp:link>
+		<xp:text id="newPostsCount" styleClass="unreadCountTag" rendered="#{context.user.name != 'anonymous' &amp;&amp; UserPrefs.current.forumRecentMode == 'Posts' &amp;&amp; newPostsCount != 0}"><xp:this.value><![CDATA[#{javascript:
+			newPostsCount.toFixed(0);
+		}]]></xp:this.value></xp:text>
+		<xp:link id="switchRecentTopics" title="Recent Topics" styleClass="action #{javascript:view.pageName=='/Forums.xsp' &amp;&amp; forumPageMode=='recent' ? 'active' : ''}"
+			value="/Forums.xsp?mode=recent" text="Recent Topics" rendered="#{UserPrefs.current.forumRecentMode != 'Posts'}">
+		</xp:link>
+		<xp:text id="newTopicsCount" styleClass="unreadCountTag" rendered="#{context.user.name != 'anonymous' &amp;&amp; UserPrefs.current.forumRecentMode != 'Posts' &amp;&amp; newTopicsCount != 0}"><xp:this.value><![CDATA[#{javascript:
+			newTopicsCount.toFixed(0)
+		}]]></xp:this.value></xp:text>
+	</div>
+	<p class="clear"></p>
+	
+	<xp:link id="goToFavorites" title="Favorite Topics" styleClass="goToFavorites" value="/FavoriteTopics.xsp" text="Favorite Topics" rendered="#{context.user.name != 'anonymous'}"/>
+	
+	<div class="searchContainer">
+		<xc:SearchPosts />
+	</div>
+</xp:view>

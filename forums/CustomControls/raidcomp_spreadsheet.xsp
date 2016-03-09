@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core">
+	<xp:this.beforePageLoad><![CDATA[#{javascript:
+		viewScope.spreadsheetNames = []
+		for(var j = 0; j < compositeData.groups; j++) {
+			var g = []
+			var i
+			for(i = 0; i < compositeData.tankCount; i++) { g.push('') }
+			for(i = 0; i < compositeData.tankHealerCount; i++) { g.push('') }
+			for(i = 0; i < compositeData.raidHealerCount; i++) { g.push('') }
+			for(i = 0; i < compositeData.dpsCount; i++) { g.push('') }
+			for(i = 0; i < compositeData.rotatingDPSCount; i++) { g.push('') }
+			viewScope.spreadsheetNames.push(g)
+		}
+	}]]></xp:this.beforePageLoad>
+	
+	<xp:table styleClass="spreadsheet">
+		<xp:tr styleClass="header">
+			<xp:td styleClass="label">Name</xp:td>
+			<xp:repeat value="#{compositeData.groups}" var="group">
+				<xp:td><xp:text disableTheme="true" value="#{javascript: 'Group ' + (group+1)}"/></xp:td>
+			</xp:repeat>
+		</xp:tr>
+		<xp:repeat var="label" indexVar="nameIndex" id="spreadsheetRows">
+			<xp:this.value><![CDATA[#{javascript:
+				var result = []
+				var i
+				for(i = 0; i < compositeData.tankCount; i++) { result.push(['Tank', 'tank', 'Main']) }
+				for(i = 0; i < compositeData.offTankCount; i++) { result.push(['Tank', 'tank', 'Off']) }
+				for(i = 0; i < compositeData.tankHealerCount; i++) { result.push(['Tank healer', 'healer', 'Tank']) }
+				for(i = 0; i < compositeData.raidHealerCount; i++) { result.push(['Raid healer', 'healer', 'Raid']) }
+				for(i = 0; i < compositeData.dpsCount; i++) { result.push(['DPS', 'dps', 'DPS']) }
+				for(i = 0; i < compositeData.rotatingDPSCount; i++) { result.push(['DPS - Rotation', 'dps', 'Roating']) }
+				return result
+			}]]></xp:this.value>
+			<xp:tr styleClass="#{label[1]}">
+				<xp:td styleClass="label"><xp:text disableTheme="true" value="#{label[0]}"/></xp:td>
+				<xp:repeat value="#{compositeData.groups}" var="group" indexVar="groupIndex">
+					<xp:td>
+						<!-- <xp:image style="vertical-align: middle" id="specIcon">
+							<xp:this.url><![CDATA[#{javascript:
+								return ""
+								var name = viewScope.spreadsheetNames[groupIndex][nameIndex]
+								if(name == "") { return "http://raidomatic.com/icons/ecblank.gif" }
+								var line = sessionScope.lineup.findByCharacter(name)
+								@LowerCase('/' + line.getCharacter().getCharacterClass() + '/' + line.getSpec().get('name') + '.gif').replace(' ', '_')
+							}]]></xp:this.url>
+						</xp:image>-->
+						<xp:inputText id="name">
+							<xp:this.defaultValue><![CDATA[#{javascript:
+								print(nameIndex-getComponent('spreadsheetRows').value.indexOf(label))
+								sessionScope.lineup.getGroup(groupIndex+1).getTanks().get(nameIndex-getComponent('spreadsheetRows').value.indexOf(label))
+							}]]></xp:this.defaultValue>
+							<xp:eventHandler event="onchange" submit="true"
+								refreshMode="partial" refreshId="#{compositeData.refreshId}">
+								<xp:this.script>
+									spinner(document.getElementById("#{id:specIcon}"), true)
+								</xp:this.script>
+							</xp:eventHandler>
+						</xp:inputText>
+					</xp:td>
+				</xp:repeat>
+			</xp:tr>
+		</xp:repeat>
+	</xp:table>
+	
+	<xp:text value="#{viewScope.spreadsheetNames[1][5]}"/>
+</xp:view>

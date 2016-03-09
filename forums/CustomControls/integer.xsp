@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core">
+	<xp:text styleClass="#{compositeData.styleClass}" value="#{compositeData.value}">
+		<xp:this.converter>
+			<xp:convertNumber type="number"
+				integerOnly="true" />
+		</xp:this.converter>
+	</xp:text>
+</xp:view>

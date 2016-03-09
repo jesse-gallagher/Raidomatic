@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config>
+  <faces-config-extension>
+    <namespace-uri>http://www.ibm.com/xsp/custom</namespace-uri>
+    <default-prefix>xc</default-prefix>
+    <public>true</public>
+  </faces-config-extension>
+  <composite-component>
+    <component-type>ArmoryPicture</component-type>
+    <composite-name>ArmoryPicture</composite-name>
+    <composite-file>/ArmoryPicture.xsp</composite-file>
+    <composite-extension>
+      <designer-extension>
+        <in-palette>true</in-palette>
+      </designer-extension>
+    </composite-extension>
+    <property>
+      <property-name>realmName</property-name>
+      <property-class>string</property-class>
+      <display-name>Realm Name</display-name>
+    </property>
+    <property>
+      <property-name>characterName</property-name>
+      <property-class>string</property-class>
+      <display-name>Character Name</display-name>
+    </property>
+  </composite-component>
+</faces-config>

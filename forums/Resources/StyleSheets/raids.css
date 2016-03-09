@@ -1,0 +1,185 @@
+.tierLabel {
+	float: right;
+	font-size: 2em;
+}
+
+table.personnel {
+	font-size: 14px;
+}
+
+.player { color: white }
+
+.death_knight { color: rgb(196, 31, 59) }
+.druid { color: rgb(255, 125, 10) }
+.hunter { color: rgb(171, 212, 115) }
+.mage { color: rgb(105, 204, 240) }
+.paladin { color: rgb(245, 140, 186) }
+.priest { color: rgb(255, 255, 255) }
+.rogue { color: rgb(255, 245, 105) }
+.shaman { color: rgb(36, 89, 255) }
+.warlock { color: rgb(148, 130, 202) }
+.warrior { color: rgb(199, 156, 110) }
+
+table.fields { margin: 1em 0 }
+table.fields > tbody > tr > td { padding: 4px 6px }
+table.fields > tbody > tr > td:first-child, table.fields td.key {
+	font-weight: bold;
+	background-color: #333;
+}
+
+textarea {
+	width: 30em;
+	height: 5em;
+}
+
+.xspTabTabbedPanel {
+	padding: 1em;
+}
+
+fieldset { border: 0; padding: 0 }
+
+input.url {
+	padding: 0.25em;
+	font-size: 1.2em;
+	width: 30em;
+}
+
+
+/* from signuptable.css */
+
+textarea.pastedLineup {
+	width: 100%;
+	height: 7em;
+	font-family: monospace;
+	font-size: 12px;
+}
+
+div.parser, div.raid-info, div.raid-info select, div.raid-info input { font-size: 16px }
+div.parser select { border: 1px solid black }
+div.parser input.url {
+	font-size: 16px;
+	width: 100%;
+	padding: 3px 0;
+}
+
+div.raid-info, div.parser {
+	padding: 20px;
+	background-color: #222;
+	border: 1px solid #555;
+	margin-bottom: 20px;
+}
+div.raid-info > table.fields { margin: 0 }
+
+div.parser h2 {
+	margin-top: 0.5em;
+	padding-top: 0.5em;
+	margin-bottom: 0.5em;
+	font-weight: normal;
+	border-top: 1px dotted #777;
+}
+div.parser h2:first-child { border-top: 0; margin-top: 0; padding-top: 0 }
+
+div.lineup-options { line-height: 24px; text-align: right }
+div.lineup-options img { vertical-align: middle }
+table.lineup { min-width: 860px; width: 100% }
+
+table.lineup td, table.lineup th { padding: 4px 6px }
+table.lineup th {
+	font-weight: bold;
+	background-color: #333;
+}
+
+table.lineup tr.even td, table.lineup.striped tbody tr:nth-child(odd) td {
+	background-color: #222;
+}
+
+table.lineup tr.cancelled {
+	text-decoration: line-through
+}
+
+table.lineup tr.selected td  { font-weight: bold }
+
+table.lineup select + img.spinner { position: absolute; vertical-align: middle }
+
+table.lineup td.group { text-align: right; width: 85px }
+table.lineup td.character { white-space: nowrap }
+
+.role-selector { width: 23px; text-align: center }
+
+
+.right-sidebar div.section {
+	margin-bottom: 20px;
+}
+.right-sidebar div.title {
+	padding: 5px;
+	background-color: #555;
+	color: white;
+	font-weight: bold;
+	/*border: 1px solid #bbb;*/
+}
+.right-sidebar div.body {
+	background-color: #888;
+	color: black;
+}
+.right-sidebar div.bufflist { padding: 10px }
+
+div.charlist div div {
+	/*color: black;*/
+	font-weight: bold;
+	background-color: #171717;
+	
+	padding: 1px 18px;
+	margin-left: 5px;
+	border-top: 1px solid #444;
+	position: relative;
+	font-size: 11px;
+	height: 13px;
+}
+/*.charlist div.death_knight { background-color: rgb(196, 31, 59) }
+.charlist div.druid { background-color: rgb(255, 125, 10) }
+.charlist div.hunter { background-color: rgb(171, 212, 115) }
+.charlist div.mage { background-color: rgb(105, 204, 240) }
+.charlist div.paladin { background-color: rgb(245, 140, 186) }
+.charlist div.priest { background-color: rgb(255, 255, 255) }
+.charlist div.rogue { background-color: rgb(255, 245, 105) }
+.charlist div.shaman { background-color: rgb(36, 89, 255) }
+.charlist div.warlock { background-color: rgb(148, 130, 202) }
+.charlist div.warrior { background-color: rgb(199, 156, 110) }*/
+
+.charlist img {
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
+div.right-sidebar div.bufflist {
+	background-color: #171717;
+	border: 1px solid #444;
+	padding: 3px;
+	font-size: 10px;
+	
+}
+div.right-sidebar div.bufflist img { padding-right: 1px }
+div.right-sidebar div.bufflist div.inactive { color: #6E6E6E }
+div.right-sidebar div.bufflist span.count { padding-right: 5px; font-weight: bold }
+
+div.right-sidebar span.tag {
+	position: absolute;
+	right: 5px;
+	font-weight: normal;
+}
+
+a.delete { font-size: 12px; color: red; font-weight: bold }
+
+div.signupGroup {
+	margin: 1em;
+}
+
+.signups .icon { width: 20px }
+.signups .character { width: 10em }
+.signups .signedUp { width: 13em }
+.signups .role { width: 7em }
+.signups .status { width: 10em }
+.signups .credit { width: 5em }

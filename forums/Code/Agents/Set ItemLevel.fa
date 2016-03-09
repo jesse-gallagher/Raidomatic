@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='utf-8'?>
+<note class='filter' xmlns='http://www.lotus.com/dxl' version='9.0' maintenanceversion='1.4'
+ replicaid='05257F710059B13D'>
+<noteinfo noteid='4e2' unid='894E35FDAA58CDE785257A4D003C6784' sequence='11'>
+<created><datetime dst='true'>20120801T065946,60-04</datetime></created>
+<modified><datetime>20160309T111950,79-05</datetime></modified>
+<revised><datetime dst='true'>20141110T172632,64-04</datetime></revised>
+<lastaccessed><datetime>20160309T111950,78-05</datetime></lastaccessed>
+<addedtofile><datetime>20160309T111950,78-05</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Jesse Gallagher/O=Frost</name><name>CN=Jesse Gallagher/O=IKSG</name></updatedby>
+<wassignedby><name>CN=Jesse Gallagher/O=IKSG</name></wassignedby>
+<item name='$TITLE' sign='true'><text>Set ItemLevel</text></item>
+<item name='$AssistType' sign='true'><number>65426</number></item>
+<item name='$AssistLastRun' sign='true'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='$AssistDocCount' sign='true'><number>0</number></item>
+<item name='$Comment' sign='true'><text/></item>
+<item name='$FlagsExt' sign='true'><text/></item>
+<item name='$AssistFlags' sign='true'><text>Es</text></item>
+<item name='$AssistTrigger'><text>4</text></item>
+<item name='$AssistInfo' sign='true'>
+<rawitemdata type='11'>
+AQAEAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+</rawitemdata></item>
+<item name='$AssistQuery' sign='true'>
+<rawitemdata type='f'>
+gQYAAAAAiP8PAAAAAAAFAExvb3RzAA==
+</rawitemdata></item>
+<item name='$AssistAction' sign='true'>
+<rawitemdata type='10'>
+gQKE/w4CAAAAAAQCBAIIAIQABQAJAEl0ZW1MZXZlbAABAAAACgKvAGgAXAABAAkASXRlbUxldmVs
+AAEAAAABAAAAAQAOAHdvd1xjb21tb24ubnNmHwIBAAUASXRlbXMABQAGAEl0ZW1JRAEABQBMZXZl
+bAACAAwBAAAAAAAAgwbEAq4ADAABAAAArgAEALUDAwAHACYAHwAJMlJUNlMxMFMxNFMxOFMyMFMy
+MlMyNFMyOFJUMjlSAAgAdgAFAAkARXZlbnREYXRlAAEAAAAKAq8AWgBOAAEACQBFdmVudERhdGUA
+AQAAAAEAAAABAAYAVG9waWNzBQAHAFRvcGljSUQAAQAJAEV2ZW50RGF0ZQACAAwBAAAAAAAAgwbE
+Aq4ADAABAAAArgAEALUDAwAHACgAIQAJMFIyUlQ2UzEwUzE0UzE2UzE4UzIwUzIyUzI2UlQyN1IA
+CAB+AAUACABJdGVtTmFtZQEAAAAKAq8AZABYAAEACABJdGVtTmFtZQEAAAABAAAAAQAOAHdvd1xj
+b21tb24ubnNmHwIBAAUASXRlbXMABQAGAEl0ZW1JRAEABABOYW1lAgAMAQAAAAAAAIMGxAKuAAwA
+AQAAAK4ABAC1AwMABwAoACEACTBSMlJUNlMxMFMxNFMxOFMyMFMyMlMyNFMyOFJUMjlSAAAACABm
+AAMABwAMAAYACTBSTDFT
+</rawitemdata></item>
+<item name='$AssistAction_Ex' sign='true'>
+<rawitemdata type='14'>
+gQI=
+</rawitemdata></item>
+<item name='$Restricted' sign='true'><number>1</number></item>
+<item name='$Flags'><text>f3</text></item>
+<item name='$DesignerVersion'><text>8.5.3</text></item>
+<item name='$AssistRunInfo' summary='true'>
+<rawitemdata type='3'>
+BgAAAgAACADeBAAAAAAAAAUAAAAwAAAAAAAAAAAAAAAAAAAAEwEAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAgG89AE16JYW8CgAACFA9AE16JYUgnUEAx3klhQAAAAAAAAAAAAAAAAAAAAAAAAAAU3RhcnRl
+ZCBydW5uaW5nIGFnZW50ICdTZXQgSXRlbUxldmVsJyBvbiAwOC8wMS8yMDEyIDA3OjEwOjUyIEFN
+DQpSdW5uaW5nIG9uIGFsbCBkb2N1bWVudHMgaW4gZGF0YWJhc2U6IDU5OTQzIHRvdGFsDQpGb3Vu
+ZCAyNzQ4IGRvY3VtZW50KHMpIHRoYXQgbWF0Y2ggc2VhcmNoIGNyaXRlcmlhDQoyNzQ4IGRvY3Vt
+ZW50KHMpIHdlcmUgbW9kaWZpZWQgYnkgZm9ybXVsYQ0KRG9uZSBydW5uaW5nIGFnZW50ICdTZXQg
+SXRlbUxldmVsJyBvbiAwOC8wMS8yMDEyIDA3OjExOjAyIEFNDQoADQrJHbhoc6djNAMyd0r5VhwF
+yoDjyDBpuEzcKmJJLOAtDQbFzHR3Db/nGDsONxo8sJ4KHW9jkSJtu3y7ZrU97u0xLA+hP2ap2Nz3
+S/ljlvX2jjADClMR7+h4F1cYxpqrlbtr9VsiuO8Lr8F3Ka3R3FY5X5W+viddukqJzlXzLWkoScN1
+aahIR6iCotuuIxZG8AHKGm4yTP5nIHVUZG1pnjD3TFvIZJWTWMNtDbcOA6pkrj4zRTdQCaviDiVM
+BbQZcPPJhsdNIStgaO3IWtb8wzLJDi8SBp2fyP7U/+SeOoR3LWKtqRzROuKoGIW2ypRET/g9myhY
+lR5x1G8nvSDQqBJf591B44Tbi9Q3WRnnf6dQwxbD6VfNSTzEI9men5EaAlar0lvWJjJbkLfJptvz
+TLFmSf7UUUMuSB5coFYK01eE0UOdRWOY5tTqNCZoZdBb7RVeIvmCJiHoNMYGgFEa9cE8hVOK6PQh
+mM0RmaTsFgp9jH2PDL0masV9TDHUC98hk77Qx8V0Pl38AfO/otgYY/g5fi0yPxnZx1IIV6LyUCba
+x7KcTEZiS1/3cU0hbxDy8j7eZyC+DxmeQ68V5U4fqy/o/jhMPKYaCiu9K0pbkqyj9EthnFTOII0c
+fYMMWl1FBmVk0cBZbOIcHmGK0DPo4DxczCo/b1NYyJeBn6N4gLuo0U3j+Bh1QoaIbQXruEd3GljG
+R2SPEPM8mtig+HTo9vtoEWKT8AmEfsdjDWtxAn5CZAfxtumgzMdk+MZzxL4KseL00jd///ETHj4o
+hqdf4tNvVYqkTyl18CLBL9F8TmmcPQAPNMrZ56SCihIT+IJUhNTd9H/xJ6IsRBtcpbT9D1BLBwju
+w296xAMAAEwGAABQSwMEFAAI
+</rawitemdata></item>
+<item name='$POID'><datetime dst='true'>20130112T165801,11-04</datetime></item>
+<item name='$AssistVersion'><datetime dst='true'>20141110T172632,85-04</datetime></item></note>
+

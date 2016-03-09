@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom">
+	
+	<xp:repeat id="topics" var="post" rows="#{compositeData.count}" value="#{compositeData.value}">
+		<xp:this.facets>
+			<xp:panel xp:key="header" disableTheme="true">
+				<xp:text escape="false" disableTheme="true"><xp:this.value><![CDATA[
+					<table class="topics recentTopics">
+				]]></xp:this.value></xp:text>
+			</xp:panel>
+			<xp:panel xp:key="footer" disableTheme="true">
+				<xp:text escape="false" disableTheme="true"><xp:this.value><![CDATA[
+					</table>
+				]]></xp:this.value></xp:text>
+				
+				<xc:pager loaded="${compositeData.showPager}" id="pager2" for="topics" pageCount="20" baseURL="#{baseURL}" styleClass="bottomPager"/>
+			</xp:panel>
+		</xp:this.facets>
+		<tr class="#{javascript: post.topic.read ? '' : 'unreadForum'}">
+			<td class="unread"><xp:image url="/tango/internet-group-chat.png" rendered="#{!post.topic.isRead}" styleClass="unreadIcon" /></td>
+			<td class="name">
+				<xp:link value="/Topics/#{post.topic.id}?showPost=#{post.id}#post-#{post.id}" text="#{post.topic.title}"/>
+			</td>
+			<td class="userInfo">
+				<xc:Username value="#{post.createdBy}" titleBlock="false"/>
+			</td>
+			<td>
+				<xc:DateTime value="#{post.dateTime}"/>
+			</td>
+		</tr>
+	</xp:repeat>
+</xp:view>

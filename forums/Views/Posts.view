@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='utf-8'?>
+<note default='true' class='view' xmlns='http://www.lotus.com/dxl' version='9.0'
+ maintenanceversion='1.4' replicaid='05257F710059B13D'>
+<noteinfo noteid='32a' unid='3E5A00AFB3612A4F8525774B0002A6AE' sequence='50'>
+<created><datetime dst='true'>20100622T202857,42-04</datetime></created>
+<modified><datetime>20160309T111945,96-05</datetime></modified>
+<revised><datetime dst='true'>20141110T172614,12-04</datetime></revised>
+<lastaccessed><datetime>20160309T111945,95-05</datetime></lastaccessed>
+<addedtofile><datetime>20160309T111945,95-05</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Jesse Gallagher/O=Frost</name><name>CN=Jesse Gallagher/O=IKSG</name></updatedby>
+<wassignedby><name>CN=Jesse Gallagher/O=IKSG</name></wassignedby>
+<item name='$FormatNote' summary='true' sign='true'>
+<rawitemdata type='4'>
+AQCaavzHgitX2SJ1WABHdyWF
+</rawitemdata></item>
+<item name='$FormulaClass' sign='true'><text>1</text></item>
+<item name='$TITLE' sign='true'><text>Posts</text></item>
+<item name='$Index' sign='true'><text/></item>
+<item name='$Formula' summary='true' sign='true'><formula compiled='true'>
+hgACABwABwBUb3BpY0lEAAUABwBUb3BpY0lEAAMABQBCAD4ABgAGAAcACQAIAAcACQBQb3N0SURU
+b3BpY0lEQ3JlYXRlZEJ5RGF0ZVRpbWVGb3J1bUlEJENvbmZsaWN0BAAEAAAAGAAFAAQARm9ybQEA
+BABQb3N0CgIDAAcACgAEAAlMMVM=
+</formula></item>
+<item name='$Collation' summary='true'>
+<rawitemdata type='2'>
+EwABAABEAGYAAAAGAFBvc3RJRA==
+</rawitemdata></item>
+<item name='$Collation1' summary='true'>
+<rawitemdata type='2'>
+IwACAABEgGYAAAAHAIBmAAcACABUb3BpY0lERGF0ZVRpbWU=
+</rawitemdata></item>
+<item name='$Collation2' summary='true'>
+<rawitemdata type='2'>
+FQABAABEgGYAAAAIAERhdGVUaW1l
+</rawitemdata></item>
+<item name='$Collation3' summary='true'>
+<rawitemdata type='2'>
+FQABAABEgWYAAAAIAERhdGVUaW1l
+</rawitemdata></item>
+<item name='$Collation4' summary='true'>
+<rawitemdata type='2'>
+IwACAABEgGYAAAAHAIFmAAcACABGb3J1bUlERGF0ZVRpbWU=
+</rawitemdata></item>
+<item name='$ViewFormat' summary='true' sign='true'>
+<rawitemdata type='5'>
+AQAFAAwAClAAAFZDAQAGAAYAAAAAAFAAAQAACgAAAAAAAAAAAAICAAAAVkMAEQcABwAeAAAAUAAB
+AAAKAAAAAAAAAAAAAgIAAABWQwAgCQAJAAAAAABQAAEAAAoAAAAAAAAAAAACAgAAAFZDAAMIAAkA
+AAAAAFAAAQAACgAAAAAAAAAAAAICAAAAVkMAMQcABwAAAAAAUAABAAAKAAAAAAAAAAAAAgIAAABQ
+b3N0SURQb3N0SURUb3BpY0lEVG9waWNJRB4AAgAcAAcAVG9waWNJRAAFAAcAVG9waWNJRAADAENy
+ZWF0ZWRCeUNyZWF0ZWRCeURhdGVUaW1lRGF0ZS9UaW1lRm9ydW1JREZvcnVtSUQmAAEAAAABAQAJ
+AQAACgEBDgoAAAEArSsBAAEAAQAAAAAAAAAAAFdDAQUACQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AP//AAAAAAAAAAAAAAAAAABXQwEBAAkAAAAAAAAAAAAAAAAAAAAAAwAEAAAAAAD//wAAAAAAAAAA
+AAAAAAAAV0MBAQAJAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAA//8AAAAAAAAAAAAAAAAAAFdDAQEA
+CQAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAP//AAAAAAAAAAAAAAAAAABXQwEBAAkAAAAAAAAAAAAA
+AAAAAAAAAwAEAAAAAAD//wAAAAAAAAAAAAAAAAAAQgAQAAAAAQD///8ABQD///8AAQAAAAAAAAAA
+AAAAAAABAP///wABAP///wAAAAEAAAAAAAEAAAAAAAEAAAAAAAAACAAAAAAAAQA=
+</rawitemdata></item>
+<item name='$Comment' sign='true'><text/></item>
+<item name='$WebFlags'><text>A</text></item>
+<item name='$DesignerVersion'><text>8.5.3</text></item>
+<item name='$Flags'><text>Y</text></item></note>
+

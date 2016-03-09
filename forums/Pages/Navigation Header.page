@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<note class='form' xmlns='http://www.lotus.com/dxl' version='9.0' maintenanceversion='1.4'
+ replicaid='05257F710059B13D'>
+<noteinfo noteid='a02' unid='126BC5CC9D9D917885257AF10050C2C6' sequence='10'>
+<created><datetime dst='true'>20130112T104207,42-04</datetime></created>
+<modified><datetime>20160309T112004,29-05</datetime></modified>
+<revised><datetime dst='true'>20141110T172609,87-04</datetime></revised>
+<lastaccessed><datetime>20160309T112004,28-05</datetime></lastaccessed>
+<addedtofile><datetime>20160309T112004,28-05</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Jesse Gallagher/O=Frost</name><name>CN=Jesse Gallagher/O=IKSG</name></updatedby>
+<wassignedby><name>CN=Jesse Gallagher/O=IKSG</name></wassignedby>
+<item name='OriginalModTime'><datetime>20061107T120130,82-05</datetime></item>
+<item name='$HTMLCode' sign='true'>
+<rawitemdata type='1'>
+X/8QAAIADwAHAAAAAAAAAA==
+</rawitemdata></item>
+<item name='$TITLE'><text>Navigation Header</text></item>
+<item name='$Info' sign='true'>
+<rawitemdata type='1'>
+hhgBAIAAAAAAgAAADwABALnF0gAQAAAA
+</rawitemdata></item>
+<item name='$Flags'><text>C34WQw1</text></item>
+<item name='$DesignerVersion'><text>8.5</text></item>
+<item name='$$ScriptName' summary='false' sign='true'><text>Navigation Header</text></item>
+<item name='$Body' sign='true'>
+<rawitemdata type='1'>
+gQKC/1oAAQAAAAAAAAAAABAFAAAQBQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAABAAAAAJSEEAUHABAFBwAAAAAAAQAAAAQAAACDBAEAhf8IAAEAAASBAoMEAQDdBgEA
++//7/ywAAAAAAAEBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAFz/PgAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOAAAAAAAAAAEAAAoAAAAAAQAAAAAA3gYBAPv/
+ow4QBSgAPAAAAAAAAgCkEgAAEAXuPAAAAAIAAAEBAACBAoL/WgACAAAAAAAAAAAAEAXuPBAFAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAhgEAAAAAVIcAAAAAAAAAAAAA
+AAABAAAABAAAAIMEAgCF/xQAAQEADEd1aWxkIEZvcnVtc6UGAAAAAIECgwQBAIX/CAABAAAKgQKD
+BAEAhf8IAAEAAAo=
+</rawitemdata></item></note>
+

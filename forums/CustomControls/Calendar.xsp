@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core">
+	<xp:this.beforePageLoad><![CDATA[#{javascript:
+		var today = @Today();
+		if(param.get('month')) {
+			viewScope._currentMonth = @Date(parseInt(param.get('month').split('-')[0]), parseInt(param.get('month').split('-')[1]), 1, 12, 0, 0);
+		} else {
+			viewScope._currentMonth = @Date(@Year(today), @Month(today), 1, 12, 0, 0);
+		}
+		
+		function recalcWeeks() {
+			var firstOfMonth = viewScope._currentMonth;
+			var lastOfMonth = @Adjust(@Adjust(firstOfMonth, 0, 1, 0, 0, 0, 0), 0, 0, -1, 0, 0, 0);
+			var followingWeek = @Adjust(lastOfMonth, 0, 0, 7, 0, 0, 0);
+			
+			var numWeeks = Math.ceil((@Day(followingWeek) + @Weekday(firstOfMonth) - 1) / 7);
+			
+			var start = @Adjust(firstOfMonth, 0, 0, -(@Weekday(firstOfMonth)-1), 0, 0, 0);
+			var end = @Adjust(followingWeek, 0, 0, 7 - @Weekday(followingWeek), 0, 0, 0);
+			
+			var weeks = [];
+			var week = [];
+			var currentIndex = 0;
+			for(var current = start; current.getTime() <= end.getTime(); current = @Adjust(current, 0, 0, 1, 0, 0, 0)) {
+				if(week.length > 0 && @Weekday(current) == 1) {
+					weeks.push(week);
+					week = [];
+				}
+				week.push(current);
+				
+				currentIndex++;
+				if(currentIndex == 50) break;
+			}
+			weeks.push(week);
+			
+			viewScope._weeks = weeks;
+		}
+		
+		recalcWeeks();
+	}]]></xp:this.beforePageLoad>
+	
+	<xp:eventHandler event="onClientLoad" submit="false">
+		<xp:this.script><![CDATA[
+			/* Thanks for not supporting postion: relative in the same way as Webkit and IE, Firefox. */
+			if(dojo.isMozilla) {
+				var cal = dojo.byId("#{id:calendar}");
+				dojo.forEach(dojo.query("span.label", cal), function(span) {
+					var td = span.parentNode;
+					while(td != null && td.tagName != "TD") { td = td.parentNode; }
+					if(td == null) { return; }
+					
+					console.log("Wants top: " + (td.offsetTop));
+					console.log("Wants left: " + (td.offsetLeft));
+					span.style.top = (td.offsetTop) + "px";
+					span.style.left = (td.offsetLeft + td.offsetWidth - span.offsetWidth - 5) + "px";
+					span.style.right = "auto";
+				});
+			} 
+		]]></xp:this.script>
+	</xp:eventHandler>
+
+	<xp:this.resources>
+		<xp:dojoModule name="dijit.Tooltip"></xp:dojoModule>
+	</xp:this.resources>
+	
+	<xp:div id="calendar">
+		<h2 class="cal-header">
+			<xp:text value="#{viewScope._currentMonth}">
+				<xp:this.converter>
+					<xp:convertDateTime pattern="MMMM yyyy"></xp:convertDateTime>
+				</xp:this.converter>
+			</xp:text>
+		</h2>
+		
+		<div class="calendarContainer">
+			<xp:div styleClass="cal-pager pager">
+				<xp:link id="previous" styleClass="previous">
+					<xp:this.value><![CDATA[#{javascript:
+						var prevMonth = @Adjust(viewScope._currentMonth, 0, -1, 0, 0, 0, 0)
+						view.getPageName() + "?month=" + @Year(prevMonth) + "-" + @Month(prevMonth)
+					}]]></xp:this.value>
+					Previous
+				</xp:link>
+				<xp:link styleClass="next">
+					<xp:this.value><![CDATA[#{javascript:
+						var nextMonth = @Adjust(viewScope._currentMonth, 0, 1, 0, 0, 0, 0)
+						view.getPageName() + "?month=" + @Year(nextMonth) + "-" + @Month(nextMonth)
+					}]]></xp:this.value>
+					Next
+				</xp:link>
+			</xp:div>
+			<xp:table styleClass="calendar" cellspacing="0" cellpadding="0">
+				<thead>
+					<xp:tr styleClass="day-header">
+						<xp:td>Sun</xp:td>
+						<xp:td>Mon</xp:td>
+						<xp:td>Tues</xp:td>
+						<xp:td>Wed</xp:td>
+						<xp:td>Thurs</xp:td>
+						<xp:td>Fri</xp:td>
+						<xp:td>Sat</xp:td>
+					</xp:tr>
+				</thead>
+				
+				<tbody>
+					<xp:repeat value="#{viewScope._weeks}" var="calendarWeek" indexVar="rindex">
+						<xp:tr styleClass="#{javascript:rindex % 2 == 0 ? 'odd' : 'even'}">
+							<xp:repeat value="#{calendarWeek}" var="calendarDay">
+								<xp:td>
+									<xp:this.styleClass><![CDATA[#{javascript:
+										@Year(@Today())==@Year(calendarDay) && @Month(@Today())==@Month(calendarDay) && @Day(@Today())==@Day(calendarDay) ? 'today' :
+										@Date(@Year(calendarDay), @Month(calendarDay), 1, 12, 0, 0).getTime() == viewScope._currentMonth.getTime() ? 	'' :
+										calendarDay.getTime() < viewScope._currentMonth.getTime() ? 									'past' :
+																													'future'
+									}]]></xp:this.styleClass>
+									<xp:text value="#{javascript:@Day(calendarDay)}" styleClass="label">
+										<xp:this.converter>
+											<xp:convertNumber type="number" integerOnly="true"/>
+										</xp:this.converter>
+									</xp:text>
+									
+									<xp:callback id="CalendarCellCallback"></xp:callback>
+								</xp:td>
+							</xp:repeat>
+						</xp:tr>
+					</xp:repeat>
+				</tbody>
+			</xp:table>
+		</div>
+	</xp:div>
+</xp:view>

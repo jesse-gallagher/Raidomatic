@@ -1,0 +1,13 @@
+Changelog
+
+2012/5/28
+=========
+* Changed the news feeds on the front page to load live data from their respective sources
+	* Changed the guild news section to use the b.net API and display character names and items as links
+* Changed the main forum list to use "loaded" instead of "rendered", which should mildly speed up load times
+* Changed the raid setup form to use a new picker for raid leaders, which is more powerful and doesn't reset the rest of the form when used
+* Changed the HTML output type of the app to HTML5, which shouldn't change any visible behavior at all
+* Changed the app to try to adjust times to the user's time zone
+* Changed the Player and Character page tabbed tables to load each tab's data as it's requested, making the initial page load faster
+* Changed several table_* custom controls to use data tables instead of repeats
+* Changed the home page text to be set in the Gorum Options config in the Common Data DB

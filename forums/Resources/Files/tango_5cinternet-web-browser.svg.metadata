@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><note class="form" maintenanceversion="1.4" replicaid="05257F710059B13D" version="9.0" xmlns="http://www.lotus.com/dxl">
+<noteinfo noteid="9fa" sequence="12" unid="11BD98F7B841516C85257AF10050BFE0">
+<created><datetime dst="true">20130112T104200,00-04</datetime></created>
+<modified><datetime>20160309T112004,22-05</datetime></modified>
+<revised><datetime dst="true">20141110T172643,73-04</datetime></revised>
+<lastaccessed><datetime>20160309T112004,21-05</datetime></lastaccessed>
+<addedtofile><datetime>20160309T112004,21-05</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Jesse Gallagher/O=Frost</name><name>CN=Jesse Gallagher/O=IKSG</name></updatedby>
+<wassignedby><name>CN=Jesse Gallagher/O=IKSG</name></wassignedby>
+<item name="$Flags"><text>345CgQ</text></item>
+<item name="$FlagsExt"><text>D</text></item>
+<item name="$FileModDT" sign="true"><datetime>20090211T115230,00-05</datetime></item>
+<item name="$TITLE" sign="true"><text>tango\internet-web-browser.svg</text></item>
+<item name="$MimeType"><text>image/svg+xml</text></item>
+<item name="$DesignerVersion"><text>8.5.3</text></item>
+
+
+
+
+<item name="$FileNames" sign="true"><text>tango_5cinternet-web-browser.svg</text></item></note>

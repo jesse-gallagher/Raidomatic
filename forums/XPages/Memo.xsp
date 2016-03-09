@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom" xmlns:xe="http://www.ibm.com/xsp/coreex"
+	beforePageLoad="#{pageController.beforePageLoad}" afterPageLoad="#{pageController.afterPageLoad}"
+	pageTitle="Mail">
+
+	<xp:this.data>
+		<xp:dominoDocument formName="Memo" action="openDocument" var="memo" databaseName="#{Players.current.mailFile}"/>
+		<xp:dominoDocument loaded="${param.parentId != null and param.parentId != ''}" var="originalMemo" formName="Memo" action="openDocument" ignoreRequestParams="true" documentId="#{param.parentId}"
+			databaseName="#{Players.current.mailFile}"/>
+	</xp:this.data>
+	
+	<xp:this.resources>
+		<xp:styleSheet href="/mail.css"></xp:styleSheet>
+	</xp:this.resources>
+
+	<xc:Layout>
+		<h1>Memo</h1>
+		
+		<xp:text value="#{originalMemo.Subject}"/>
+		
+		<xp:button value="Reply" id="replyToMemo" rendered="#{javascript:!memo.isEditable()}">
+			<xp:eventHandler event="onclick" submit="true" refreshMode="complete">
+				<xp:this.action>
+					<xp:openPage name="/Memo.xsp" target="newDocument">
+						<xp:this.parameters>
+							<xp:parameter name="parentId" value="#{javascript:memo.getDocument().getUniversalID()}"/>
+						</xp:this.parameters>
+					</xp:openPage>
+				</xp:this.action>
+			</xp:eventHandler>
+		</xp:button>
+		<xp:button value="Delete" id="deleteMemo" rendered="#{javascript:!memo.isEditable()}">
+			<xp:eventHandler event="onclick" submit="true" refreshMode="complete">
+				<xp:this.action>
+					<xp:deleteDocument name="/Mail.xsp"
+						message="Delete this memo?">
+					</xp:deleteDocument>
+				</xp:this.action>
+			</xp:eventHandler>
+		</xp:button>
+	
+		<table class="fields mailFields">
+			<tr>
+				<td>To:</td>
+				<td>
+					<xp:inputText value="#{memo.SendTo}" defaultValue="#{originalMemo.From}" multipleSeparator="; ">
+						<xp:typeAhead mode="partial" minChars="1" tokens="; " ignoreCase="true"
+							valueList="#{pageController.playerNames}"/>
+					</xp:inputText>
+				</td>
+			</tr>
+			<tr>
+				<td>Subject:</td>
+				<td>
+					<xp:inputText value="#{memo.Subject}" defaultValue="#{pageController.defaultSubject}"/>
+				</td>
+			</tr>
+		</table>
+		
+		<xp:inputRichText value="#{memo.Body}" id="bodyField"/>
+		
+		<xp:button value="Send" id="button1" rendered="#{javascript:memo.isEditable()}">
+			<xp:eventHandler event="onclick" submit="true" refreshMode="complete"
+				action="#{pageController.send}"/>
+		</xp:button>
+	</xc:Layout>
+
+	<xp:this.navigationRules>
+		<xp:navigationRule outcome="xsp-success" viewId="/Mail.xsp" />
+	</xp:this.navigationRules>
+</xp:view>

@@ -1,0 +1,118 @@
+h1 { margin-bottom: 1em }
+
+.categories, .posts { margin: 0; padding: 0 }
+.categories > li, .posts > li { list-style-type: none; margin: 0; padding: 0 }
+.category h2 {
+	border: 1px solid #555;
+	padding: 0.5%;
+	background-color: #333;
+	color: white;
+	font-weight: bold;
+}
+
+.forums, .topics { margin: 0.5%; margin-left: 1.5%; width: 90%; border-collapse: collapse }
+.forums th, .topics th { font-weight: bold; border-bottom: 1px solid #444 }
+.forums tfoot td, .topics tfoot td { font-style: italic; border-top: 1px solid #444 }
+.forums td, .topics td { padding: 0.5em 0 }
+.forums .name, .topics .name { width: auto }
+.forums .topicCount, .forums .postCount, .topics .postCount { width: 7em; text-align: right }
+.forums .latestPost, .topics .latestPost { width: 13em; text-align: right }
+.topics .author { display: block }
+.forums .subtitle { display: block }
+
+.posts > .post {
+	position: relative;
+	margin-bottom: 1em;
+	border: 1px solid #555;
+	min-height: 200px;
+}
+.posts .time {
+	position: absolute;
+	top: 4px;
+	left: 4px;
+}
+.posts .title {
+	padding: 3px;
+	padding-left: 152px;
+	border-bottom: 1px solid #555;
+	background-color: #222;
+	height: 16px;
+}
+.posts .author {
+	position: absolute;
+	top: 23px;
+	left: 0;
+	width: 130px;
+	bottom: 0;
+	background-color: #111;
+	border-right: 1px solid #555;
+	padding: 10px;
+}
+.posts .author img { display: block; max-width: 100%; }
+.posts .body, .posts .edit-history, .posts .tags, .posts .appQuestionsBox, .posts .signature {
+	margin-left: 152px;
+	padding: 1%;
+	padding-bottom: 45px;
+	font-size: 14px;
+	line-height: 1.4;
+}
+.posts .body p {
+	margin-bottom: 1em;
+}
+.posts .signature {
+	border-top: 1px solid #ccc;
+	margin-left: 170px;
+	margin-right: 18px;
+}
+.posts .body img { max-width: 100% }
+.posts .edit-history {
+	font-size: 12px;
+	font-style: italic;
+}
+.posts .appQuestionsBox {
+	/*margin: 0 1em;*/
+	margin: 20px;
+	margin-left: 172px;
+	border: 1px solid #555;
+	background-color: #333;
+	padding: 1em;
+}
+.posts .actions {
+	position: absolute;
+	bottom: 0;
+	left: 150px;
+	right: 0;
+	height: 24px;
+	padding-top: 3px;
+	border-top: 1px solid #555;
+	background-color: #111;
+}
+.posts .actions .button { margin-right: 0.5em }
+
+.sticky, .unread { width: 20px }
+.sticky img, .unread img { width: 18px; height: 18px }
+
+.category h2 {
+	padding-left: 20px;
+	background-image: url("tango/media-playback-start-rot.png");
+	background-position: 1px center;
+	background-repeat: no-repeat;
+	cursor: pointer;
+}
+.category h2.collapsed { background-image: url("tango/media-playback-start.png") }
+
+.post .quoteTitle { font-style: italic; margin-bottom: 0.5em }
+.post .quoteBody {
+	margin: 0 1em;
+	padding: 0.5em;
+	border: 1px solid #555;
+	background-color: #222;
+}
+.post .usernameTitleBlock { font-style: italic; margin-top: 0.5em; font-size: 0.9em }
+.post .postCountBlock { margin-top: 0.5em; font-size: 0.9em }
+
+h1 + .restricted { margin-top: -1em }
+.restricted { margin-bottom: 1em }
+.restricted img { width: 32px; height: 32px }
+
+.category .spinner { float: right }

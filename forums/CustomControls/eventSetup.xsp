@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom" xmlns:xe="http://www.ibm.com/xsp/coreex">
+	<xp:div id="eventSetup">
+		<table class="fieldLayout">
+			<tr>
+				<th scope="row"><h3>Date:</h3></th>
+				<td colspan="3">
+					<h3>
+						<xc:DateTime value="#{compositeData.value.eventDate}" rendered="#{!compositeData.editable}" styleClass="value"/>
+						<xp:inputText rendered="#{compositeData.editable == true}" value="#{viewScope.topicEventDate}"
+							defaultValue="#{javascript:@Time(@Year(@Today()), @Month(@Today()), @Day(@Today()), 21, 0, 0)}">
+							<xp:this.converter>
+								<xp:convertDateTime type="both" timeStyle="short"/>
+							</xp:this.converter>
+							<xp:dateTimeHelper/>
+						</xp:inputText>
+					</h3>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row">Type:</th>
+				<td>
+					<xp:text rendered="#{!compositeData.editable}" value="#{compositeData.value.eventType}" styleClass="value"/>
+					<xp:comboBox rendered="#{compositeData.editable == true}" id="eventType" value="#{viewScope.topicEventType}">
+						<xp:selectItem itemLabel="- Choose -" itemValue=""/>
+						<xp:selectItem itemLabel="Raid"/>
+						<xp:selectItem itemLabel="Dungeon"/>
+						<xp:selectItem itemLabel="PvP"/>
+						<xp:selectItem itemLabel="Meeting"/>
+						<xp:selectItem itemLabel="Applicant Interview"/>
+						<xp:selectItem itemLabel="Other"/>
+					</xp:comboBox>
+				</td>
+				<th scope="row">Leader:</th>
+				<td>
+					<xp:text rendered="#{!compositeData.editable}" value="#{javascript:compositeData.value.eventLeader.join(', ')}" styleClass="value"/>
+					<xp:panel disableTheme="true" rendered="#{compositeData.editable == true}">
+						<xe:djextNameTextBox id="topicEventLeader" value="#{viewScope.topicEventLeader}" multipleSeparator="," />
+						<xe:namePicker for="topicEventLeader" id="topicEventLeaderPicker">
+							<xp:this.dojoAttributes>
+								<xp:dojoAttribute name="maxRowCount" value="10000"/>
+							</xp:this.dojoAttributes>
+							<xe:this.dataProvider>
+								<xe:dominoNABNamePicker addressBookDb="wownames.nsf" addressBookSel="db-name" groups="false" />
+							</xe:this.dataProvider>
+						</xe:namePicker>
+					</xp:panel>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row">Loot Tier:</th>
+				<td>
+					<xp:text styleClass="value" rendered="#{compositeData.editable != true}"><xp:this.value><![CDATA[#{javascript:
+						if(!compositeData.value.eventLootTier) { return ""; }
+						var tier = (new com.raidomatic.model.LootTiers()).getById(compositeData.value.eventLootTier);
+						return tier == null ? "" : tier.name;
+					}]]></xp:this.value></xp:text>
+					<xp:comboBox id="lootTier" rendered="#{compositeData.editable == true}"
+						value="#{viewScope.topicEventLootTier}">
+						<xp:selectItem itemLabel="- Choose -"
+							itemValue="" />
+						<xp:selectItems>
+							<xp:this.value><![CDATA[#{javascript:
+								var result = []
+								var tiers = LootTiers.getLootTiersByName().toVector()
+								for(var i = 0; i < tiers.length; i++) {
+									result.push(tiers[i].name + "|" + tiers[i].id)
+								}
+								return result
+							}]]></xp:this.value>
+						</xp:selectItems>
+					</xp:comboBox>
+				</td>
+				<th scope="row">Groups:</th>
+				<td>
+					<xc:integer value="#{compositeData.value.eventGroups}" rendered="#{compositeData.editable != true}" />
+					<xp:radioGroup value="#{viewScope.topicEventGroupsText}" rendered="#{compositeData.editable == true}"
+						defaultValue="1" id="eventGroups">
+						<xp:selectItem itemLabel="1" />
+						<xp:selectItem itemLabel="2" />
+						<xp:selectItem itemLabel="3" />
+						<xp:selectItem itemLabel="4" />
+					</xp:radioGroup>
+				</td>
+			</tr>
+		</table>
+	</xp:div>
+</xp:view>

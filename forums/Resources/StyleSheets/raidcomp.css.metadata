@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><note class="form" maintenanceversion="1.4" replicaid="05257F710059B13D" version="9.0" xmlns="http://www.lotus.com/dxl">
+<noteinfo noteid="c82" sequence="17" unid="CDE9CBA73DE1215485257AF10050B2D3">
+<created><datetime dst="true">20130112T104126,59-04</datetime></created>
+<modified><datetime>20160309T112010,42-05</datetime></modified>
+<revised><datetime dst="true">20141110T172617,03-04</datetime></revised>
+<lastaccessed><datetime>20160309T112010,41-05</datetime></lastaccessed>
+<addedtofile><datetime>20160309T112010,41-05</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Jesse Gallagher/O=Frost</name><name>CN=Jesse Gallagher/O=IKSG</name></updatedby>
+<wassignedby><name>CN=Jesse Gallagher/O=IKSG</name></wassignedby>
+<item name="$TITLE"><text>raidcomp.css</text></item>
+<item name="$MimeType"><text>text/css</text></item>
+<item name="$Flags"><text>34C=Q</text></item>
+<item name="$MimeCharSet"><text>UTF-8</text></item>
+<item name="$PublicAccess"><text>1</text></item>
+<item name="$DesignerVersion"><text>8.5.3</text></item>
+
+
+<item name="$FileNames" sign="true"><text>raidcomp.css</text></item></note>

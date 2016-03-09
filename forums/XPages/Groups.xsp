@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom" pageTitle="Groups">
+
+	<xc:Layout>
+		<h1>Groups</h1>
+		
+		<xc:table_groups value="#{Groups.all}"/>
+	</xc:Layout>
+
+</xp:view>

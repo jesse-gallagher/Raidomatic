@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core">
+	<xp:text disableTheme="true" value="#{compositeData.value}">
+		<xp:this.converter>
+			<xp:customConverter getAsObject="#{javascript:value}">
+				<xp:this.getAsString><![CDATA[#{javascript:
+					(value / 1024).toFixed(1) + " KB"
+				}]]></xp:this.getAsString>
+			</xp:customConverter>
+		</xp:this.converter>
+	</xp:text>
+</xp:view>

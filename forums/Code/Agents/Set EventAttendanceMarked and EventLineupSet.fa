@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='utf-8'?>
+<note class='filter' xmlns='http://www.lotus.com/dxl' version='9.0' maintenanceversion='1.4'
+ replicaid='05257F710059B13D'>
+<noteinfo noteid='492' unid='EAE886478CF5409585257898007EE742' sequence='12'>
+<created><datetime dst='true'>20110522T190607,38-04</datetime></created>
+<modified><datetime>20160309T111949,81-05</datetime></modified>
+<revised><datetime dst='true'>20141110T172631,81-04</datetime></revised>
+<lastaccessed><datetime>20160309T111949,80-05</datetime></lastaccessed>
+<addedtofile><datetime>20160309T111949,80-05</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Jesse Gallagher/O=Frost</name><name>CN=Jesse Gallagher/O=IKSG</name></updatedby>
+<wassignedby><name>CN=Jesse Gallagher/O=IKSG</name></wassignedby>
+<item name='$TITLE' sign='true'><text>Set EventAttendanceMarked and EventLineupSet</text></item>
+<item name='$AssistType' sign='true'><number>65426</number></item>
+<item name='$AssistLastRun' sign='true'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='$AssistDocCount' sign='true'><number>0</number></item>
+<item name='$Comment' sign='true'><text/></item>
+<item name='$FlagsExt' sign='true'><text/></item>
+<item name='$AssistFlags' sign='true'><text>Es</text></item>
+<item name='$AssistTrigger'><text>4</text></item>
+<item name='$AssistInfo' sign='true'>
+<rawitemdata type='11'>
+AQAEAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+</rawitemdata></item>
+<item name='$AssistQuery' sign='true'>
+<rawitemdata type='f'>
+gQYAAAAAiP8QAAAAAAAGAFRvcGljcw==
+</rawitemdata></item>
+<item name='$AssistAction' sign='true'>
+<rawitemdata type='10'>
+gQKE/wwBAAAAAAIBAgEIADQABQAEAEZvcm0BAAUAVG9waWMACwKvABgADAABAAAAwgGuAAwAAQAA
+AK4ABAC1AwMABwAQAAoACTNTNFM2UzExUwgALgABAA4ARXZlbnRMaW5ldXBTZXQFAAkARXZlbnRE
+YXRlAAEAAAALAsQCAwAHABAACgAJMFJSNFM1UzZTCABSAAEAFQBFdmVudEF0dGVuZGFuY2VNYXJr
+ZWQABQAJAEV2ZW50RGF0ZQABAAAACwIFAAkARXZlbnREYXRlAAIA/////5d4JQAMAhwCxAIDAAcA
+GAASAAkwUjRTNVM2UzdTOFM5UzEwUwAACABmAAMABwAMAAYACTBSTDFT
+</rawitemdata></item>
+<item name='$AssistAction_Ex' sign='true'>
+<rawitemdata type='14'>
+gQI=
+</rawitemdata></item>
+<item name='$Restricted' sign='true'><number>1</number></item>
+<item name='$Flags'><text>f3</text></item>
+<item name='$DesignerVersion'><text>8.5.2</text></item>
+<item name='$AssistRunInfo' summary='true'>
+<rawitemdata type='3'>
+BgAAAgAACACOBAAAAAAAAAUAAAAwAAAAAAAAAAAAAAAAAAAASwEAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAvXpqAJp4JYUjEAAAWSB/AJh4JYUaPGsAaXglhQAAAAAAAAAAAAAAAAAAAAAAAAAAU3RhcnRl
+ZCBydW5uaW5nIGFnZW50ICdTZXQgRXZlbnRBdHRlbmRhbmNlTWFya2VkIGFuZCBFdmVudExpbmV1
+cFNldCcgb24gMDUvMjQvMjAxMSAxNToyMzowMA0KUnVubmluZyBvbiBhbGwgZG9jdW1lbnRzIGlu
+IGRhdGFiYXNlOiA0MDY5NCB0b3RhbA0KRm91bmQgNDEzMSBkb2N1bWVudChzKSB0aGF0IG1hdGNo
+IHNlYXJjaCBjcml0ZXJpYQ0KNDEzMSBkb2N1bWVudChzKSB3ZXJlIG1vZGlmaWVkIGJ5IGZvcm11
+bGENCkRvbmUgcnVubmluZyBhZ2VudCAnU2V0IEV2ZW50QXR0ZW5kYW5jZU1hcmtlZCBhbmQgRXZl
+bnRMaW5ldXBTZXQnIG9uIDA1LzI0LzIwMTEgMTU6MjM6MDINCgANCgAAAAAAcN4NAP//AAAAAAAA
+kN4NAP//AAAAAAAAsN4NAP//AAAAAAAA0N4NAP//AAAAAAAA8N4NAP//AAAAAAAAEN8NAP//AAAA
+AAAAUN8NAP//AAAAAAAAEOANAP//AAAAAAAAMOANAP//AAAAAAAAUOANAP//AAAAAAAA4EAJAP//
+AAAAAAAA8OANAP//AAAAAAAAsOANAP//AAAAAAAA0OANAP//AAAAAAAAkOANAP//AAAAAAAAwEEJ
+AP//AAAAAAAAMOENAP//AAAAAAAAUOENAP//AAAAAAAAcOENAP//AAAAAAAAkOENAP//AAAAAAAA
+sOENAP//AAAAAAAA0OENAP//AAAAAAAA8OENAP//AAAAAAAAEOINAP//AAAAAAAAMOINAP//AAAA
+AAAAUOINAP//AAAAAAAAcOINAP//AAAAAAAAkOINAP//AAAAAAAAsOINAP//AAAAAAAA0OINAP//
+AAAAAAAA8OINAP//AAAAAAAAkOoNAP//AAAAAAAAsOoNAP//AAAAAAAA0OoNAP//AAAAAAAA8OoN
+AP//AAAAAAAAEOsNAP//AAAAAAAAMOsNAP//AAAAAAAAUOsNAP//AAAAAAAAcOsNAP//AAAAAAAA
+kOsNAP//AAAAAAAAsOsNAP//AAAAAAAAUO8NAP//AAAAAAAAcOANAP//AAAAAAAAkO8NAP//AAAA
+AAAAsO8NAP//AAAAAAAA0O8NAP//AAAAAAAA8O8NAP//AAAAAAAAEPANAP//AAAAAAAAMPANAP//
+AAAAAAAAUPANAP//AAAAAAAA
+</rawitemdata></item>
+<item name='$POID'><datetime dst='true'>20130112T165800,69-04</datetime></item>
+<item name='$AssistVersion'><datetime dst='true'>20141110T172632,03-04</datetime></item></note>
+

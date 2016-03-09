@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom">
+
+	<xp:dataTable var="signup" indexVar="rindex" rows="#{javascript:Configuration.getDocumentItemValue('Forum Options', 'ForumDataTableRows')[0]}" value="#{compositeData.value}" id="signupTable" styleClass="lineup loot">
+		<xp:column style="white-space: nowrap">
+			<xp:this.facets><xp:text xp:key="header" value="Date"/></xp:this.facets>
+			<xp:link value="/topics/#{signup.topic.id}" text="#{signup.topic.eventDate}"/>
+		</xp:column>
+		<xp:column>
+			<xp:this.facets><xp:text xp:key="header" value="Title"/></xp:this.facets>
+			<xp:text value="#{signup.topic.title}"/>
+		</xp:column>
+		<xp:column>
+			<xp:this.facets><xp:text xp:key="header" value="Character"/></xp:this.facets>
+			<xp:link value="/characters/#{javascript:RUtils.urlEncode(signup.character.name)}" text="#{signup.character.name}"/>
+		</xp:column>
+		<xp:column>
+			<xp:this.facets><xp:text xp:key="header" value="Tier"/></xp:this.facets>
+			<xp:text value="#{signup.lootTier.name}"/>
+		</xp:column>
+		<xp:column>
+			<xp:this.facets><xp:text xp:key="header" value="Attended?"/></xp:this.facets>
+			<xp:text value="#{javascript:signup.attended ? 'Yes' : 'No'}"/>
+		</xp:column>
+		<xp:column>
+			<xp:this.facets><xp:text xp:key="header" value="Loots"/></xp:this.facets>
+			<xp:repeat var="lootItem" rows="100000">
+				<xp:this.value><![CDATA[#{javascript:
+					var result = []
+					var loots = signup.topic.loots
+					for(var i = 0; i < loots.length; i++) {
+						if(loots[i].player != null && loots[i].player.name == signup.player.name) {
+							result.push(loots[i].item)
+						}
+					}
+					return result
+				}]]></xp:this.value>
+				
+				<xc:itemLink value="#{lootItem}"/>
+			</xp:repeat>
+		</xp:column>
+	</xp:dataTable>
+	
+	<xp:pager layout="Previous Group Next" id="pager2" for="signupTable"
+		partialRefresh="true" />
+</xp:view>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core"
+	xmlns:xc="http://www.ibm.com/xsp/custom" pageTitle="Preferences">
+	<xp:this.data>
+		<xp:dominoDocument var="prefs" formName="UserPrefs"
+			computeWithForm="both" ignoreRequestParams="true">
+			<xp:this.action><![CDATA[#{javascript:
+				@DbLookup("", "User Prefs", @UserName(), 1, "[FailSilent]")=="" ? "newDocument" : "editDocument"
+			}]]></xp:this.action>
+			<xp:this.documentId><![CDATA[#{javascript:
+				@DbLookup("", "User Prefs", @UserName(), 1, "[FailSilent]:[ReturnDocumentUniqueID]")
+			}]]></xp:this.documentId>
+			<xp:this.querySaveDocument><![CDATA[#{javascript:prefs.replaceItemValue("AvatarURLMIMEType", avatarURLMimeType)}]]></xp:this.querySaveDocument></xp:dominoDocument>
+	</xp:this.data>
+	<xp:this.dataContexts>
+		<xp:dataContext var="avatarURLMimeType">
+			<xp:this.value><![CDATA[#{javascript:
+				if(prefs.getItemValueString("AvatarMode") != "URL") { return ""; }
+				if(prefs.getItemValueString("AvatarURL") == "") { return ""; }
+				try {
+					var url = new java.net.URL(prefs.getItemValueString("AvatarURL"));
+					var conn = url.openConnection();
+					conn.setRequestProperty("User-Agent", "Firefox/2.0");
+					conn.connect();
+					var contentType = conn.getHeaderField("Content-Type");
+					conn.disconnect();
+					return contentType;
+				} catch(e) { }
+				return "";
+			}]]></xp:this.value>
+		</xp:dataContext>
+	</xp:this.dataContexts>
+	<xp:this.navigationRules>
+		<xp:navigationRule outcome="xsp-success" viewId="/Forums.xsp" />
+	</xp:this.navigationRules>
+
+	<xp:this.beforePageLoad><![CDATA[#{javascript:
+		viewScope.player = Players.getCurrent();
+	}]]></xp:this.beforePageLoad>
+
+	<xp:this.resources>
+		<xp:script src="/JSON.jss" clientSide="false"></xp:script>
+		<xp:script src="/EditorButtons.jss" clientSide="false"></xp:script>
+	</xp:this.resources>
+	<xc:Layout>
+		<h1>Preferences</h1>
+
+		<xp:table styleClass="vertTable fields">
+			<xp:tr>
+				<xp:td>Recent:</xp:td>
+				<xp:td>
+					<xp:radioGroup id="recentMode"
+						value="#{prefs.RecentMode}" layout="lineDirection"
+						style="border: 0" defaultValue="Posts">
+						<xp:selectItem itemLabel="Recent Posts"
+							itemValue="Posts" />
+						<xp:selectItem itemLabel="Recent Topics"
+							itemValue="Topics" />
+					</xp:radioGroup>
+				</xp:td>
+			</xp:tr>
+			<xp:tr>
+				<xp:td>Avatar:</xp:td>
+				<xp:td>
+					<xp:radioGroup id="avatarMode"
+						value="#{prefs.AvatarMode}" layout="lineDirection"
+						style="border: 0" defaultValue="None">
+						<xp:selectItem itemLabel="Official Forum" />
+						<xp:selectItem itemLabel="URL" />
+						<xp:selectItem itemLabel="None" />
+
+						<xp:eventHandler event="onchange" submit="true"
+							refreshMode="partial" refreshId="avatarOptions"
+							execMode="partial">
+						</xp:eventHandler>
+					</xp:radioGroup>
+					<xp:div id="avatarOptions">
+						<xp:table styleClass="vertTable"
+							rendered="#{prefs.AvatarMode=='Official Forum'}">
+							<xp:tr>
+								<xp:td>Character:</xp:td>
+								<xp:td>
+									<xp:comboBox id="avatarCharacter"
+										value="#{prefs.AvatarCharacter}">
+										<xp:selectItems>
+											<xp:this.value><![CDATA[#{javascript:
+												var characters = Players.getByName(@UserName()).getCharacters()
+												var result = []
+												for(var i = 0; i < characters.length; i++) {
+													result.push(characters[i].name)
+												}
+												result
+											}]]></xp:this.value>
+										</xp:selectItems>
+
+										<xp:eventHandler
+											event="onchange" submit="true" refreshMode="partial"
+											refreshId="avatarOptions" execMode="partial" />
+									</xp:comboBox>
+
+									<xp:br />
+									<xc:officialForumAvatar charName="#{prefs.AvatarCharacter}" />
+								</xp:td>
+							</xp:tr>
+						</xp:table>
+
+						<xp:table styleClass="vertTable"
+							rendered="#{prefs.AvatarMode=='URL'}">
+							<xp:tr>
+								<xp:td>URL:</xp:td>
+								<xp:td>
+									<xp:inputText value="#{prefs.AvatarURL}" id="avatarURL">
+										<xp:eventHandler event="onchange" submit="true" refreshMode="partial" refreshId="avatarOptions">
+										</xp:eventHandler>
+									</xp:inputText>
+									<xp:br />Image type:&#160;<xp:text id="imageMIMETypeText" value="#{avatarURLMimeType}"/>
+										
+								</xp:td>
+							</xp:tr>
+						</xp:table>
+					</xp:div>
+				</xp:td>
+			</xp:tr>
+			<tr>
+				<td>Display Name:</td>
+				<td><xp:inputText value="#{player.dispName}" id="dispName"/></td>
+			</tr>
+			<tr>
+				<td>Other Users:</td>
+				<td>
+					<xp:checkBox value="#{prefs.HideGIFAvatars}" id="hideGIFAvatars" checkedValue="Yes" uncheckedValue="No" text="Hide GIF avatars" />
+					<br />
+					<xp:checkBox value="#{prefs.HideOtherSignatures}" id="hideOtherSignatures" checkedValue="Yes" uncheckedValue="No" text="Hide other users' signatures" />
+				</td>
+			</tr>
+			<xp:tr>
+				<xp:td>Signature:</xp:td>
+				<xp:td>
+					<div class="smallEditor">
+						<xp:inputTextarea id="html"
+							value="#{player.signature}" htmlFilterIn="acf"
+							dojoType="ibm.xsp.widget.layout.CKEditorWrapper">
+							<xp:this.dojoAttributes>
+								<xp:dojoAttribute name="toolbar">
+									<xp:this.value><![CDATA[#{javascript:
+										JSON.serialize(getRichTextEditorButtons())
+									}]]></xp:this.value>
+								</xp:dojoAttribute>
+								<xp:dojoAttribute name="mode"
+									value="source" />
+							</xp:this.dojoAttributes>
+						</xp:inputTextarea>
+					</div>
+				</xp:td>
+			</xp:tr>
+			<xp:tr>
+				<xp:td>New Password:</xp:td>
+				<xp:td>
+					<xp:inputText id="newPassword" password="true" />
+				</xp:td>
+			</xp:tr>
+			<xp:tr>
+				<xp:td>Confirm New Password:</xp:td>
+				<xp:td>
+					<xp:inputText id="confirmNewPassword"
+						password="true" />
+				</xp:td>
+			</xp:tr>
+		</xp:table>
+
+		<xp:button value="Save Preferences" id="save">
+			<xp:eventHandler event="onclick" submit="true"
+				refreshMode="complete" immediate="false" save="true">
+				<xp:this.action><![CDATA[#{javascript:
+					if(getComponent("newPassword").value != "" && getComponent("newPassword").value == getComponent("confirmNewPassword").value) {
+						var names = sessionAsSigner.getDatabase("", "wownames.nsf")
+						var lookup = names.getView("($NamesFieldLookup)")
+						var userDoc = lookup.getDocumentByKey(@UserName(), true)
+						if(userDoc != null) {
+							userDoc.replaceItemValue("HTTPPassword", getComponent("newPassword").value)
+							userDoc.replaceItemValue("HTTPPassword", session.evaluate(" @Password(HTTPPassword) ", userDoc))
+							userDoc.save()
+							
+							sessionAsSigner.sendConsoleCommand(names.getServer(), "show nlcache reset")
+						}
+					}
+					player.save(true);
+					return "xsp-success"
+				}]]></xp:this.action>
+			</xp:eventHandler>
+		</xp:button>
+	</xc:Layout>
+
+</xp:view>

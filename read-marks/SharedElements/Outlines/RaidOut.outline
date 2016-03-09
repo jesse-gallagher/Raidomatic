@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<note class='filter' xmlns='http://www.lotus.com/dxl' version='9.0' maintenanceversion='1.4'
+ replicaid='05257F710059C9CA'>
+<noteinfo noteid='142' unid='4465187FF98DFFAA852577CE0063DA08' sequence='4'>
+<created><datetime dst='true'>20101101T141038,80-04</datetime></created>
+<modified><datetime>20160309T112044,30-05</datetime></modified>
+<revised><datetime dst='true'>20121219T070645,78-04</datetime></revised>
+<lastaccessed><datetime>20160309T112044,29-05</datetime></lastaccessed>
+<addedtofile><datetime>20160309T112044,29-05</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Jesse Gallagher/O=MTC</name><name>CN=Jesse Gallagher/O=Frost</name></updatedby>
+<wassignedby><name>CN=Jesse Gallagher/O=Frost</name></wassignedby>
+<item name='$POID'><datetime dst='true'>20080313T103820,40-04</datetime></item>
+<item name='$SiteMapList' sign='true'>
+<rawitemdata type='1a'>
+AQYBAAEAAgBIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAACAEgAlgAgAAIAtwAAAAAAAAAAAAAAAAAAAEYAAAAAAAAAUAAAAAAA
+/P8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEA9v9EAAAAAAADABMAIgAAAAAAAAAA
+AAAAAAAAAAAAAAAAAHRhbmdvXHgtb2ZmaWNlLXNwcmVhZHNoZWV0LW1vZC5naWYABk4AAAA8AAEA
+CwBQcmVmZXJlbmNlcwABAAsASGlkZGVuVmlld3MA9AD3AwEACwBPdGhlciBWaWV3cwAKAgMABwAQ
+AAkACTRTNlM4UzlTAEgA+AAwCgAAZwAAAAAAAAAQAAAAXAAAAAAAAAAAAAAAjAAAAAAABQAOAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFT3RoZXIgVmlldy4uLgABAPb/WgABAAAABQAO
+AEAAAAAAAAAAAAAAAAAAQAAKAAQACAASAAEABABWaWV3+wEYAQMABwAMAAUACTBTMEUAAAASAAIA
+khMAAAAAAADtAQMABwAKAAMACTBSAAAGigAKAAQAAABkAIsAAgApAQAAAAAAAPsCKgEBAAEANQAB
+AAEANgAfAgoCBAAeAQEACwBQcmVmZXJlbmNlcwABAAsASGlkZGVuVmlld3MA9AD3AwEADQBPdGhl
+ciBWaWV3Li4uAAoCHQIDAAcAIAAZAAk2UzhTOVMxM1MxNFMxOFMyMFMyMlMyM1MA
+</rawitemdata></item>
+<item name='$TITLE'><text>RaidOut</text></item>
+<item name='$Flags'><text>m</text></item>
+<item name='$DesignerVersion' sign='true'><text>8.5.2</text></item></note>
+

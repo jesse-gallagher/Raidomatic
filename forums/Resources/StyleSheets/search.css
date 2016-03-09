@@ -1,0 +1,9 @@
+.search {
+	margin: 2em 0;
+}
+.search .query {
+	margin-left: 2em;
+	width: 30em;
+	padding: 0.25em;
+}
+.search select { padding: 0.25em; margin: 0 0.5em }

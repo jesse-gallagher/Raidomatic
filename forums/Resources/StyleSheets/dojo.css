@@ -1,0 +1,56 @@
+/****************************************************************
+ * Tab Panels
+ ****************************************************************/
+
+.dijitTabContainer {
+	width: 100%;
+	min-height: 50px;
+}
+
+/* the tabs themselves */
+.tundra #content .dijitTabChecked, body.tundra form #content .dijitTabCheckedHover {
+	background-color: #777;
+	border: 0;
+	color: white;
+}
+#content .dijitTab {
+	background-color: #333;
+	background-image: none;
+	border: 0;
+	/*border-bottom: 1px solid #777;*/
+	color: white;
+	margin-bottom: 0;
+}
+
+#content .dijitTabSpacer { display: none }
+#content .dijitTabPaneWrapper {
+	border: 1px solid #777;
+}
+.tundra .dijitTabContainer .dijitTabPaneWrapper, .tundra .dijitTabContainer .dijitTabPane {
+	background-color: transparent
+}
+
+/* set the default text color to black for a number of dijits */
+.dijitPopup { color: black }
+.dijitPopup .dijitMenu { color: white }
+.dijitSelect { color: black }
+.dijitDialog { color: black }
+/*.dijitRadio { display: inline !important }
+.dijitRadio input {
+	display: inline-block !important;
+}*/
+
+
+/****************************************************************
+ * Lotus filter doodads
+ ****************************************************************/
+.lotusFilters{margin-top:5px;line-height:1.8em;}
+.lotusFilters a{padding:2px 3px;border-width:1px;border-style:solid;-moz-border-radius:4px;-webkit-border-radius:4px;text-decoration:none}
+.lotusFilters .lotusClose{padding:0 4px}
+
+
+/****************************************************************
+ * Editor styles
+ ****************************************************************/
+ .smallEditor { width: 900px }
+ .normalEditor { width: 80% }

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom"
+	beforePageLoad="#{pageController.beforePageLoad}" afterPageLoad="#{pageController.afterPageLoad}"
+	pageTitle="Players">
+	
+	<xc:Layout>
+		<h1><xp:text disableTheme="true" value="Players"/></h1>
+
+		<table class="fields">
+			<tr>
+				<th scope="row">Show:</th>
+				<td>
+					<xp:comboBox value="#{viewScope.onlyAttended}" id="onlyAttended">
+						<xp:selectItem itemLabel="All" itemValue=""/>
+						<xp:selectItem itemLabel="Only Signed Up" itemValue="Signed Up"/>
+						<xp:selectItem itemLabel="Only Attended" itemValue="Yes"/>
+						
+						<xp:eventHandler event="onchange" submit="true" refreshMode="partial" refreshId="playerList"
+							action="#{pageController.updatePlayerList}">
+							<xp:this.script><![CDATA[
+								spinner(thisEvent, { id: "onlyAttendedSpinner" });
+							]]></xp:this.script>
+							<xp:this.onComplete><![CDATA[
+								var spinnerNode = dojo.byId("onlyAttendedSpinner")
+								if(spinnerNode) {
+									spinnerNode.parentNode.removeChild(spinnerNode);
+								}
+							]]></xp:this.onComplete>
+						</xp:eventHandler>
+					</xp:comboBox>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row">Sort by:</th>
+				<td>
+					<xp:comboBox id="sortBy" value="#{viewScope.sortBy}">
+						<xp:selectItem itemLabel="Name"/>
+						<xp:selectItem itemLabel="Signups"/>
+						<xp:selectItem itemLabel="Attendances"/>
+						<xp:selectItem itemLabel="Needs"/>
+						<xp:selectItem itemLabel="Ratio"/>
+						
+						<xp:eventHandler event="onchange" submit="true" refreshMode="partial" refreshId="playerList"
+							action="#{pageController.updatePlayerList}">
+							<xp:this.script><![CDATA[
+								spinner(thisEvent, { id: "sortBySpinner" });
+							]]></xp:this.script>
+							<xp:this.onComplete><![CDATA[
+								var spinnerNode = dojo.byId("sortBySpinner")
+								if(spinnerNode) {
+									spinnerNode.parentNode.removeChild(spinnerNode);
+								}
+							]]></xp:this.onComplete>
+						</xp:eventHandler>
+					</xp:comboBox>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row">Loot Tier:</th>
+				<td>
+					<xp:comboBox id="lootTier" value="#{viewScope.lootTierId}">
+						<xp:selectItem itemLabel="All" itemValue=""/>
+						<xp:selectItems value="#{pageController.lootTierChoices}"/>
+						
+						<xp:eventHandler event="onchange" submit="true" refreshMode="partial" refreshId="playerList"
+							action="#{pageController.updatePlayerList}">
+							<xp:this.script><![CDATA[
+								spinner(thisEvent, { id: "lootTierSpinner" });
+							]]></xp:this.script>
+							<xp:this.onComplete><![CDATA[
+								var spinnerNode = dojo.byId("lootTierSpinner")
+								if(spinnerNode) {
+									spinnerNode.parentNode.removeChild(spinnerNode);
+								}
+							]]></xp:this.onComplete>
+						</xp:eventHandler>
+					</xp:comboBox>
+				</td>
+			</tr>
+		</table>
+		
+		<xp:div styleClass="viewContainer" id="playerList">
+			<xp:pager layout="Previous Group Next" id="pager1" for="playerTable"
+				partialRefresh="true" />
+			<xp:dataTable var="player" rows="#{javascript:Configuration.getDocumentItemValue('Forum Options', 'ForumDataTableRows')[0]}" id="playerTable" styleClass="lineup"
+				value="#{pageController.currentPlayerList}">
+				
+				<xp:column>
+					<xp:this.facets><xp:text xp:key="header" value="Name"/></xp:this.facets>
+					<xp:link text="#{player.name}" value="/players/#{player.name}"/>
+				</xp:column>
+				<xp:column>
+					<xp:this.facets><xp:text xp:key="header" value="Characters"/></xp:this.facets>
+					<xp:text value="#{javascript:player.characterNames.sort().join(', ')}"/>
+				</xp:column>
+				<xp:column>
+					<xp:this.facets><xp:text xp:key="header" value="Signups"/></xp:this.facets>
+					<xc:integer>
+						<xp:this.value><![CDATA[#{javascript:
+							!viewScope.lootTierId || viewScope.lootTierId == "" ? player.signupCount : player.getSignupCountForLootTier(LootTiers.getById(viewScope.lootTierId))
+						}]]></xp:this.value>
+					</xc:integer>
+				</xp:column>
+				<xp:column>
+					<xp:this.facets><xp:text xp:key="header" value="Attendances"/></xp:this.facets>
+					<xc:integer>
+						<xp:this.value><![CDATA[#{javascript:
+							!viewScope.lootTierId || viewScope.lootTierId == "" ? player.attendanceCount-2 : player.getAttendanceCountForLootTier(LootTiers.getById(viewScope.lootTierId))-2
+						}]]></xp:this.value>
+					</xc:integer>
+				</xp:column>
+				<xp:column>
+					<xp:this.facets><xp:text xp:key="header" value="Needs"/></xp:this.facets>
+					<xc:integer>
+						<xp:this.value><![CDATA[#{javascript:
+							!viewScope.lootTierId || viewScope.lootTierId == "" ? player.needCount-1 : player.getNeedCountForLootTier(LootTiers.getById(viewScope.lootTierId))-1
+						}]]></xp:this.value>
+					</xc:integer>
+				</xp:column>
+				<xp:column styleClass="ratio">
+					<xp:this.facets><xp:text xp:key="header" value="Loot Tier"/></xp:this.facets>
+					<xp:text rendered="#{player.attendanceCount &gt; 0}" value="#{pageController.currentLootRatioTier}"/>
+				</xp:column>
+				<xp:column>
+					<xp:this.facets><xp:text xp:key="header" value="Tier Name"/></xp:this.facets>
+					<xp:text rendered="#{player.attendanceCount &gt; 0}" value="#{pageController.currentLootRatioTierName}"/>
+				</xp:column>
+			</xp:dataTable>
+			<xp:pager layout="Previous Group Next" id="pager2" for="playerTable"
+				partialRefresh="true" />
+			<p class="clear"></p>
+		</xp:div>
+	</xc:Layout>
+</xp:view>

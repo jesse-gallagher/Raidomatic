@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core">
+	<xp:span styleClass="item" rendered="#{compositeData.value != null}">
+		<xp:image
+			rendered="#{compositeData.showIcon}"
+			url="http://static.wowhead.com/images/wow/icons/small/#{javascript:compositeData.value.iconName.toLowerCase()}.jpg"
+			width="18" height="18" />
+		<xp:link
+			value="/items/#{compositeData.value.id}"
+			rel="http://www.wowhead.com/item=#{compositeData.value.id}"
+			styleClass="#{compositeData.value.qualityName}"
+			text="#{compositeData.value.name}" />
+	</xp:span>
+</xp:view>

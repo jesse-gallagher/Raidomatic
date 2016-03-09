@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom" xmlns:xe="http://www.ibm.com/xsp/coreex"
+	beforePageLoad="#{pageController.beforePageLoad}" afterPageLoad="#{pageController.afterPageLoad}"
+	pageTitle="Mail">
+	
+	<xp:this.resources>
+		<xp:styleSheet href="/mail.css"></xp:styleSheet>
+	</xp:this.resources>
+
+	<xc:Layout>
+		<h1>Mail</h1>
+		
+		<xp:button value="Compose Mail" id="composeMail">
+			<xp:eventHandler event="onclick" submit="true" refreshMode="complete">
+				<xp:this.action>
+					<xp:openPage name="/Memo.xsp" target="newDocument"/>
+				</xp:this.action>
+			</xp:eventHandler>
+		</xp:button>
+		
+		<xp:button value="Open Mail File" id="openMailFile">
+			<xp:eventHandler event="onclick" submit="true" refreshMode="complete"
+				action="#{pageController.openMailFile}"/>
+		</xp:button>
+		
+		<xp:panel>
+			<xp:this.data>
+				<xp:dominoView var="inbox"
+					databaseName="#{javascript:@Name('[Abbreviate]', Players.current.mailServer)}!!#{Players.current.mailFile}"
+					viewName="($Inbox)" sortColumn="$70" sortOrder="descending">
+				</xp:dominoView>
+			</xp:this.data>
+
+			<xp:repeat value="#{inbox}" var="mail" rows="1000">
+				<xp:this.facets>
+					<xp:text disableTheme="true" xp:key="header"
+						escape="false">
+						<xp:this.value><![CDATA[
+						<table class="lineup">
+							<tr>
+								<th></th>
+								<th>From</th>
+								<th>Subject</th>
+								<th>Date</th>
+							</tr>
+					]]></xp:this.value>
+					</xp:text>
+					<xp:text disableTheme="true" xp:key="footer"
+						escape="false">
+						<xp:this.value><![CDATA[
+						</table>
+					]]></xp:this.value>
+					</xp:text>
+				</xp:this.facets>
+
+				<xp:tr>
+					<xp:td>
+						<xp:image url="/tango/internet-group-chat.png"
+							rendered="#{javascript:!mail.getDocument().getRead()}" />
+					</xp:td>
+					<xp:td>
+						<xp:text value="#{mail.$98}" />
+					</xp:td>
+					<xp:td>
+						<xp:link text="#{javascript:mail.getColumnValue('$73') == '' ? '(no subject)' : mail.getColumnValue('$73')}"
+							value="/Memo.xsp?documentId=#{javascript:mail.getDocument().getUniversalID()}" />
+					</xp:td>
+					<xp:td>
+						<xc:DateTime value="#{mail.$70}" />
+					</xp:td>
+				</xp:tr>
+			</xp:repeat>
+		</xp:panel>
+	</xc:Layout>
+</xp:view>

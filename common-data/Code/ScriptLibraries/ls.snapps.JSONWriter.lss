@@ -1,0 +1,1020 @@
+'++LotusScript Development Environment:2:5:(Options):0:74
+Option Public
+Option Declare
+
+%INCLUDE "lsconst.lss"
+
+
+'++LotusScript Development Environment:2:5:(Forward):0:1
+Declare Class JSONWriter
+
+'++LotusScript Development Environment:2:5:(Declarations):0:10
+%REM
+Copyright 2007, 2008, 2009 SNAPPS (Strategic Net Applications, Inc.)
+
+Licensed under the Apache License, Version 2.0 (the "License"); 
+you may not use this file except in compliance with the License. 
+You may obtain a copy of the License at 
+
+	http://www.apache.org/licenses/LICENSE-2.0 
+
+Unless required by applicable law or agreed to in writing, software 
+distributed under the License is distributed on an "AS IS" BASIS, 
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+See the License for the specific language governing permissions and limitations under the License.
+%END REM
+
+'*************************************************
+'Globalization constants
+Const ERR_MISPLACED_BEGIN_ARRAY = "Misplaced array beginning."
+Const ERR_MISPLACED_BEGIN_OBJECT = "Misplaced object beginning."
+Const ERR_MISPLACED_END_ARRAY = "Misplaced array ending."
+Const ERR_MISPLACED_END_OBJECT = "Misplaced object ending."
+Const ERR_MISPLACED_KEY = "Misplaced key."
+Const ERR_BLANK_KEY = "Blank key."
+Const ERR_MISPLACED_VALUE = "Value out of sequence."
+Const ERR_MISSING_END_CHAR = "Missing end character(s)."
+Const ERR_NESTING_ERROR = "Nesting error."
+Const ERR_NESTING_TOO_DEEP = "Nesting too deep."
+'*************************************************
+
+Const MODE_INITIAL = 1
+Const MODE_ARRAY = 2
+Const MODE_OBJECT = 3
+Const MODE_KEY = 4
+Const MODE_DONE = 5
+
+Const MAX_DEPTH = 20
+
+Const TYPE_UNKNOWN = "UNKNOWN"
+
+Class JSONWriter
+	'*********************************************************************************************
+	'* Version:	1.0.3
+	'* Purpose:	This class provides two ways of outputing JSON text.  The first is 
+	'*					 to pass an array, list, NotesDocument, NotesDocumentCollection, 
+	'*					NotesView, NotesViewEntryCollection, or NotesViewEntry to the ToJSON method.  
+	'*					This will render the object as JSON. If the object is a type of view object,
+	'*					the output will be taken from the column values.  The output data is basically
+	'*					the same as the properties/values of NotesViewEntry.  If the object is a 
+	'*					document, its output follows the NotesDocument properties/values.
+	'*					
+	'*					Hints:  Set the IncludeRichTextItems property to false to ignore rich text
+	'*					items.  Set the number of characters to output from a rich text item with
+	'*					the TruncateRichText property.  By default, the output for multiple documents
+	'*					is an associative array (as seen below).  To output a normal array,
+	'*					set the OutputAsArray property to True.  To output specific fields, pass an array
+	'*					with the field names to SetFieldsToOutput.  To reset, pass an empty string.
+	'*					To output view data as documents instead of as column values, set the
+	'*					OutputViewAsDocuments property to true.
+	'*
+	'*					NOTE:  All field data is placed into the "Items" object.  Field names are
+	'*					set to lowercase. The value of the field is in an array called "Values".
+	'*					The datatype is put in "Type".
+	'*						"Items":{"field1":{"Values":["my value"],"Type":"TEXT"}}
+	'*
+	'*					Date output format:  yyyy/mm/dd hh:mm:ss UTC+|-hh:mm
+	'*
+	'*					Single document (default):
+	'*						{"UNID":
+	'*							{"Authors":["CN=Troy Reimer\/O=SNA"],...,"Items":{"field1": ...}}
+	'*						}
+	'*					Single document (OutputAsArray = true):
+	'*						[
+	'*							{"Authors":["CN=Troy Reimer\/O=SNA"],...,"Items":{"field1": ...}}
+	'*						]
+	'*					Mutliple documents (default):
+	'*						{
+	'*						"unid1":{"Authors":["CN=Troy Reimer\/O=SNA"],...,"Items":{"field1":...}},
+	'*						"unid2":{"Authors":["CN=Troy Reimer\/O=SNA"],...,"Items":{"field1":...}}
+	'*						}
+	'*					Mutliple documents (OutputAsArray = true):
+	'*						[
+	'*						{"Authors":["CN=Troy Reimer\/O=SNA"],...,"Items":{"field1": ...}},
+	'*						{"Authors":["CN=Troy Reimer\/O=SNA"],...,"Items":{"field1": ...}}
+	'*						]
+	'*
+	'*					This class also provides an pseudo-object oriented way of creating JSON text.
+	'*					Each public method returns a string with the JSON text requested.
+	'*					It generates an error if arrays and objects are not begun and ended 
+	'*					in the correct order.  The first method called must be either BeginArray
+	'*					or BeginObject.  The AppendValue method accepts only scalar values.
+	'*					Example:
+	'*						set json = New JSONWriter
+	'*						sResult = json.BeginObject
+	'*						sResult = sResult & json.Key("single value")
+	'*						sResult = sResult & json.AppendValue(1)
+	'*						sResult = sResult & json.Key("multi")
+	'*						sResult = sResult & json.BeginArray
+	'*						sResult = sResult & json.AppendValue(split("1,2", ","))	'an array
+	'*						sResult = sResult & json.EndArray
+	'*						sResult = sResult & json.EndObject
+	'*
+	'*Prpperties:	DoEscapeStrings (boolean, default is True)
+	'*					IncludeRichTextItems (boolean, default is True)
+	'*					OuputAsArray (boolean, default is False)
+	'*					OutputViewAsDocuments(boolean, default is False)
+	'*					TruncateRichText (long)
+	'*
+	'* Methods:	AppendJSON(JSON String)
+	'*					AppendValue(Value(s))
+	'*					BeginArray
+	'*					BeginCallbackFunction
+	'*					BeginObject
+	'*					EndArray
+	'*					EndCallbackFunction
+	'*					EndObject
+	'*					Key(Name)
+	'*					SetFieldsToOutput(array)
+	'*					ToJSON(Array | List | NotesDocument | NotesDocumentCollection | View |
+	'*								NotesViewEntryCollection | NotesViewEntry)
+	'*
+	'* Author:		Troy Reimer (treimer@snapps.com)
+	'*********************************************************************************************
+	
+	Private m_sEscapes List As String					'a list of escape characters
+	Private m_iMode As Integer							'the current mode
+	Private m_bAddComma As Boolean				'boolean to add comma before next write
+	Private m_iStack() As Integer							'the stack of objects/arrays added to the JSON
+	Private m_iTop As Integer								'the top of the stack
+	Private m_bIncludeRichTextItems As Boolean	'whether to output RichText items (default true)
+	Private m_iTruncateRichText As Long				'number of characters to extract from RichText items
+	Private m_bOutputAsArray As Boolean				'output multiple documents as a JSON array (default false)
+	Private m_bOutputViewAsDocuments As Boolean	'output the data from the view entry column values
+	Private m_sFieldTypes List As String
+	Private m_sFieldsToOutput List As String			
+	Private m_bTruncateFields As Boolean
+	Private m_bDoEscape As Boolean					'true by default
+	
+	Property Get DoEscapeStrings As Boolean
+		DoEscapeStrings = Me.m_bDoEscape
+	End Property
+	Property Set DoEscapeStrings As Boolean
+		Me.m_bDoEscape = DoEscapeStrings
+	End Property
+	Property Get IncludeRichTextItems As Boolean
+		IncludeRichTextItems = Me.m_bIncludeRichTextItems
+	End Property
+	Property Set IncludeRichTextItems As Boolean
+		Me.m_bIncludeRichTextItems = IncludeRichTextItems
+	End Property
+	Property Get OutputAsArray As Boolean
+		OutputAsArray = Me.m_bOutputAsArray
+	End Property
+	Property Set OutputAsArray As Boolean
+		Me.m_bOutputAsArray = OutputAsArray
+	End Property
+	Property Get OutputViewAsDocuments As Boolean
+		OutputViewAsDocuments = Me.m_bOutputViewAsDocuments
+	End Property
+	Property Set OutputViewAsDocuments As Boolean
+		Me.m_bOutputViewAsDocuments = OutputViewAsDocuments
+	End Property
+	Property Get TrunctateRichText As Long
+		TrunctateRichText = Me.m_iTruncateRichText
+	End Property
+	Property Set TruncateRichText As Long
+		Me.m_iTruncateRichText = TruncateRichText
+	End Property
+	
+	Public Sub New			
+		Me.m_sEscapes(|\|) = |\\|
+		Me.m_sEscapes(|"|) = |\"|
+		Me.m_sEscapes(|/|) = |\/|
+		Me.m_sEscapes(Chr(8)) = |\b|
+		Me.m_sEscapes(Chr(12)) = |\f|
+		Me.m_sEscapes(Chr(10)) = |\n|
+		Me.m_sEscapes(Chr(13)) = |\r|
+		Me.m_sEscapes(Chr(9)) = |\t|		
+		
+		Me.m_bIncludeRichTextItems = True
+		Me.m_iTruncateRichText = -1
+		Me.m_bDoEscape = True
+		
+		Call Me.LoadFieldTypes
+		
+		Redim Me.m_iStack(MAX_DEPTH)
+		
+		Call Me.Reset
+	End Sub
+	
+	Public Function BeginArray As String
+		'*********************************************************************************************
+		'* Purpose:	This appends the array character, "[", to the end of the JSON string.
+		'*
+		'* Calls:			Push
+		'*********************************************************************************************
+		Dim sComma As String
+		If Me.m_iMode = MODE_INITIAL Or Me.m_iMode = MODE_OBJECT Or Me.m_iMode = MODE_ARRAY Then
+			If Me.m_bAddComma Then
+				sComma = ","
+			End If			
+			BeginArray = sComma & "["			
+			Me.Push(MODE_ARRAY)
+			Me.m_bAddComma = False
+		Else
+			'error - Misplaced array
+			Error 1000, ERR_MISPLACED_BEGIN_ARRAY
+		End If
+	End Function
+	
+	Public Function BeginObject As String
+		'*********************************************************************************************
+		'* Purpose:	This appends the object character, "{", to the end of the JSON string.
+		'*
+		'* Calls:			Push
+		'*********************************************************************************************
+		Dim sComma As String
+		If Me.m_iMode = MODE_INITIAL Then
+			Me.m_iMode = MODE_OBJECT
+		End If
+		If Me.m_iMode = MODE_OBJECT Or Me.m_iMode = MODE_ARRAY Then
+			If Me.m_bAddComma Then
+				sComma = ","
+			End If
+			BeginObject = sComma & "{"
+			Me.Push(MODE_OBJECT)
+			Me.m_bAddComma = False
+			Me.m_iMode = MODE_KEY
+		Else
+			'error - misplaced object
+			Error 1000, ERR_MISPLACED_BEGIN_OBJECT
+		End If
+	End Function
+	
+	Public Function BeginCallbackFunction(p_sFunctionName As String) As String
+		'*********************************************************************************************
+		'* Purpose:	This returns a string with the name of the callback function and the
+		'*					open paren
+		'*********************************************************************************************
+		BeginCallbackFunction = p_sFunctionName & "("
+	End Function
+	
+	Public Function EndArray As String
+		'*********************************************************************************************
+		'* Purpose:	This appends the array character, "]", to the end of the JSON string.
+		'*
+		'* Calls:			Pop
+		'*********************************************************************************************
+		If Me.m_iMode = MODE_ARRAY Then
+			Me.Pop(MODE_ARRAY)
+			EndArray = "]"
+			Me.m_bAddComma = True
+		Else
+			'error - Misplaced end array
+			Error 1000, ERR_MISPLACED_END_ARRAY
+		End If		
+	End Function
+	
+	Public Function EndObject As String
+		'*********************************************************************************************
+		'* Purpose:	This appends the array character, "}", to the end of the JSON string.
+		'*
+		'* Calls:			Pop
+		'*********************************************************************************************
+		If Me.m_iMode = MODE_OBJECT Or Me.m_iMode = MODE_KEY Then
+			Me.Pop(MODE_OBJECT)
+			EndObject = "}"
+			Me.m_bAddComma = True
+		Else
+			'error - Misplaced end object
+			Error 1000, ERR_MISPLACED_END_OBJECT
+		End If
+	End Function
+	
+	Public Function EndCallbackFunction As String
+		'*********************************************************************************************
+		'* Purpose:	This returns a string the close paren
+		'*********************************************************************************************
+		EndCallbackFunction = ")"
+	End Function
+	
+	Public Function Key(p_sKey As String) As String
+		'*********************************************************************************************
+		'* Purpose:	This sub appends the key value to the end of the JSON string.
+		'*
+		'* Input:			p_sKey:		The name of the key
+		'*********************************************************************************************
+		Dim sComma As String
+		If p_sKey <> "" Then
+			If Me.m_iMode = MODE_KEY Or Me.m_iMode = MODE_OBJECT Then
+				If Me.m_bAddComma Then
+					sComma = ","
+				End If
+				Key = sComma & |"| & p_sKey & |"| & |:|
+				Me.m_iMode = MODE_OBJECT
+				Me.m_bAddComma = False
+			Else
+				'error - misplaced key
+				Error 1000, ERR_MISPLACED_KEY
+			End If
+		Else
+			'error - blank key
+			Error 1000, ERR_BLANK_KEY
+		End If
+	End Function
+	
+	Public Function AppendJSON(p_sJSON As String) As String
+		'*********************************************************************************************
+		'* Purpose:	This appends an incoming JSON string to the end of the output.
+		'*					It does not format or escape the string.  It assumes that the string is
+		'*					valid JSON.
+		'*
+		'* Input:			p_sJSON:	The JSON string to add
+		'*********************************************************************************************
+		Dim sReturn As String
+		If Me.m_iMode = MODE_ARRAY Or Me.m_iMode = MODE_OBJECT Then
+			If Me.m_bAddComma And Me.m_iMode = MODE_ARRAY Then
+				sReturn = ","
+			End If
+			sReturn = sReturn & p_sJSON
+			Me.m_bAddComma = True
+		Else
+			'error - value out of sequence
+			Error 1000, ERR_MISPLACED_VALUE
+		End If
+		AppendJSON = sReturn
+	End Function
+	
+	Public Function AppendValue(p_vValue As Variant) As String
+		'*********************************************************************************************
+		'* Purpose:	This appends the value to the end of the JSON string.  It only accepts
+		'*					scalar values and arrays of scalar values as input.  If an array is passed in,
+		'*					a recursive call is made for each index of the array.  For string values,
+		'*					it calls the Escape function.
+		'*
+		'* Input:			p_vValue:	The scalar value(s) to add
+		'*
+		'* Calls:			AppendValue
+		'*					Escape
+		'*					FormatDate
+		'*********************************************************************************************
+		Dim sReturn As String
+		If Isarray(p_vValue) Then
+			If Me.m_iMode = MODE_ARRAY Then
+				Forall v In p_vValue
+					sReturn = sReturn & AppendValue(v)
+				End Forall
+			Else
+				If Me.m_iMode = MODE_OBJECT Then
+					sReturn = sReturn & Me.BeginArray
+					Forall v In p_vValue
+						sReturn = sReturn & AppendValue(v)
+					End Forall
+					sReturn = sReturn & Me.EndArray
+				Else
+					'error
+					Error 1000, ERR_MISPLACED_VALUE
+				End If
+			End If
+		Else
+			If Me.m_iMode = MODE_ARRAY Or Me.m_iMode = MODE_OBJECT Then
+				If Me.m_bAddComma And Me.m_iMode = MODE_ARRAY Then
+					sReturn = ","
+				End If
+				Select Case Datatype(p_vValue)
+				Case V_STRING, v_VARIANT
+					sReturn = sReturn & |"| & Me.Escape(Cstr(p_vValue)) & |"|
+				Case V_INTEGER, V_LONG, V_DOUBLE, V_CURRENCY, V_BYTE
+					sReturn = sReturn & p_vValue
+				Case V_NULL
+					sReturn = sReturn & "null"
+				Case V_BOOLEAN
+					If p_vValue Then
+						sReturn = sReturn & "true"
+					Else
+						sReturn = sReturn & "false"
+					End If
+				Case V_DATE
+					sReturn = sReturn & |"| & Me.FormatDate(Cstr(p_vValue)) & |"|
+				Case Else
+					'if the datatype is not known then return an empty string
+					sReturn = sReturn & |""|
+				End Select	
+				Me.m_bAddComma = True
+			Else
+				'error - value out of sequence
+				Error 1000, ERR_MISPLACED_VALUE
+			End If			
+		End If	
+		AppendValue = sReturn
+	End Function
+	
+	Public Sub SetFieldsToOutput(p_vInput As Variant)
+		'*********************************************************************************************
+		'* Purpose:	This sets a list of fields to output.  The input can either be an array of field
+		'*					names or a string of a single field name.  If the value is "", the fields to 
+		'*					output is set back to output all.
+		'*********************************************************************************************
+		Erase Me.m_sFieldsToOutput
+		If Isarray(p_vInput) Then
+			Forall e In p_vInput
+				Me.m_sFieldsToOutput(Lcase(e)) = ""
+			End Forall
+			Me.m_bTruncateFields = True
+		Elseif Datatype(p_vInput) = V_STRING Then
+			If p_vInput <> "" Then
+				Me.m_sFieldsToOutput(Lcase(p_vInput)) = ""
+				Me.m_bTruncateFields = True
+			Else
+				Me.m_bTruncateFields = False
+			End If			
+		End If		
+	End Sub
+	
+	Public Function ToJSON(p_vInput As Variant) As String
+		'*********************************************************************************************
+		'* Purpose:	This function converts the input to JSON text.  The input can be a scalar
+		'*					array or list.  It can also be a NotesDocument, NotesDocumentCollection,
+		'*					NotesView, NotesViewEntry, or NotesViewEntryCollection.
+		'*					Ultimately, if a Notes object is passed in, the output will be from the
+		'*					NotesDocument object(s).
+		'*
+		'* Input:			p_vInput:	The thing to convert to JSON text
+		'*
+		'* Output:		JSON text representation of the input
+		'*
+		'* Calls:			AppendValue
+		'*					BeginArray
+		'*					BeginObject
+		'*					DocumentToJSON
+		'*					EndArray
+		'*					EndObject
+		'*					EntryToJSON
+		'*					Key
+		'*					Reset
+		'*********************************************************************************************
+		Dim doc As NotesDocument
+		Dim vec As NotesViewEntryCollection
+		Dim entry As NotesViewEntry
+		Dim sType As String
+		Dim sReturn As String
+		Dim bIsScalar As Boolean
+		Dim bSaveOutput As Boolean
+		
+		Call Me.Reset
+		
+		If Isarray(p_vInput) Then	'process array
+			If Isscalar(p_vInput(0)) Then
+				sReturn = Me.BeginArray
+				sReturn = sReturn & Me.AppendValue(p_vInput)
+				sReturn = sReturn & Me.EndArray
+			Else
+				sType = Typename(p_vInput(0))
+				If sType = "NOTESDOCUMENT" Or sType = "NOTESVIEWENTRY" Then
+					'change the output style to array
+					bSaveOutput = Me.m_bOutputAsArray
+					Me.m_bOutputAsArray = True
+					
+					sReturn = Me.BeginNotesObject
+					Forall e In p_vInput
+						If sType = "NOTESVIEWENTRY" And Me.m_bOutputViewAsDocuments = False Then
+							'output the column values for this entry
+							sReturn = sReturn & Me.EntryToJSON(e)
+						Else
+							'output all document values
+							sReturn = sReturn & Me.DocumentToJSON(e)
+						End If
+						
+					End Forall
+					sReturn = sReturn & Me.EndNotesObject
+					'reset the output style
+					Me.m_bOutputAsArray = bSaveOutput
+				Else
+					bSaveOutput = Me.m_bOutputAsArray
+					Me.m_bOutputAsArray = True
+					
+					sReturn = Me.BeginObject()
+					ForAll e In p_vInput
+						sReturn = sReturn & Me.ToJSON(e)
+					End ForAll
+					sReturn = sReturn & Me.EndObject()
+					'reset the output style
+					Me.m_bOutputAsArray = bSaveOutput
+				End If
+			End If
+			
+		Elseif Islist(p_vInput) Then	'process list			
+			'retrieve the first element to find the type
+			Forall e In p_vInput
+				bIsScalar = Isscalar(e)
+				sType = Typename(e)
+				Exit Forall
+			End Forall
+			
+			If bIsScalar Then
+				sReturn = Me.BeginObject
+				Forall e In p_vInput
+					sReturn = sReturn & Me.Key(Listtag(e))
+					sReturn = sReturn & Me.AppendValue(e)
+				End Forall
+				sReturn = sReturn & Me.EndObject
+			Else
+				'change the output style to array
+				bSaveOutput = Me.m_bOutputAsArray
+				Me.m_bOutputAsArray = True
+				
+				'process Notes objects
+				sReturn = Me.BeginObject
+				Forall e In p_vInput
+					sReturn = sReturn & Me.Key(Listtag(e))
+					sReturn = sReturn & Me.BuildNotesObjectJSON(e)
+					
+				End Forall
+				sReturn = sReturn & Me.EndObject
+				
+				'reset the output style
+				Me.m_bOutputAsArray = bSaveOutput
+			End If
+			
+		Else	'process Notes objects
+			sReturn = Me.BuildNotesObjectJSON(p_vInput)
+		End If
+		
+		ToJSON = sReturn
+		Call Me.Reset
+	End Function
+	
+	
+	Public Function Escape(p_sInput As String) As String
+		'*********************************************************************************************
+		'* Purpose:	This function escapes the characters listed in the m_sEscapes variable.
+		'*					It also converts any ISO control characters to the unicode equivalent.
+		'*
+		'* Inuput:		p_sInput:	The string to escape
+		'*********************************************************************************************
+		Dim sEscape As String
+		Dim sReturn As String
+		Dim sChar As String
+		Dim iCode As Long
+		Dim i As Integer
+		Dim iLen As Integer
+		
+		If Me.m_bDoEscape Then
+			sEscape = p_sInput		
+			'first escape the appropriate characters
+			Forall e In Me.m_sEscapes
+				sEscape = Replace(sEscape, Listtag(e), e)
+			End Forall
+			
+			'now we need to build the return string.
+			iLen = Len(sEscape)
+			For i = 1 To iLen
+				sChar = Mid(sEscape, i, 1)
+				iCode = Uni(sChar)
+				'check to see if any chars are ISO control characters
+				Select Case iCode
+				Case &H0000 To &H001F
+					sReturn = sReturn & "\u" & Right("00" & Cstr(Hex(iCode)), 4)
+				Case &H007F To &H009F
+					sReturn = sReturn & "\u" & Right("00" & Cstr(Hex(iCode)), 4)
+				Case Else
+					sReturn = sReturn & sChar
+				End Select
+			Next		
+		Else
+			sReturn = p_sInput
+		End If		
+		
+		Escape = sReturn
+	End Function
+	
+	Private Function FormatDate(p_sInput As String) As String
+		'*********************************************************************************************
+		'* Purpose:	This function formats the date in the following way:
+		'*						yyyy/mm/dd hh:mm:ss UTC+|-hh:mm
+		'*
+		'* Inuput:		p_sInput:	The date string to format
+		'*
+		' Output:		The formatted date string
+		'*********************************************************************************************
+		Dim ndate As NotesDateTime
+		Dim sUTC As String
+		Dim sHour As String
+		Dim sZone As String
+		Dim sMinute As String	
+		Dim sDirection As String
+		
+		Set ndate = New NotesDateTime(p_sInput)
+		sZone = Abs(ndate.TimeZone)
+		If Len(sZone) > 2 Then
+			sHour = Right(sZone, 2)
+			sMinute = Left(sZone, 2)
+		Else
+			sHour = sZone
+			sMinute = "00"
+		End If
+		
+		If ndate.IsDST Then
+			sHour = Abs(-(Cint(sHour)) + 1)
+		End If
+		If ndate.TimeZone < 0 Then
+			sDirection = "+"
+		Else
+			sDirection = "-"
+		End If
+		FormatDate = Format(p_sInput, "yyyy/mm/dd hh:mm:ss") + " UTC" & sDirection & Format(sHour, "00") & Format(sMinute, "00")
+	End Function
+	
+	Private Sub Pop(p_iMode As Integer)
+		'*********************************************************************************************
+		'* Purpose:	This sub moves the stack pointer back one place.  If it finds itself at the
+		'*					beginning, then the mode is set to MODE_DONE.
+		'*
+		'* Input:			p_iMode:	The current mode
+		'*********************************************************************************************
+		If Me.m_iTop > 0 Then
+			If Me.m_iStack(Me.m_iTop - 1) = p_iMode Then
+				Me.m_iTop = Me.m_iTop - 1
+				If Me.m_iTop = 0 Then
+					Me.m_iMode = MODE_DONE
+				Else
+					Me.m_iMode = Me.m_iStack(Me.m_iTop - 1)
+				End If
+			Else
+				'error - nesting error
+				Error 1000, ERR_NESTING_ERROR
+			End If
+		Else
+			'error - error nesting error
+			Error 1000, ERR_NESTING_ERROR
+		End If
+	End Sub
+	
+	Private Sub Push(p_iMode As Integer)
+		'*********************************************************************************************
+		'* Purpose:	This sub moves the stack pointer forward one place.  It checks to make
+		'*					sure we are not attempting to go past the MAX_DEPTH.
+		'*
+		'* Input:			p_iMode:	The current mode
+		'*********************************************************************************************
+		If Me.m_iTop < MAX_DEPTH Then
+			Me.m_iStack(Me.m_iTop) = p_iMode
+			Me.m_iMode = p_iMode
+			Me.m_iTop = Me.m_iTop + 1
+		Else
+			'error - nesting too deep
+			Error 1000, ERR_NESTING_TOO_DEEP
+		End If
+	End Sub
+	
+	Private Sub Reset
+		'*********************************************************************************************
+		'* Purpose:	This sub resets the writer to its original state
+		'*********************************************************************************************
+		Me.m_bAddComma = False
+		Me.m_iMode = MODE_INITIAL		
+		Me.m_iTop = 0		
+	End Sub
+	
+	Private Function BuildNotesObjectJSON(p_vInput As Variant) As String
+		'*********************************************************************************************
+		'* Purpose:	This function outputs JSON text for the input Notes object
+		'*
+		'* Input:			p_entry:	The Notes object to convert to JSON text
+		'*
+		'* Output:		The JSON text for the NotesDocument
+		'*
+		'* Calls:			AppendValue
+		'*					BeginArray
+		'*					BeginObject
+		'*					DocumentToJSON
+		'*					EndArray
+		'*					EndObject
+		'*					EntryToJSON
+		'*					Key
+		'*********************************************************************************************
+		Dim vec As NotesViewEntryCollection
+		Dim entry As NotesViewEntry
+		Dim doc As NotesDocument
+		Dim sType As String
+		Dim sReturn As String
+		
+		sType = Typename(p_vInput)
+		
+		Select Case sType
+		Case "NOTESDOCUMENT", "NOTESVIEWENTRY"		
+			sReturn = sReturn & Me.BeginNotesObject
+			If sType = "NOTESVIEWENTRY" And Me.m_bOutputViewAsDocuments = False Then
+				'output the column values for this entry
+				sReturn = sReturn & Me.EntryToJSON(p_vInput)
+			Else
+				'output the document values
+				sReturn = sReturn & Me.DocumentToJSON(p_vInput)
+			End If	
+			sReturn = sReturn & Me.EndNotesObject
+			
+		Case "NOTESDOCUMENTCOLLECTION"			
+			Set doc = p_vInput.GetFirstDocument					
+			If Not (doc Is Nothing) Then		
+				sReturn = sReturn & Me.BeginNotesObject
+				Do Until doc Is Nothing
+					sReturn = sReturn & Me.DocumentToJSON(doc)
+					
+					Set doc = p_vInput.GetNextDocument(doc)					
+				Loop	
+				sReturn = sReturn & Me.EndNotesObject
+			End If
+			
+		Case "NOTESVIEW", "NOTESVIEWENTRYCOLLECTION"
+			If sType = "NOTESVIEW" Then
+				Set vec = p_vInput.AllEntries
+			Elseif sType = "NOTESVIEWENTRYCOLLECTION" Then
+				Set vec = p_vInput
+			End If
+			
+			Set entry = vec.GetFirstEntry
+			If Not (entry Is Nothing) Then
+				sReturn = sReturn & Me.BeginNotesObject		
+				Do Until entry Is Nothing
+					If Me.m_bOutputViewAsDocuments Then
+						'output the data as documents
+						sReturn = sReturn & Me.DocumentToJSON(entry.Document)
+					Else
+						'output the data as defined in the view columns
+						sReturn = sReturn & Me.EntryToJSON(entry)
+					End If					
+					
+					Set entry = vec.GetNextEntry(entry)
+				Loop
+				sReturn = sReturn & Me.EndNotesObject
+			End If
+		End Select
+		
+		BuildNotesObjectJSON = sReturn
+	End Function
+	
+	Private Function DocumentToJSON(p_doc As Variant) As String
+		'*********************************************************************************************
+		'* Purpose:	This function outputs the NotesDocument as JSON text.
+		'*					Most NotesDocument properties are output as are all data items.
+		'*					However, the RichText items can be excluded by setting IncludeRichText
+		'*					to false.  RichText items can also be truncated by setting the
+		'*					number of characters with the TruncateRichText property
+		'*					NOTE:  All item key values are set to lowercase.
+		'*
+		'* Input:			p_doc:	The NotesDocument or NotesViewEntry to convert to JSON text
+		'*
+		'* Output:		The JSON text for the NotesDocument
+		'*
+		'* Calls:			AppendValue
+		'*					BeginArray
+		'*					BeginObject
+		'*					BuildFieldJSON
+		'*					EndArray
+		'*					EndObject
+		'*					Key
+		'*********************************************************************************************
+		Dim doc As NotesDocument
+		Dim sType As String
+		Dim sReturn As String
+		Dim vEval As Variant
+		
+		sType = Typename(p_doc)
+		If sType = "NOTESVIEWENTRY" Then
+			Set doc = p_doc.Document
+		Elseif sType = "NOTESDOCUMENT" Then
+			Set doc = p_doc
+		End If
+		
+		If Not (doc Is Nothing) Then		
+			'if this is output as an object, add the UNID as a key
+			If Me.m_bOutputAsArray = False Then
+				sReturn = sReturn & Me.Key(doc.UniversalID)
+			End If
+			
+			sReturn = sReturn & Me.BeginObject
+			sReturn = sReturn & Me.Key("Authors")
+			sReturn = sReturn & Me.BeginArray
+			sReturn = sReturn & Me.AppendValue(p_doc.Authors)
+			sReturn = sReturn & Me.EndArray
+			
+			'output info about the attachments
+			vEval = Evaluate(|@Attachments|, p_doc)
+			sReturn = sReturn & Me.Key("Attachments")
+			sReturn = sReturn & Me.AppendValue(Cint(vEval(0)))
+			
+			vEval = Evaluate(|@AttachmentNames|, p_doc)
+			sReturn = sReturn & Me.Key("AttachmentNames")
+			sReturn = sReturn & Me.BeginArray
+			sReturn = sReturn & Me.AppendValue(vEval)
+			sReturn = sReturn & Me.EndArray
+			
+			vEval = Evaluate(|@AttachmentLengths|, p_doc)
+			sReturn = sReturn & Me.Key("AttachmentLengths")
+			sReturn = sReturn & Me.BeginArray
+			sReturn = sReturn & Me.AppendValue(vEval)
+			sReturn = sReturn & Me.EndArray
+			
+			vEval = Evaluate(|@AttachmentModifiedTimes|, p_doc)
+			sReturn = sReturn & Me.Key("AttachmentModifiedTimes")
+			sReturn = sReturn & Me.BeginArray
+			sReturn = sReturn & Me.AppendValue(vEval)
+			sReturn = sReturn & Me.EndArray
+			
+			'output additional NotesDocument properties
+			sReturn = sReturn & Me.Key("Created")
+			sReturn = sReturn & Me.AppendValue(p_doc.Created)
+			sReturn = sReturn & Me.Key("HttpURL")
+			sReturn = sReturn & Me.AppendValue(p_doc.HttpURL)
+			sReturn = sReturn & Me.Key("IsResponse")
+			sReturn = sReturn & Me.AppendValue(p_doc.IsResponse)
+			sReturn = sReturn & Me.Key("LastAccessed")
+			sReturn = sReturn & Me.AppendValue(p_doc.LastAccessed)
+			sReturn = sReturn & Me.Key("LastModified")
+			sReturn = sReturn & Me.AppendValue(p_doc.LastModified)
+			sReturn = sReturn & Me.Key("NoteID")
+			sReturn = sReturn & Me.AppendValue(p_doc.NoteID)
+			sReturn = sReturn & Me.Key("NotesURL")
+			sReturn = sReturn & Me.AppendValue(p_doc.NotesURL)
+			sReturn = sReturn & Me.Key("ParentDocumentUNID")
+			sReturn = sReturn & Me.AppendValue(p_doc.ParentDocumentUNID)
+			sReturn = sReturn & Me.Key("UniversalID")
+			sReturn = sReturn & Me.AppendValue(p_doc.UniversalID)
+			
+			'output the data items
+			sReturn = sReturn & Me.Key("Items")
+			sReturn = sReturn & Me.BeginObject
+			Forall i In p_doc.Items
+				If Me.m_bTruncateFields = False Or (Me.m_bTruncateFields And Iselement(Me.m_sFieldsToOutput(Lcase(i.Name)))) Then
+					If i.Type <> RICHTEXT Then
+						'if the item is not rich text, simply output the value(s)
+						sReturn = sReturn & Me.BuildFieldJSON(i, p_doc.GetItemValue(i.Name))
+						
+					Elseif i.Type = RICHTEXT And Me.m_bIncludeRichTextItems Then		'check to see if we are outputting rich text
+						If Me.m_iTruncateRichText > -1 Then
+							'we are truncating the rich text that is output
+							sReturn = sReturn & Me.BuildFieldJSON(i, Left(p_doc.GetItemValue(i.Name)(0), Me.m_iTruncateRichText))
+							
+						Else
+							'output the rich text item
+							sReturn = sReturn & Me.BuildFieldJSON(i, p_doc.GetItemValue(i.Name))
+							
+						End If
+					End If
+				End If
+			End Forall
+			sReturn = sReturn & Me.EndObject
+			
+			sReturn = sReturn & Me.EndObject
+		End If
+		
+		DocumentToJSON = sReturn
+	End Function
+	
+	Private Function EntryToJSON(p_entry As Variant) As String
+		'*********************************************************************************************
+		'* Purpose:	This function outputs the NotesEntry as JSON text.
+		'*					Most NotesEntry properties are output as are all column values.
+		'*
+		'* Input:			p_entry:	The NotesViewEntry to convert to JSON text
+		'*
+		'* Output:		The JSON text for the NotesDocument
+		'*
+		'* Calls:			AppendValue
+		'*					BeginArray
+		'*					BeginObject
+		'*					EndArray
+		'*					EndObject
+		'*					Key
+		'*********************************************************************************************
+		Dim sReturn As String
+		Dim vColumnValues As Variant
+		Dim iCount As Long
+		Dim x As Long
+		
+		If Not(p_entry Is Nothing) Then
+			If Typename(p_entry) = "NOTESVIEWENTRY" Then
+				'if this is output as an object, add the UNID as a key
+				If Me.m_bOutputAsArray = False Then
+					sReturn = sReturn & Me.Key(p_entry.UniversalID)
+				End If
+				sReturn = sReturn & Me.BeginObject
+				
+				'output values about the entry
+				sReturn = sReturn & Me.Key("ChildCount")
+				sReturn = sReturn & Me.AppendValue(p_entry.ChildCount)
+				sReturn = sReturn & Me.Key("ColumnIndentLevel")
+				sReturn = sReturn & Me.AppendValue(p_entry.ColumnIndentLevel)
+				sReturn = sReturn & Me.Key("DescendantCount")
+				sReturn = sReturn & Me.AppendValue(p_entry.DescendantCount)
+				sReturn = sReturn & Me.Key("IndentLevel")
+				sReturn = sReturn & Me.AppendValue(p_entry.IndentLevel)
+				sReturn = sReturn & Me.Key("IsCategory")
+				sReturn = sReturn & Me.AppendValue(p_entry.IsCategory)
+				sReturn = sReturn & Me.Key("IsConflict")
+				sReturn = sReturn & Me.AppendValue(p_entry.IsConflict)
+				sReturn = sReturn & Me.Key("IsDocument")
+				sReturn = sReturn & Me.AppendValue(p_entry.IsDocument)
+				sReturn = sReturn & Me.Key("IsTotal")
+				sReturn = sReturn & Me.AppendValue(p_entry.IsTotal)
+				sReturn = sReturn & Me.Key("IsValid")
+				sReturn = sReturn & Me.AppendValue(p_entry.IsValid)
+				sReturn = sReturn & Me.Key("NoteID")
+				sReturn = sReturn & Me.AppendValue(p_entry.NoteID)
+				sReturn = sReturn & Me.Key("SiblingCount")
+				sReturn = sReturn & Me.AppendValue(p_entry.SiblingCount)
+				sReturn = sReturn & Me.Key("UniversalID")
+				sReturn = sReturn & Me.AppendValue(p_entry.UniversalID)
+				
+				'output the data items
+				sReturn = sReturn & Me.Key("ColumnValues")
+				sReturn = sReturn & Me.BeginObject
+				vColumnValues = p_entry.ColumnValues
+				iCount = Ubound(vColumnValues)
+				For x = 0 To iCount
+					sReturn = sReturn & Me.Key(Cstr(x))
+					sReturn = sReturn & Me.AppendValue(vColumnValues(x))
+				Next
+				sReturn = sReturn & Me.EndObject
+				
+				sReturn = sReturn & Me.EndObject
+			End If
+		End If
+		
+		EntryToJSON = sReturn
+	End Function
+	
+	Private Function BeginNotesObject As String
+		'*********************************************************************************************
+		'* Purpose:	This function outputs a "{" or "[" based on the OutputAsArray property
+		'*********************************************************************************************
+		'start the object/array
+		If Me.m_bOutputAsArray Then
+			BeginNotesObject = Me.BeginArray
+		Else
+			BeginNotesObject = Me.BeginObject
+		End If
+	End Function
+	
+	Private Function EndNotesObject As String
+		'*********************************************************************************************
+		'* Purpose:	This function outputs a "}" or "]" based on the OutputAsArray property
+		'*********************************************************************************************
+		'end the object/array
+		If Me.m_bOutputAsArray Then
+			EndNotesObject = Me.EndArray
+		Else
+			EndNotesObject = Me.EndObject
+		End If		
+	End Function
+	
+	Private Function BuildFieldJSON(p_item As NotesItem, p_vValue As Variant) As String
+		'*********************************************************************************************
+		'* Purpose:	This function formats the field output
+		'*********************************************************************************************
+		Dim sReturn As String
+		sReturn = sReturn & Me.Key(Lcase(p_item.Name))
+		sReturn = sReturn & Me.BeginObject
+		sReturn = sReturn & Me.Key("Values")
+		sReturn = sReturn & Me.BeginArray
+		sReturn = sReturn & Me.AppendValue(p_vValue)
+		sReturn = sReturn & Me.EndArray
+		sReturn = sReturn & Me.Key("Type")
+		If Iselement(Me.m_sFieldTypes(p_item.Type)) Then
+			sReturn = sReturn & Me.AppendValue(Me.m_sFieldTypes(p_item.Type))
+		Else
+			sReturn = sReturn & Me.AppendValue(TYPE_UNKNOWN)
+		End If
+		sReturn = sReturn & Me.EndObject
+		
+		BuildFieldJSON = sReturn
+	End Function
+	
+	Private Sub LoadFieldTypes
+		'*********************************************************************************************
+		'* Purpose:	This sub loads the names for the datatype constants
+		'*********************************************************************************************
+		Me.m_sFieldTypes(16) = "ACTIONCD"
+		Me.m_sFieldTypes(17) = "ASSISTANTINFO"
+		Me.m_sFieldTypes(1084) = "ATTACHMENT"
+		Me.m_sFieldTypes(1076) = "AUTHORS"
+		Me.m_sFieldTypes(2) = "COLLATION"
+		Me.m_sFieldTypes(1024) = "DATETIMES"
+		Me.m_sFieldTypes(1090) = "EMBEDDEDOBJECT"
+		Me.m_sFieldTypes(256) = "ERRORITEM"
+		Me.m_sFieldTypes(1536) = "FORMULA"
+		Me.m_sFieldTypes(21) = "HTML"
+		Me.m_sFieldTypes(6) = "ICON"
+		Me.m_sFieldTypes(20) = "LSOBJECT"
+		Me.m_sFieldTypes(25) = "MIME_PART"
+		Me.m_sFieldTypes(1074) = "NAMES"
+		Me.m_sFieldTypes(7) = "NOTELINKS"
+		Me.m_sFieldTypes(4) = "NOTEREFS"
+		Me.m_sFieldTypes(768) = "NUMBERS"
+		Me.m_sFieldTypes(1085) = "OTHEROBJECT"
+		Me.m_sFieldTypes(15) = "QUERYCD"
+		Me.m_sFieldTypes(1075) = "READERS"
+		Me.m_sFieldTypes(1282) = "RFC822TEXT"
+		Me.m_sFieldTypes(1) = "RICHTEXT"
+		Me.m_sFieldTypes(8) = "SIGNATURE"
+		Me.m_sFieldTypes(1280) = "TEXT"
+		Me.m_sFieldTypes(512) = "UNAVAILABLE"
+		Me.m_sFieldTypes(0) = "UNKNOWN"
+		Me.m_sFieldTypes(14) = "USERDATA"
+		Me.m_sFieldTypes(1792) = "USERID"
+		Me.m_sFieldTypes(18) = "VIEWMAPDATA"
+		Me.m_sFieldTypes(19) = "VIEWMAPLAYOUT"		
+	End Sub
+	
+End Class

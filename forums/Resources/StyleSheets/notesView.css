@@ -1,0 +1,41 @@
+.viewContainer {
+	background-color: rgb(64, 64, 64);
+	padding: 1px;
+	margin: 20px auto;
+}
+
+.pager {
+	text-align: right;
+	padding: 3px;
+	color: rgb(204, 204, 204);
+}
+
+.pager span { padding: 3px }
+.pager span.firstNum { padding-left: 0 }
+.pager span.lastNum { padding-right: 0 }
+
+
+.viewContainer table {
+	border: 1px solid rgb(128, 128, 128);
+	border-collapse: collapse;
+	background-color: rgb(20, 20, 20);
+	width: 100%;
+}
+.viewContainer .header div, .viewContainer th div {
+	background-color: rgb(88, 88, 88);
+	border-bottom: 1px solid rgb(48, 48, 48);
+	border-right: 1px solid rgb(48, 48, 48);
+	border-left: 1px solid rgb(112, 112, 112);
+	border-top: 1px solid rgb(112, 112, 112);
+	
+	padding: 5px;
+	min-height: 18px;
+}
+.viewContainer td, .viewContainer th {
+	border: 1px solid rgb(64, 64, 64);
+	color: rgb(221, 221, 221);
+	padding: 4px;
+}
+.viewContainer .header, .viewContainer th { border-bottom: 1px solid rgb(32, 32, 32); font-size: 14px; font-weight: bold; padding: 0 }
+
+.viewContainer .link a { color: white }

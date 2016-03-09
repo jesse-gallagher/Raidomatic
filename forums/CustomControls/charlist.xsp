@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom">
+	<xp:div styleClass="#{javascript:'section ' + compositeData.sectionClass}">
+		<xp:div styleClass="title">
+			<xp:text disableTheme="true" value="#{compositeData.title}"/>
+			<xp:text rendered="#{compositeData.tag != null &amp;&amp; compositeData.tag != ''}" styleClass="tag" value="#{compositeData.tag}"/>
+		</xp:div>
+		<xp:div styleClass="body charlist">
+			<xp:repeat value="#{compositeData.value}" var="toon">
+				<xp:div disableTheme="true">
+					<xc:charlist_character
+						className="#{toon.character.className}" name="#{javascript:toon.character.name}" spec="#{toon.spec.name}"
+						raidGroup="#{toon.spec.group}" group="#{toon.group}"
+					/>
+				</xp:div>
+			</xp:repeat>
+		</xp:div>
+	</xp:div>
+</xp:view>

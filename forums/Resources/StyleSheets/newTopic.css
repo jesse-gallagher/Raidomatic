@@ -1,0 +1,28 @@
+#content {
+	margin-right: 400px;
+}
+.existingPosts {
+	position: absolute;
+	top: 160px;
+	right: 20px;
+	width: 350px;
+	height: 400px;
+	border: 1px solid #ccc;
+	overflow: auto;
+}
+
+.existingPosts h2 { margin-bottom: 0.5em }
+
+.existingPosts .post + .post { border-top: 1px solid #999 }
+.existingPosts .post { margin-bottom: 1em }
+.existingPosts .author {
+	background-color: #333;
+}
+.existingPosts .datetime { background-color: #555; margin-bottom: 0.25em }
+
+table.fields { margin: 1em 0 }
+table.fields > tbody > tr > td { padding: 4px 6px }
+table.fields > tbody > tr > td:first-child, table.fields td.key {
+	font-weight: bold;
+	background-color: #333;
+}

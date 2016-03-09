@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom" xmlns:xe="http://www.ibm.com/xsp/coreex"
+	beforePageLoad="#{pageController.beforePageLoad}" afterPageLoad="#{pageController.afterPageLoad}">
+	
+	<xp:this.resources>
+		<xp:script src="/SSJS Support.jss" clientSide="false"/>
+		<xp:script src="/JSON.jss" clientSide="false"/>
+		<xp:script src="/Raid Support.jss" clientSide="false"/>
+	</xp:this.resources>
+
+	<xc:Layout id="layout">
+		<xp:div id="body">
+			<xp:panel readonly="#{!topic.isEditable}">
+	
+				<xc:raidcomp_sidebar styleClass="right-sidebar"
+					topic="#{topic}" id="right-sidebar"
+					rendered="#{javascript: topic.getSignups().size() &gt; 0}" />
+	
+				<xc:raidcomp_raidinfo styleClass="raid-info"
+					refreshId="body" value="#{topic}" />
+					
+				<xe:djTabContainer id="djTabContainer1" doLayout="false"
+					tabStrip="false" styleClass="raidCompTabs">
+	
+					<xe:djTabPane title="Signups" id="signupsBox">
+						<xc:raidcomp_lineup refreshId="body" topic="#{topic}" id="signupsList" />
+						<xp:br />
+	
+						<xc:raidcomp_addplayer
+							rendered="#{topic.isEditable}" styleClass="add-player"
+							refreshId="body" topic="#{topic}" />
+	
+					</xe:djTabPane>
+					<xe:djTabPane title="Attendance" id="attendanceBox">
+						<xc:raidcomp_attendance id="raidcomp_attendance"
+							refreshId="raidcomp_attendance" value="#{topic.signups}" />
+					</xe:djTabPane>
+					<xe:djTabPane title="Lewts" id="lootBox">
+						<xc:raidcomp_loot id="raidcomp_loot"
+							refreshId="raidcomp_loot" topic="#{topic}" />
+					</xe:djTabPane>
+					<xe:djTabPane id="djTabPane4" title="Logs">
+						<xc:raidcomp_reports id="raidcomp_reports"
+							refreshId="raidcomp_reports" topic="#{topic}" />
+						
+					</xe:djTabPane>
+				</xe:djTabContainer>
+				
+				<div class="clear"/>
+			</xp:panel>
+		</xp:div>
+	</xc:Layout>
+</xp:view>

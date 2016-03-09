@@ -1,0 +1,33 @@
+/*
+	div.xspPagerContainer
+		div.xspPagerRight
+			span.xspPagerNav.xspPrevious
+				a
+			span.xspPagerNav.xspGroup
+				span
+					span.xspFirstItem
+						a
+					span*
+						a
+					span.xspLastItem
+						a
+			span.xspPagerNav.xspNext
+				a
+ */
+div.xspPagerRight {
+	float: none;
+	margin: 1em 0;
+	height: 1.4em
+}
+
+div.xspPagerContainer,div.xspPagerContainer>div {
+	background-color: transparent;
+	font-size: 13px;
+}
+
+/*div.xspPagerContainer div span.xspPrevious a, div.xspPager div span.xspPrevious a:visited,
+div.xspPagerContainer div span.xspNext a, div.xspPager div span.xspNext a:visited,
+div.xspPagerContainer div span.xspGroup span a, div.xspPager div span.xspGroup span a:visited {*/
+div.xspPagerContainer div span a {
+	color: rgb(255, 209, 0) !important;
+}

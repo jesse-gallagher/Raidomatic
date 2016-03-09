@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core">
+	<xp:image styleClass="forumAvatar" style="#{compositeData.style}">
+		<xp:this.url><![CDATA[#{javascript:
+			var charObj = Characters.getByName(compositeData.charName)
+			if(charObj != null) {
+				"http://us.battle.net/static-render/us/thorium-brotherhood/" + charObj.getAvatarPath() + "-avatar.jpg" +
+					"?alt=/wow/static/images/2d/avatar/" + charObj.getRaceId() + "-" + charObj.getGenderId() + ".jpg"
+			}
+		}]]></xp:this.url>
+	</xp:image>
+</xp:view>

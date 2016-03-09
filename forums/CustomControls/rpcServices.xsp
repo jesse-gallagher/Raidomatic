@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core"  xmlns:xe="http://www.ibm.com/xsp/coreex">
+	<xe:jsonRpcService id="loginService" serviceName="loginService">
+		<xe:this.methods>
+			<xe:remoteMethod name="authenticate">
+				<xe:this.arguments>
+					<xe:remoteMethodArg name="username"></xe:remoteMethodArg>
+					<xe:remoteMethodArg name="password"></xe:remoteMethodArg>
+				</xe:this.arguments>
+				<xe:this.script><![CDATA[
+					var tempDoc = database.createDocument();
+					tempDoc.replaceItemValue("Username", username);
+					tempDoc.replaceItemValue("Password", password);
+					var result = session.evaluate(" @NameLookup([Exhaustive]; Username; 'HTTPPassword') = @Password(Password) ", tempDoc)[0];
+					tempDoc.recycle();
+					if(result) {
+						DomSessionManager.establishSession(username);
+					}
+					return result;
+				]]></xe:this.script>
+			</xe:remoteMethod>
+			<xe:remoteMethod name="secretAuthenticate">
+				<xe:this.arguments>
+					<xe:remoteMethodArg name="username"/>
+				</xe:this.arguments>
+				<xe:this.script><![CDATA[
+					DomSessionManager.establishSession(username);
+				]]></xe:this.script>
+			</xe:remoteMethod>
+		</xe:this.methods>
+	</xe:jsonRpcService>
+	<xe:jsonRpcService id="raidService" serviceName="raidService">
+		<xe:this.methods>
+			<xe:remoteMethod name="markAttendance">
+				<xe:this.arguments>
+					<xe:remoteMethodArg name="signupId"></xe:remoteMethodArg>
+					<xe:remoteMethodArg name="status"></xe:remoteMethodArg>
+				</xe:this.arguments>
+				<xe:this.script><![CDATA[
+					try {
+						var signup = Signups.getById(signupId);
+						signup.setAttendedText(status);
+						signup.save();
+					} catch(e) {
+						e.printStackTrace();
+					}
+				]]></xe:this.script>
+			</xe:remoteMethod>
+			<xe:remoteMethod name="toggleAttendance">
+				<xe:this.arguments>
+					<xe:remoteMethodArg name="signupId"/>
+				</xe:this.arguments>
+				<xe:this.script><![CDATA[
+					try {
+						var signup = Signups.getById(signupId);
+						signup.setAttended(signup.getAttended() == 0 ? 1 : 0);
+						signup.save();
+						return signup.getAttended();
+					} catch(e) {
+						e.printStackTrace();
+					}
+					return -1;
+				]]></xe:this.script>
+			</xe:remoteMethod>
+			<xe:remoteMethod name="toggleSelected">
+				<xe:this.arguments>
+					<xe:remoteMethodArg name="signupId"/>
+				</xe:this.arguments>
+				<xe:this.script><![CDATA[
+					try {
+						var signup = Signups.getById(signupId);
+						signup.setSelected(signup.isSelected() == 0);
+						signup.save();
+						return signup.isSelected();
+					} catch(e) {
+						e.printStackTrace();
+					}
+					return -1;
+				]]></xe:this.script>
+			</xe:remoteMethod>
+		</xe:this.methods>
+	</xe:jsonRpcService>
+</xp:view>

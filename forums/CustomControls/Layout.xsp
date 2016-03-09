@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom" xmlns:xe="http://www.ibm.com/xsp/coreex">
+
+	<xp:this.resources>
+		<xp:script src="/SessionManager.jss" clientSide="false"></xp:script>
+		<xp:script src="/SSJS Support.jss" clientSide="false"></xp:script>
+		<xp:script src="/Raid Support.jss" clientSide="false"></xp:script>
+	</xp:this.resources>
+	<xp:this.beforePageLoad><![CDATA[#{javascript:
+		if(!applicationScope.containsKey("userSessions") || applicationScope.get("userSessions") == null) {
+			applicationScope.put("userSessions", {});
+		}
+		if(@UserName() != "Anonymous") {
+			applicationScope.get("userSessions")[@UserName()] = { time: @Now(), page: view.pageName };
+		}
+	}]]></xp:this.beforePageLoad>
+	<xp:eventHandler event="onClientLoad" submit="false">
+		<xp:this.script><![CDATA[
+			setInterval(function() {
+				XSP.partialRefreshGet("#{id:activeUsers}", {
+					onError: function() { }
+				});
+			}, 1 * 60 * 1000);
+		]]></xp:this.script>
+	</xp:eventHandler>
+
+	<xc:googleAnalytics accountId="UA-21618784-3" />
+	<xc:rpcServices />
+
+	<div id="header">
+		<h1 class="title">
+			<xp:link text="The Risen Guild Forums" value="/" />
+		</h1>
+	</div>
+
+	<div id="linksbar">
+		<ul>
+			<li
+				class="${javascript:view.getPageName() == '/Home.xsp' ? 'active' : ''}">
+				<xp:link value="/Home.xsp">Home</xp:link>
+			</li>
+			<li
+				class="${javascript:view.getPageName() == '/Forums.xsp' ? 'active' : ''}">
+				<xp:link value="/Forums.xsp">Forums</xp:link>
+			</li>
+			<li
+				class="${javascript:view.getPageName() == '/EventCalendar.xsp' ? 'active' : ''}">
+				<xp:link value="/EventCalendar.xsp">
+					Event Calendar
+				</xp:link>
+			</li>
+			<li
+				class="${javascript:view.getPageName() == '/Library.xsp' ? 'active' : ''}">
+				<xp:link value="/Library.xsp">Library</xp:link>
+			</li>
+			<xp:panel disableTheme="true"
+				loaded="${context.user.name != 'anonymous'}">
+				<xp:panel disableTheme="true">
+					<xp:this.loaded><![CDATA[${javascript:
+						return Players.current != null && Players.current.mailSystem == "1";
+					}]]></xp:this.loaded>
+					<li>
+						<xp:link value="/Mail.xsp" title="Mail">
+							<xp:text styleClass="label" value="Mail " />
+							<xc:integer id="mailUnreadCount"
+								styleClass="unreadCount"
+								value="#{javascript:com.raidomatic.JSFUtil.getInboxUnreadCount()}"
+								rendered="#{javascript:com.raidomatic.JSFUtil.getInboxUnreadCount() != 0}" />
+						</xp:link>
+					</li>
+				</xp:panel>
+				<li>
+					<xp:link value="/UserPrefs.xsp" title="Preferences"
+						text="Preferences" />
+				</li>
+			</xp:panel>
+			<xp:panel disableTheme="true"
+				loaded="${context.user.name == 'anonymous'}">
+				<xp:link styleClass="loginLink" value="/?Login"
+					loaded="${javascript:context.getUserAgent().isIE()}">
+					<span>Log In</span>
+				</xp:link>
+				<xp:div dojoType="dijit.form.DropDownButton"
+					styleClass="loginLink"
+					loaded="${javascript:!context.getUserAgent().isIE()}">
+					<span>Log In</span>
+					<div dojoType="dijit.TooltipDialog">
+						<table>
+							<tr>
+								<th scope="row">Username:</th>
+								<td>
+									<xp:inputText id="loginUsername">
+										<xp:eventHandler
+											event="onkeypress" submit="false">
+											<xp:this.script><![CDATA[if(Event.keyCode == 13) { dojo.byId('#{id:loginButton}').click(); return false }]]></xp:this.script>
+										</xp:eventHandler>
+									</xp:inputText>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">Password:</th>
+								<td>
+									<xp:inputText password="true"
+										id="loginPassword">
+										<xp:eventHandler
+											event="onkeypress" submit="false">
+											<xp:this.script><![CDATA[if(thisEvent.keyCode == 13) { dojo.byId('#{id:loginButton}').click(); return false }]]></xp:this.script>
+										</xp:eventHandler>
+									</xp:inputText>
+								</td>
+							</tr>
+						</table>
+						<xp:button id="loginButton" value="Log In">
+							<xp:eventHandler event="onclick"
+								submit="false">
+								<xp:this.script><![CDATA[
+									var deferred = loginService.authenticate(dojo.byId("#{id:loginUsername}").value, dojo.byId("#{id:loginPassword}").value);
+									deferred.addCallback(function(result) {
+										if(result) {
+											location.reload();
+										} else {
+											alert("Authentication failed");
+											var spin = dojo.byId("loginSpinner");
+											if(spin) {
+												spin.parentNode.removeChild(spin);
+											}
+										}
+									})
+									spinner(thisEvent, {id: "loginSpinner"})
+								]]></xp:this.script>
+							</xp:eventHandler>
+						</xp:button>
+					</div>
+				</xp:div>
+			</xp:panel>
+		</ul>
+	</div>
+
+	<div id="content" class="#{compositeData.contentStyleClass}">
+		<xp:panel id="notifications">
+			<xp:repeat id="notificationList" var="notification"
+				styleClass="notificationList"
+				rendered="${javascript:@Elements(@DbColumn('', 'Active Site Notifications', 1)) &gt; 0}">
+				<xp:this.value><![CDATA[${javascript:
+					var notifications = [];
+					/*var activeView = database.getView("Active Site Notifications");
+					var activeViewNav = activeView.createViewNav();
+					var notificationEntry = activeViewNav.getFirst();
+					while(notificationEntry != null) {
+						var values = notificationEntry.getColumnValues();
+						notifications.push({
+							dateTime: values[0].toJavaDate(),
+							type: values[1],
+							createdBy: values[2],
+							message: values[3]
+						});
+					
+						notificationEntry = activeViewNav.getNext(notificationEntry);
+					}*/
+					return notifications;
+				}]]></xp:this.value>
+				<xp:this.facets>
+					<xp:text xp:key="header" escape="false"
+						disableTheme="true">
+						<xp:this.value><![CDATA[
+						<h2>Notifications</h2>
+						<ul>
+					]]></xp:this.value>
+					</xp:text>
+					<xp:text xp:key="footer" escape="false"
+						disableTheme="true">
+						<xp:this.value><![CDATA[
+						</ul>
+					]]></xp:this.value>
+					</xp:text>
+				</xp:this.facets>
+
+				<li>
+					<xc:DateTime value="#{notification.dateTime}" />
+					&#160;-&#160;
+					<xp:text value="#{notification.message}" />
+				</li>
+
+			</xp:repeat>
+		</xp:panel>
+
+		<xp:callback id="pageBody"
+			loaded="${javascript:viewScope.fatalErrors == null || viewScope.fatalErrors.length == 0}">
+		</xp:callback>
+		<xp:div id="errorFrame" styleClass="errorFrame"
+			loaded="${javascript:viewScope.fatalErrors != null &amp;&amp; viewScope.fatalErrors.length != 0}">
+			<h1>
+				<xp:image url="/tango/dialog-error.svg" />
+				I can't really cope with what you are trying to do. This
+				may be fatal!
+				<!-- http://thedailywtf.com/Comments/Worst-Preview-Ever.aspx -->
+			</h1>
+
+			<xp:repeat styleClass="errors"
+				value="${viewScope.fatalErrors}" var="error">
+				<xp:text value="#{error}" tagName="div" />
+			</xp:repeat>
+		</xp:div>
+	</div>
+
+	<div id="footer">
+		<div class="container">
+			<xp:div styleClass="activeUsers" id="activeUsers">
+				<xp:text>
+					<xp:this.value><![CDATA[#{javascript:
+					var sessions = applicationScope.get("userSessions")
+					var result = []
+					for(var node in sessions) {
+						if(sessions[node].time > @Adjust(@Now(), 0, 0, 0, 0, -15, 0)) {
+							result.push(node)
+						}
+					}
+					if(result.length >= 2) {
+						return result.sort().join(", ")
+					} else if(result.length == 1) {
+						return result[0]
+					} else {
+						return ""
+					}
+				}]]></xp:this.value>
+				</xp:text>
+			</xp:div>
+
+			<xp:div styleClass="loginInfo">
+				<xp:div
+					loaded="${javascript:@Name('[CN]', @UserName()) != 'Anonymous'}">
+					Logged in as:&#160;
+					<xp:text disableTheme="true">
+						<xp:this.value><![CDATA[${javascript:
+						@Name('[CN]', @UserName())
+					}]]></xp:this.value>
+					</xp:text>
+					&#160;|&#160;
+					<xp:link value="javascript:void(0)" id="link1">
+						Log&#160;Out
+						<xp:eventHandler event="onclick" submit="true"
+							refreshMode="complete">
+							<xp:this.action><![CDATA[#{javascript:
+								DomSessionManager.clearSession();
+								
+								facesContext.getExternalContext().redirect("/?Logout&RedirectTo=" + java.net.URLEncoder.encode(RUtils.webDbName(), "UTF-8"));
+							}]]></xp:this.action>
+						</xp:eventHandler>
+					</xp:link>
+				</xp:div>
+			</xp:div>
+		</div>
+	</div>
+
+	<!--	<xe:keepSessionAlive id="keepAlive" delay="360" />-->
+</xp:view>

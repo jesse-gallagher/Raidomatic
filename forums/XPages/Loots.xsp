@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom" pageTitle="Loots">
+	<xc:Layout>
+		<h1><xp:text disableTheme="true" value="Loots"/></h1>
+		
+		<table class="fields">
+			<tr>
+				<th scope="row">Sort by:</th>
+				<td>
+					<xp:comboBox id="sortBy" value="#{viewScope.sortBy}">
+						<xp:selectItem itemLabel="Name"/>
+						<xp:selectItem itemLabel="ilvl"/>
+						<xp:selectItem itemLabel="Result"/>
+						<xp:selectItem itemLabel="Date"/>
+						
+						<xp:eventHandler event="onchange" submit="true" refreshMode="partial" refreshId="lootList">
+							<xp:this.script><![CDATA[
+								spinner(thisEvent, { id: "sortBySpinner" });
+							]]></xp:this.script>
+							<xp:this.onComplete><![CDATA[
+								var spinnerNode = dojo.byId("sortBySpinner")
+								if(spinnerNode) {
+									spinnerNode.parentNode.removeChild(spinnerNode);
+								}
+							]]></xp:this.onComplete>
+						</xp:eventHandler>
+					</xp:comboBox>
+				</td>
+			</tr>
+		</table>
+
+		<xc:table_loots readOnly="true" id="lootList">
+			<xp:this.value><![CDATA[#{javascript:
+				viewScope.sortBy == "ilvl" ?		Loots.lootsByLevel :
+				viewScope.sortBy == "Result" ?	Loots.lootsByResult :
+				viewScope.sortBy == "Date" ?		Loots.lootsByEventDate :
+										Loots.lootsByItemName
+			}]]></xp:this.value>
+		</xc:table_loots>
+		<p class="clear"/>
+	</xc:Layout>
+</xp:view>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom"
+	xmlns:xe="http://www.ibm.com/xsp/coreex">
+	
+	<xp:div id="signupsBox" loaded="${compositeData.showSignups}">
+		<xp:div id="signupList" rendered="#{javascript:compositeData.topic.getSignups != null &amp;&amp; compositeData.topic.getSignups().size() != 0}">
+			<xp:repeat var="eventGroup" rows="1000" id="signupGroupRepeat">
+				<xp:this.value><![CDATA[#{javascript:
+					var result = []
+					for(var i = 0; i <= compositeData.topic.getEventGroups(); i++) {
+						result.push(i)
+					}
+					return result
+				}]]></xp:this.value>
+				
+				<xp:div styleClass="signupGroup">
+					<xp:this.rendered><![CDATA[#{javascript:
+						eventGroup == 0 || compositeData.topic.signups.findByGroup(eventGroup, true).size() > 0
+					}]]></xp:this.rendered>
+				
+					<xp:text value="#{javascript:eventGroup == 0 ? 'Unconfirmed' : ('Group ' + eventGroup.toFixed(0))}" tagName="h3"/>
+					
+					<xp:repeat var="rsignup" rows="1000" id="signupRepeat" indexVar="rindex">
+						<xp:this.value><![CDATA[#{javascript:
+							eventGroup == 0 ? compositeData.topic.signups.findBySelected(false) : compositeData.topic.signups.findByGroup(eventGroup, true)
+						}]]></xp:this.value>
+						<xp:this.facets>
+							<xp:text disableTheme="true" xp:key="header" escape="false"><xp:this.value><![CDATA[
+								<table class="lineup signups">
+									<tr>
+										<th class="icon"></th>
+										<th class="name">Name</th>
+										<th class="character">Character</th>
+										<th class="role">Role</th>
+										<th class="status">Status</th>
+										<th class="signedUp">Signed Up</th>
+										<th class="credit">Credit?</th>
+									</tr>
+							]]></xp:this.value></xp:text>
+							<xp:text disableTheme="true" xp:key="footer" escape="false"><xp:this.value><![CDATA[
+								</table>
+							]]></xp:this.value></xp:text>
+						</xp:this.facets>
+						
+						<xp:tr styleClass="#{javascript:@Trim((rsignup.isSelected() &amp;&amp; !rsignup.isCanceled() ? 'selected' : '') + ' ' + (rindex % 2 == 1 ? 'even' : 'odd'))}">
+							<td class="icon">
+									<xp:image rendered="#{rsignup.canceled}" url="/tango/process-stop-16x16.png" />
+									<xp:image rendered="#{rsignup.selected &amp;&amp; !rsignup.canceled}" url="bullet_home.png" />
+<!--								<xp:link styleClass="toggleSelected">-->
+<!--									<xp:this.rendered><![CDATA[#{javascript:-->
+<!--										var roles = database.queryAccessRoles(@UserName());-->
+<!--										!rsignup.selected && topic.eventDate != null && (roles.contains("[RaidLeader]") || roles.contains("[ForumOfficer]") || topic.eventLeader.contains(@UserName()))-->
+<!--									}]]></xp:this.rendered>-->
+<!--									<xp:eventHandler event="onclick" submit="true" refreshMode="partial" refreshId="signupsBox">-->
+<!--										<xp:this.action><![CDATA[#{javascript:-->
+<!--											if(!rsignup.canceled) {-->
+<!--												rsignup.selected = !rsignup.selected;-->
+<!--												rsignup.save();-->
+<!--											}-->
+<!--										}]]></xp:this.action>-->
+<!--									</xp:eventHandler>-->
+<!--									<xp:text value="S" rendered="#{!rsignup.selected &amp;&amp; !rsignup.canceled}" />-->
+<!--								</xp:link>-->
+							</td>
+							<xp:td><xp:link value="/Players/#{javascript:RUtils.urlEncode(rsignup.player.name)}"><xc:Username value="#{rsignup.player.name}" titleBlock="false" /></xp:link></xp:td>
+							<xp:td>
+								<xc:characterName rendered="#{javascript: rsignup.player.name != @UserName() || rsignup.selected || !topic.eventDate.after(@Now())}" value="#{javascript:rsignup.selected ? rsignup.assignedCharacter : rsignup.preferredCharacter}"/>
+								<xp:comboBox rendered="#{javascript: rsignup.player.name == @UserName() &amp;&amp; !rsignup.selected &amp;&amp; topic.eventDate.after(@Now())}" id="inlinePreferredCharacter"
+									value="#{viewScope.signupPreferredCharacter}" defaultValue="#{rsignup.preferredCharacter}">
+									<xp:selectItems><xp:this.value><![CDATA[#{javascript:
+										if(Players.getCurrent() == null) { return [] }
+										var player = Players.getCurrent()
+										var characters = player.getCharacters()
+										var result = ["- Choose One -|"]
+										for(var i = 0; i < characters.size(); i++) {
+											result.push(characters[i].getName() + "|" + characters[i].getId());
+										}
+										return result
+									}]]></xp:this.value></xp:selectItems>
+		
+									<xp:eventHandler event="onchange" submit="true" refreshMode="partial" refreshId="signupRepeat">
+										<xp:this.action><![CDATA[#{javascript:
+											rsignup.setPreferredCharacter(viewScope.signupPreferredCharacter)
+											rsignup.save()
+										}]]></xp:this.action>
+									</xp:eventHandler>
+								</xp:comboBox>
+							</xp:td>
+							<xp:td>
+								<xp:text rendered="#{javascript: rsignup.player.name != @UserName() || rsignup.selected || !topic.eventDate.after(@Now())}" value="#{javascript:rsignup.selected ? rsignup.assignedRole : rsignup.preferredRole}"/>
+								<xp:comboBox rendered="#{javascript: rsignup.player.name == @UserName() &amp;&amp; !rsignup.selected &amp;&amp; topic.eventDate.after(@Now())}" id="inlinePreferredRole"
+									value="#{viewScope.signupPreferredRole}" defaultValue="#{rsignup.preferredRole}">
+									<xp:selectItem itemLabel="- Choose -" itemValue=""/>
+									<xp:selectItems><xp:this.value><![CDATA[#{javascript:
+										if(Players.getCurrent() == null) { return []; }
+										if(rsignup.preferredCharacter == null || rsignup.preferredCharacter == "") {
+											if(Players.getCurrent().characters.length > 0) {
+												Players.getCurrent().characters[0].getAvailableRoles();
+											} else {
+												[];
+											}
+										} else {
+											Characters.getByName(rsignup.preferredCharacter).getAvailableRoles();
+										}
+									}]]></xp:this.value></xp:selectItems>
+		
+									<xp:eventHandler event="onchange" submit="true" refreshMode="partial" refreshId="signupRepeat">
+										<xp:this.action><![CDATA[#{javascript:
+											rsignup.setPreferredRole(viewScope.signupPreferredRole)
+											rsignup.save()
+										}]]></xp:this.action>
+									</xp:eventHandler>
+								</xp:comboBox>
+							</xp:td>
+							<xp:td>
+								<xp:text rendered="#{javascript: rsignup.player.name != @UserName() || !topic.eventDate.after(@Now())}" value="#{rsignup.status}"/>
+								<xp:comboBox rendered="#{javascript: rsignup.player.name == @UserName() &amp;&amp; topic.eventDate.after(@Now())}" id="inlineStatus"
+									value="#{viewScope.signupStatus}" defaultValue="#{rsignup.status}">
+									<xp:selectItem itemLabel="- Choose -" itemValue=""/>
+									<xp:selectItem itemLabel="Available"/>
+									<xp:selectItem itemLabel="Tentative"/>
+		
+									<xp:eventHandler event="onchange" submit="true" refreshMode="partial" refreshId="signupRepeat">
+										<xp:this.action><![CDATA[#{javascript:
+											rsignup.setStatus(viewScope.signupStatus)
+											rsignup.save()
+										}]]></xp:this.action>
+									</xp:eventHandler>
+								</xp:comboBox>
+							</xp:td>
+							<xp:td><xc:DateTime value="#{rsignup.dateTime}"/></xp:td>
+							<xp:td>
+								<xp:text value="#{javascript:rsignup.attended == 1 ? 'Yes' : 'No'}" id="attendanceField"/>
+								&#160;
+								<xp:link styleClass="toggleAttended" text="☄">
+									<xp:this.rendered><![CDATA[#{javascript:
+										var roles = database.queryAccessRoles(@UserName());
+										topic.eventDate != null && (roles.contains("[RaidLeader]") || roles.contains("[ForumOfficer]") || topic.eventLeader.contains(@UserName()))
+									}]]></xp:this.rendered>
+									<xp:eventHandler event="onclick" submit="false">
+										<xp:this.script><![CDATA[
+											var deferred = raidService.toggleAttendance("#{javascript:rsignup.id}");
+											deferred.addCallback(function(result) {
+												var span = dojo.byId("#{id:attendanceField}");
+												span.innerHTML = result == 0 ? "No" : "Yes"
+											})
+										]]></xp:this.script>
+									</xp:eventHandler>
+								</xp:link>
+							</xp:td>
+						</xp:tr>
+					</xp:repeat>
+				</xp:div>
+			</xp:repeat>
+		</xp:div>
+	</xp:div>
+</xp:view>

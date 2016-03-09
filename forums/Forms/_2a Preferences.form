@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='utf-8'?>
+<note class='form' xmlns='http://www.lotus.com/dxl' version='9.0' maintenanceversion='1.4'
+ replicaid='05257F710059B13D'>
+<noteinfo noteid='a82' unid='292B5C946B1142C085257AF10050C2FE' sequence='30'>
+<created><datetime dst='true'>20130112T104207,98-04</datetime></created>
+<modified><datetime>20160309T112005,49-05</datetime></modified>
+<revised><datetime dst='true'>20110309T114524,67-04</datetime></revised>
+<lastaccessed><datetime>20160309T112005,48-05</datetime></lastaccessed>
+<addedtofile><datetime>20160309T112005,48-05</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Jesse Gallagher/O=MTC</name></updatedby>
+<wassignedby><name>CN=Jesse Gallagher/O=MTC</name></wassignedby>
+<item name='$Comment' sign='true'><text/></item>
+<item name='$HTMLCode' sign='true'>
+<rawitemdata type='1'>
+X/8QAAIADwAHAAAAAAAAAA==
+</rawitemdata></item>
+<item name='$TITLE'><textlist><text>* Preferences</text><text>Preferences</text></textlist></item>
+<item name='$Info' sign='true'>
+<rawitemdata type='1'>
+hhgBAIAAAAAAgAAAAQABAP///wAQAAAA
+</rawitemdata></item>
+<item name='$WindowTitle' sign='true'><formula>"Database Preferences"</formula></item>
+<item name='$DesignerVersion'><text>8.5.2</text></item>
+<item name='$$ScriptName' summary='false' sign='true'><text>Preferences</text></item>
+<item name='GuildPortalUsername' placeholder='true'>
+<rawitemdata type='0'>
+</rawitemdata></item>
+<item name='GuildPortalID' placeholder='true'>
+<rawitemdata type='0'>
+</rawitemdata></item>
+<item name='GuildPortalPassword' placeholder='true'>
+<rawitemdata type='0'>
+</rawitemdata></item>
+<item name='GuildPortalGuildID' placeholder='true'>
+<rawitemdata type='0'>
+</rawitemdata></item>
+<item name='GuildPortalEventTabID' placeholder='true'>
+<rawitemdata type='0'>
+</rawitemdata></item>
+<item name='GuildPortalForumTabID' placeholder='true'>
+<rawitemdata type='0'>
+</rawitemdata></item>
+<item name='$Fields'><textlist><text>GuildPortalForumTabID</text><text>GuildPortalEventTabID</text><text
+>GuildPortalGuildID</text><text>GuildPortalPassword</text><text>GuildPortalID</text><text
+>GuildPortalUsername</text></textlist></item>
+<item name='$Body' sign='true'>
+<rawitemdata type='1'>
+gQKC/1oAAQAAAAAAAAAAAKAFAACgBQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAABAAAAAJSHAAAAAAAAAAAAAAAAAQAAAAQAAACDBAEAhf8IAAEAAAqBAoMEAQCF/xwA
+AQEAEkRhdGFiYXNlIFByZWZlcmVuY2VzgQKDBAEAhf8IAAEAAAqBAoMEAQCF/x4AAQAACkd1aWxk
+UG9ydGFsIFVzZXJuYW1lOiDdBgAAiv/+/1AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAB4AHgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIr/OACKAAAFADAC
+AAAAAAAAAgEAAAoAAAAAAAAAABMAAAAAAEd1aWxkUG9ydGFsVXNlcm5hbWUAYg4BAIQAAAAAAAAA
+AADeBgAAiv+F/wgAAQAACoECgwQBAIX/GAABAAAKR3VpbGRQb3J0YWwgSUQ6IN0GAACK//7/UAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHgAeAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAiv8yAIoAAAUAMAIAAAAAAAACAQAACgAAAAAAAAAADQAAAAAAR3Vp
+bGRQb3J0YWxJRABiDgEAhAAAAAAAAAAAAN4GAACK/4X/CAABAAAKgQKDBAEAhf8oAAEAAApHdWls
+ZFBvcnRhbCBQYXNzd29yZCAoRW5jb2RlZCk6IN0GAACK//7/UAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAHgAeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+iv84AIoAAAUAMAIAAAAAAAACAQAACgAAAAAAAAAAEwAAAAAAR3VpbGRQb3J0YWxQYXNzd29yZABi
+DgEAhAAAAAAAAAAAAN4GAACK/4X/CAABAAAKgQKDBAEAhf8IAAEAAAqBAoMEAQCF/x4AAQAACkd1
+aWxkUG9ydGFsIEd1aWxkIElEOiDdBgAAiv/+/1AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAB4AHgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIr/NgCKAAAF
+ADACAAAAAAAAAgEAAAoAAAAAAAAAABIAAAAAAEd1aWxkUG9ydGFsR3VpbGRJRGIOAQCEAAAAAAAA
+AAAA3gYAAIr/hf8IAAEAAAqBAoMEAQCF/yIAAQAACkd1aWxkUG9ydGFsIEV2ZW50IFRhYiBJRDog
+3QYAAIr//v9QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAB4AAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACK/zoAigAABQAwAgAAAAAAAAIBAAAKAAAAAAAA
+AAAVAAAAAABHdWlsZFBvcnRhbEV2ZW50VGFiSUQAYg4BAIQAAAAAAAAAAADeBgAAiv+F/wgAAQAA
+CoECgwQBAIX/IgABAAAKR3VpbGRQb3J0YWwgRm9ydW0gVGFiIElEOiDdBgAAiv/+/1AAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB4AHgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAIr/OgCKAAAFADACAAAAAAAAAgEAAAoAAAAAAAAAABUAAAAAAEd1aWxkUG9y
+dGFsRm9ydW1UYWJJRABiDgEAhAAAAAAAAAAAAN4GAACK/4X/CAABAAAK
+</rawitemdata></item>
+<item name='$Class'><text>WoW-Design</text></item>
+<item name='$Flags'><text>CD</text></item></note>
+

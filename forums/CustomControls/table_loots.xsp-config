@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config>
+  <faces-config-extension>
+    <namespace-uri>http://www.ibm.com/xsp/custom</namespace-uri>
+    <default-prefix>xc</default-prefix>
+  </faces-config-extension>
+  <composite-component>
+    <component-type>table_loots</component-type>
+    <composite-name>table_loots</composite-name>
+    <composite-file>/table_loots.xsp</composite-file>
+    <composite-extension>
+      <designer-extension>
+        <in-palette>true</in-palette>
+      </designer-extension>
+    </composite-extension>
+    <property>
+      <property-name>value</property-name>
+      <property-class>object</property-class>
+    </property>
+    <property>
+      <property-name>showItem</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <designer-extension>
+          <default-value>true</default-value>
+        </designer-extension>
+      </property-extension>
+    </property>
+    <property>
+      <property-name>readOnly</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <designer-extension>
+          <default-value>true</default-value>
+        </designer-extension>
+      </property-extension>
+    </property>
+  </composite-component>
+</faces-config>

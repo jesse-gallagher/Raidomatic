@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='utf-8'?>
+<note default='true' class='icon' xmlns='http://www.lotus.com/dxl' version='9.0'
+ maintenanceversion='1.4' replicaid='05257F710059B13D'>
+<noteinfo noteid='122' unid='922437FB06C99496852577470058752A' sequence='30'>
+<created><datetime dst='true'>20100619T120611,62-04</datetime></created>
+<modified><datetime>20160309T112020,79-05</datetime></modified>
+<revised><datetime>20160309T112020,78-05</datetime></revised>
+<lastaccessed><datetime>20160309T112020,78-05</datetime></lastaccessed>
+<addedtofile><datetime>20160309T111941,31-05</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Jesse Gallagher/O=Frost</name><name>CN=Arcturus/O=Frost</name><name
+>CN=Ceres/O=Frost</name><name>CN=Jesse Gallagher/O=IKSG</name></updatedby>
+<item name='IconBitmap' summary='true'>
+<rawitemdata type='6'>
+AiAgAQAA///////wD///gAH//gAAf/wAAD/4AAAf8AAAD+AAAAfgAAAHwAAAA8AAAAPAAAADgAAA
+AYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAHAAAADwAAAA8AAAAPgAAAH4AAAB/AAAA/4AAAf
+/AAAP/4AAH//gAH///AP//////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAiIiIiAAAAAAAAAAAAAAI
+jPZmZm/IgAAAAAAAAAAIjGZmZmZmZsiAAAAAAAAAjGZmZmZmZmZmyAAAAAAACMZmZmZmZmZmZmyA
+AAAAAIxmZmZmZmZmZmZmyAAAAAjGZmZmZmZmZmZmZmyAAAAIZmbyL2byL2byL2ZmgAAAjGZmIiJm
+IiJmIiJmZsgAAIZmZiIiZiIiZiIiZmZoAADGZmYiImYiImYiImZmbAAI9mZmIiJmIiJmIiJmZm+A
+CGZmZiIiZiIiZiIiZmZmgAhmZmYiImYiImYiImZmZoAIZmZmIiJmIiJmIiJmZmaACGZvIiIiZiIi
+ZiIiIvZmgAhmYiIiImYiImYiIiImZoAIZm8iIi9m8i9m8iIi9maACPZmZmZmZmZmZmZmZmZvgADG
+ZmbyL2byL2byL2ZmbAAAj2ZmIiJmIiJmIiJmZvgAAIxmZiIiZiIiZiIiZmbIAAAI9mbyL2byL2by
+L2ZvgAAACMZmZmZmZmZmZmZmbIAAAACMZmZmZmZmZmZmZsgAAAAACMZmZmZmZmZmZmyAAAAAAACM
+9mZmZmZmZm/IAAAAAAAACIz2ZmZmZm/IgAAAAAAAAAAIiMZmZmyIgAAAAAAAAAAAAACIiIiIAAAA
+AAAAUEECICABAAD/////+A4DgA==
+</rawitemdata></item>
+<item name='$DefaultFrameset'><text>Outer Frame</text></item>
+<item name='$DBTheme'><text>Forums.theme</text></item>
+<item name='$DefaultClientXPage'><text>Forums.xsp</text></item>
+<item name='$DefaultXPage'><text>Home.xsp</text></item>
+<item name='$AllowPost8HTML'><text>1</text></item>
+<item name='$AllowRESTDbAPI'><number>2</number></item>
+<item name='$TemplateServerName'><text>CN=Jesse Gallagher/O=Frost</text></item>
+<item name='$PIRCRefreshModTime'><datetime dst='true'>20130128T173858,07-04</datetime></item>
+<item name='$TemplateModTime'><datetime dst='true'>20130128T173833,84-04</datetime></item>
+<item name='$TemplateFileName'><text>Y:\Library\Application Support\Lotus Notes Data (Windows)\forums-20130128.ntf</text></item>
+<item name='$FlagsNoRefresh'><text/></item>
+<item name='$Flags'><text>Jz2417qNZF!QU</text></item>
+<item name='$Daos'><text>1</text></item>
+<item name='$TITLE'><text>Guild Forums</text></item></note>
+

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom">
+
+	<xp:link styleClass="userLink">
+		<xp:this.value><![CDATA[#{javascript:
+			var player = Players.getByName(compositeData.value);
+			player == null ? "" : "/Players/" + RUtils.urlEncode(player.shortName);
+		}]]></xp:this.value>
+		<xp:text styleClass="username #{compositeData.styleClass}" value="#{compositeData.value}" tagName="#{javascript:compositeData.tagName}">
+			<xp:this.converter>
+				<xp:customConverter
+					getAsObject="#{javascript:value}">
+					<xp:this.getAsString><![CDATA[#{javascript:
+						var player = Players.getByName(value);
+						player == null ? ("(" + @Name("[CN]", value) + ")") : player.getDispName()
+					}]]></xp:this.getAsString>
+				</xp:customConverter>
+			</xp:this.converter>
+		</xp:text>
+	</xp:link>
+	<xp:text rendered="#{compositeData.titleBlock}" tagName="div" styleClass="usernameTitleBlock">
+		<xp:this.value><![CDATA[#{javascript:
+			//session.evaluate(" @NameLookup([NoUpdate]; '" + compositeData.value.replace("'", "\\'") + "'; 'DispTitle') ")[0]
+			var player = Players.getByName(compositeData.value);
+			player == null ? "" : player.getDispTitle()
+		}]]></xp:this.value>
+	</xp:text>
+	<xp:text rendered="#{compositeData.postCount != null &amp;&amp; compositeData.postCount}" tagName="div" styleClass="postCountBlock">
+		<xp:this.value><![CDATA[#{javascript:
+			"Posts: " + Posts.getPostCountForUser(compositeData.value).toFixed()
+		}]]></xp:this.value>
+	</xp:text>
+</xp:view>

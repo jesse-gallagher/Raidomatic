@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core">
+	<xp:div styleClass="#{compositeData.styleClass}">
+		<xp:inputText id="newPlayerName">
+			<xp:eventHandler event="onkeypress" submit="false">
+				<xp:this.script><![CDATA[
+					if(thisEvent.keyCode == 13) {
+						document.getElementById("#{id:addPlayerButton}").click()
+						return false
+					}
+					return true
+				]]></xp:this.script>
+			</xp:eventHandler>
+			<xp:typeAhead mode="full" minChars="1" ignoreCase="true">
+				<xp:this.valueList><![CDATA[#{javascript:@Unique(@DbColumn(["", "wow/common.nsf"], "Characters", 2))}]]></xp:this.valueList>
+			</xp:typeAhead>
+		</xp:inputText>
+		<xp:button value="Add Character" id="addPlayerButton">
+			<xp:eventHandler event="onclick" submit="true"
+				refreshMode="partial" refreshId="#{compositeData.refreshId}">
+				<xp:this.action><![CDATA[#{javascript:
+					if(getComponent("newPlayerName").value != "") {
+						try {
+							var characters = new com.raidomatic.model.Characters()
+							var character = characters.getByAnyName(getComponent("newPlayerName").value)
+							if(character != null) {
+								if(!compositeData.topic.getIsPlayerSignedUp(character.player.name)) {
+									var signup = new com.raidomatic.model.Signup()
+									signup.setTopicId(compositeData.topic.getId())
+									signup.setPlayerName(character.getPlayerName())
+									signup.setPreferredCharacter(character.getName())
+									signup.setAssignedCharacter(character.getName())
+									signup.setStatus("Available")
+									signup.setCreatedBy(@UserName())
+									signup.save()
+									
+									viewScope.addCharacterError = ""
+								} else {
+									viewScope.addCharacterError = character.player.name + " is already signed up."
+								}
+							}
+							
+							getComponent("newPlayerName").value = ""
+							
+						} catch(e) {
+							viewScope.addCharacterError = "Unable to load character."
+						}
+					}
+				}]]></xp:this.action>
+				<xp:this.onComplete><![CDATA[
+					document.getElementById("#{id:newPlayerName}").focus()
+				]]></xp:this.onComplete>
+			</xp:eventHandler>
+		</xp:button>
+		<xp:br/>
+		<xp:text styleClass="error" value="#{viewScope.addCharacterError}"/>
+	</xp:div>
+</xp:view>

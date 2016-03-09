@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core">
+	<xp:div id="restrictedTo" styleClass="restricted"
+		rendered="#{javascript:compositeData.value.getReaders().size() != 0}">
+		<xp:image url="/tango/system-lock-screen-32x32.png" />
+		Restricted to:&#160;
+		<xp:text>
+			<xp:this.value><![CDATA[#{javascript:
+				var names = compositeData.value.readers;
+				var result = [];
+				for(var i = 0; i < names.length; i++) {
+					switch(names[i]) {
+						case "[ForumCouncil]":
+							result.push("Risen");
+							break;
+						case "[ForumMember]":
+							result.push("Members");
+							break;
+						case "[ForumOfficer]":
+							result.push("Officers");
+							break;
+						case "[RaidLeader]":
+							result.push("Raid Leaders");
+							break;
+						default:
+							result.push(names[i]);
+							break;
+					}
+				}
+				RUtils.textualList(result)
+			}]]></xp:this.value>
+		</xp:text>
+	</xp:div>
+</xp:view>

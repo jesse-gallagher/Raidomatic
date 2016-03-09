@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config>
+  <faces-config-extension>
+    <namespace-uri>http://www.ibm.com/xsp/custom</namespace-uri>
+    <default-prefix>xc</default-prefix>
+    <public>true</public>
+  </faces-config-extension>
+  <composite-component>
+    <component-type>raidcomp_spreadsheet</component-type>
+    <composite-name>raidcomp_spreadsheet</composite-name>
+    <composite-file>/raidcomp_spreadsheet.xsp</composite-file>
+    <composite-extension>
+      <designer-extension>
+        <in-palette>true</in-palette>
+      </designer-extension>
+    </composite-extension>
+    <property>
+      <property-name>groups</property-name>
+      <property-class>int</property-class>
+      <display-name>Groups</display-name>
+    </property>
+    <property>
+      <property-name>tankCount</property-name>
+      <property-class>int</property-class>
+      <display-name>Tank Count</display-name>
+      <property-extension>
+        <designer-extension>
+          <default-value>3</default-value>
+        </designer-extension>
+      </property-extension>
+    </property>
+    <property>
+      <property-name>tankHealerCount</property-name>
+      <property-class>int</property-class>
+      <display-name>Tank Healer Count</display-name>
+      <property-extension>
+        <designer-extension>
+          <default-value>2</default-value>
+        </designer-extension>
+      </property-extension>
+    </property>
+    <property>
+      <property-name>raidHealerCount</property-name>
+      <property-class>int</property-class>
+      <display-name>Raid Healer Count</display-name>
+      <property-extension>
+        <designer-extension>
+          <default-value>4</default-value>
+        </designer-extension>
+      </property-extension>
+    </property>
+    <property>
+      <property-name>dpsCount</property-name>
+      <property-class>int</property-class>
+      <display-name>DPS Count</display-name>
+      <property-extension>
+        <designer-extension>
+          <default-value>11</default-value>
+        </designer-extension>
+      </property-extension>
+    </property>
+    <property>
+      <property-name>rotatingDPSCount</property-name>
+      <property-class>int</property-class>
+      <display-name>Rotating DPS Count</display-name>
+      <property-extension>
+        <designer-extension>
+          <default-value>5</default-value>
+        </designer-extension>
+      </property-extension>
+    </property>
+    <property>
+      <property-name>refreshId</property-name>
+      <property-class>string</property-class>
+      <display-name>Refresh ID</display-name>
+    </property>
+    <property>
+      <property-name>offTankCount</property-name>
+      <property-class>int</property-class>
+      <display-name>Off-Tank Count</display-name>
+    </property>
+  </composite-component>
+</faces-config>

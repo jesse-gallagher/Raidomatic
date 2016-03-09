@@ -1,0 +1,96 @@
+'++LotusScript Development Environment:2:5:(Options):0:74
+Option Public
+Option Declare
+
+'use this library if you don't need the ability to convert the JSONObject to a JSON string
+'++LotusScript Development Environment:2:5:(Forward):0:1
+Declare Class JSONObject
+
+'++LotusScript Development Environment:2:5:(Declarations):0:10
+%REM
+Copyright 2007, 2008, 2009 SNAPPS (Strategic Net Applications, Inc.)
+
+Licensed under the Apache License, Version 2.0 (the "License"); 
+you may not use this file except in compliance with the License. 
+You may obtain a copy of the License at 
+
+	http://www.apache.org/licenses/LICENSE-2.0 
+
+Unless required by applicable law or agreed to in writing, software 
+distributed under the License is distributed on an "AS IS" BASIS, 
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+See the License for the specific language governing permissions and limitations under the License.
+%END REM
+
+Class JSONObject
+	'*********************************************************************************************
+	'* Version:		1.0.3
+	'* Purpose:		This class is a wrapper for an object in a JSON string
+	'*
+	'* Properties:	Count:	Returns the number of items in the JSONObject
+	'*						Items:	Returns all items in the JSONObject
+	'*
+	'* Methods:		AddItem(Value):	
+	'*							Adds the value to the JSONObject
+	'*						GetItemValue(ItemName)
+	'*							Returns the value of the requested item
+	'*						RemoveItem(ItemName)
+	'*							Removes the value of the requested item
+	'*						ReplaceItemValue(Index, Value)
+	'*							Replaces the value in the specified array index
+	'*********************************************************************************************
+	Private m_vData List As Variant
+	Private m_iCount As Integer
+	Private REPLACE_CR(1) As String
+	Private REPLACE_BLANK(1) As String
+	
+	Public Sub New
+		Me.REPLACE_CR(0) = Chr(10)
+		Me.REPLACE_CR(1) = Chr(13)
+		Me.REPLACE_BLANK(0) = ""
+		Me.REPLACE_BLANK(1) = ""
+	End Sub
+	
+	Property Get Count As Integer
+		Count = Me.m_iCount
+	End Property
+	Property Get Items As Variant
+		Items = Me.m_vData
+	End Property
+	
+	Public Sub AddItem(p_sName As String, p_vValue As Variant)
+		Dim sName As String
+		Me.m_iCount = Me.m_iCount + 1
+		'remove carriage returns
+		sName = Replace(p_sName, Me.REPLACE_CR, Me.REPLACE_BLANK)		
+		If Isobject(p_vValue) Then
+			Set Me.m_vData(sName) = p_vValue
+		Else
+			Me.m_vData(sName) = p_vValue
+		End If
+	End Sub
+	
+	Public Function GetItemValue(p_sName As String) As Variant
+		If Iselement(Me.m_vData(p_sName)) Then
+			If Isobject(Me.m_vData(p_sName)) Then
+				Set GetItemValue = Me.m_vData(p_sName)
+			Else
+				GetItemValue = Me.m_vData(p_sName)
+			End If
+		End If
+	End Function
+	
+	Public Sub RemoveItem(p_sName As String)
+		If Iselement(Me.m_vData(p_sName)) Then
+			If Me.m_iCount > 0 Then
+				Me.m_iCount = m_iCount - 1
+			End If
+			Erase Me.m_vData(p_sName)
+		End If
+	End Sub
+	
+	Public Sub ReplaceItemValue(p_sName As String, p_vValue As Variant)
+		Call Me.AddItem(p_sName, p_vValue)
+	End Sub
+	
+End Class

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core"
+	xmlns:xe="http://www.ibm.com/xsp/coreex">
+	
+	<xp:panel id="attendanceLineup">
+		<xp:button styleClass="small paddedButton" value="Mark All Attended" rendered="#{javascript:compositeData.value.length &gt; 0}" id="selectAll">
+			<xp:eventHandler event="onclick" submit="true"
+				refreshMode="partial" refreshId="attendanceLineup"
+				execMode="partial">
+				<xp:this.script><![CDATA[
+					spinner(thisEvent)
+				]]></xp:this.script>
+				<xp:this.action><![CDATA[#{javascript:
+					for(var i = 0; i < compositeData.value.length; i++) {
+						var signup = compositeData.value[i];
+						signup.setAttended(true);
+						signup.save();
+					}
+				}]]></xp:this.action>
+			</xp:eventHandler>
+		</xp:button>
+		<xp:table styleClass="lineup">
+			<xp:tr>
+				<th>Player</th>
+				<!--			<th>Character(s)</th>-->
+				<th>Attendance</th>
+<!--				<th>Notes</th>-->
+			</xp:tr>
+			<xp:repeat var="attLine" indexVar="playerIndex"
+				value="#{compositeData.value}" rows="100000">
+				<xp:tr rendered="#{!attLine.canceled}">
+					<xp:this.styleClass><![CDATA[#{javascript:
+						if(attLine.isCanceled()) { return '' }
+						requestScope.att_index = requestScope.att_index == null ? 1 : requestScope.att_index + 1;
+						(requestScope.att_index % 2) == 0 ? 'even' : 'odd'
+					}]]></xp:this.styleClass>
+					<xp:td>
+						<xp:text value="#{attLine.player.shortName}" />
+					</xp:td>
+					<!--				<xp:td>-->
+					<!--					<xp:checkBoxGroup value="#{attLine.attCharacters}" layout="lineDirection" id="attCharacters">-->
+					<!--						<xp:selectItems value="#{attLine.characters}" />-->
+					<!--						<xp:eventHandler event="onchange" submit="true" refreshMode="partial" refreshId="#{compositeData.refreshId}" execMode="partial">-->
+					<!--							<xp:this.script><![CDATA[-->
+					<!--								spinner(this.event.srcElement, true)-->
+					<!--							]]></xp:this.script>-->
+					<!--						</xp:eventHandler>-->
+					<!--					</xp:checkBoxGroup>-->
+					<!--				</xp:td>-->
+					<xp:td styleClass="attendance">
+						<xp:radioGroup value="#{attLine.attendedText}" id="attAttended">
+							<xp:selectItem itemLabel="Yes" itemValue="true" id="attendedYes" />
+							<xp:selectItem itemLabel="No" itemValue="false" id="attendedNo" />
+							<xp:selectItem itemLabel="No-Show" itemValue="no-show" id="attendedNoShow" />
+	
+<!--							<xp:eventHandler event="onchange" submit="true"-->
+<!--								refreshMode="norefresh" execMode="partial">-->
+<!--								<xp:this.action><![CDATA[#{javascript:-->
+<!--									attLine.save()-->
+<!--								}]]></xp:this.action>-->
+<!--							</xp:eventHandler>-->
+							<xp:eventHandler event="onchange" submit="false">
+								<xp:this.script><![CDATA[
+									var element = thisEvent.srcElement ? thisEvent.srcElement : thisEvent.target;
+									var signupId = "#{javascript:attLine.id}";
+
+									//spinner(thisEvent, { id: ("spinner-" + signupId) });
+									var deferred = raidService.markAttendance(signupId, element.value);
+									/*deferred.addCallback(function(result) {
+										var spin = dojo.byId("spinner-" + signupId);
+										spin.parentNode.removeChild(spin);
+									})*/
+								]]></xp:this.script>
+							</xp:eventHandler>
+						</xp:radioGroup>
+					</xp:td>
+<!--					<xp:td>-->
+<!--						<xe:djTextarea value="#{attLine.signupNotes}" id="signupNotes">-->
+<!--							<xp:eventHandler event="onblur" submit="true"-->
+<!--								refreshMode="norefresh" execMode="partial">-->
+<!--								<xp:this.action><![CDATA[#{javascript:-->
+<!--									attLine.save()-->
+<!--								}]]></xp:this.action>-->
+<!--							</xp:eventHandler>-->
+<!--						</xe:djTextarea>-->
+<!--					</xp:td>-->
+				</xp:tr>
+			</xp:repeat>
+		</xp:table>
+	</xp:panel>
+</xp:view>

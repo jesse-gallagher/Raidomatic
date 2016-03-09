@@ -1,0 +1,11 @@
+.dijitPopup { max-height: 200px }
+ul.dijitMenu {
+	border: 1px solid #444;
+}
+ul.dijitMenu li {
+	padding: 2px;
+	background-color: black;
+}
+ul.dijitMenu li + li { border-top: 1px solid #aaa }
+ul.dijitMenu pre { margin: 0 }
+div.dijitTextBox input { background-color: white !important; color: black !important }

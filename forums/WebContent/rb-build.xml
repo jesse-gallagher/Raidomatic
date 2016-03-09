@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<project name="Ruby" default="compile">
+	<target name="compile">
+		<echo message="Starting 'compile'"/>
+		<java classname="com.raidomatic.build.RubyBuilder">
+			<arg value="${project_path}"/>
+			<arg value="WebContent/rb"/>
+			<arg value="WebContent/WEB-INF/source"/>
+		</java>
+	</target>
+</project>

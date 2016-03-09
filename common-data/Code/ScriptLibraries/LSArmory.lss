@@ -1,0 +1,75 @@
+'++LotusScript Development Environment:2:5:(Options):0:72
+Option Public
+Option Declare
+Use "Network"
+Use "Text Manipulation"
+
+'++LotusScript Development Environment:2:5:(Forward):0:1
+Declare Class LSArmory
+
+'++LotusScript Development Environment:2:5:(Declarations):0:10
+Class LSArmory
+	Private m_server As String
+	Private m_session As NotesSession
+	
+	Sub New
+		m_server = "www.wowarmory.com"
+		Set m_session = New NotesSession
+	End Sub
+	
+	Property Get Server As String
+		Me.Server = m_server
+	End Property
+	Property Set Server As String
+		Me.m_server = Server
+	End Property
+	
+	Function GetCharacterInfo(serverName As String, charName As String) As Variant
+		Dim headers List As String, result As String
+		headers("User-Agent") = "Firefox/2.0"
+		result = FetchURLWithHeaders("http://www.wowarmory.com/character-sheet.xml?r=" & URLEncode(serverName) & "&cn=" & URLEncode(charName), headers)
+		
+		Dim xml As Variant
+		Set xml = CreateObject("MSXML.DOMDocument")
+		Call xml.LoadXML(result)
+		
+		Set GetCharacterInfo = xml
+	End Function
+	
+	Function GetCharacterTalents(serverName As String, charName As String) As Variant
+		Dim headers List As String, result As String
+		headers("User-Agent") = "Firefox/2.0"
+		result = FetchURLWithHeaders("http://www.wowarmory.com/character-talents.xml?r=" & URLEncode(serverName) & "&cn=" & URLEncode(charName), headers)
+		
+		Dim xml As Variant
+		Set xml = CreateObject("MSXML.DOMDocument")
+		Call xml.LoadXML(result)
+		
+		Set GetCharacterTalents = xml
+	End Function
+	
+	Function GetLootTable(instanceName As String, difficulty As String) As Variant
+		Dim headers List As String, result As String
+		headers("User-Agent") = "Firefox/2.0"
+		result = FetchURLWithHeaders("http://www.wowarmory.com/search.xml?fl[source]=dungeon&fl[dungeon]=" & URLEncode(instanceName) & "&fl[difficulty]=" & URLEncode(difficulty) & "&fl[type]=all&fl[usbleBy]=all&fl[rqrMin]=&fl[rqrMax]=&fl[rrt]=all&advOptName=none&fl[andor]=and&searchType=items&fl[advOpt]=none", headers)
+		
+		Dim xml As Variant
+		Set xml = CreateObject("MSXML.DOMDocument")
+		Call xml.LoadXML(result)
+		
+		Set GetLootTable = xml
+	End Function
+	
+	Function GetItemInfo(itemID As Long) As Variant
+		Dim headers List As String, result As String
+		headers("User-Agent") = "Firefox/2.0"
+		result = FetchURLWithHeaders("http://www.wowarmory.com/item-info.xml?i=" & itemID, headers)
+		
+		Dim xml As Variant
+		Set xml = CreateObject("MSXML.DOMDocument")
+		Call xml.LoadXML(result)
+		
+		Set GetItemInfo = xml
+	End Function
+	
+End Class

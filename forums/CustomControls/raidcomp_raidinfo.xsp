@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core"
+	xmlns:xe="http://www.ibm.com/xsp/coreex">
+	<xp:panel styleClass="#{compositeData.styleClass}">
+<!--		<xp:div styleClass="tierLabel"-->
+<!--			rendered="#{javascript:compositeData.value.getEventInstance() != '' &amp;&amp; compositeData.value.getEventInstance() != '- Choose -'}">-->
+<!--			<xp:text disableTheme="true"-->
+<!--				value="#{javascript:'Tier ' + @DbLookup(['', 'wow/common.nsf'], 'Instances', compositeData.value.getEventInstance(), 'Tier')}" />-->
+<!--		</xp:div>-->
+
+		<xp:table styleClass="fields">
+<!--			<xp:tr>-->
+<!--				<xp:td>-->
+<!--					<xp:image url="/WC.png"-->
+<!--						style="width: 60px; height: 32px" />-->
+<!--				</xp:td>-->
+<!--				<xp:td>-->
+<!--					<xp:comboBox-->
+<!--						value="#{compositeData.value.eventInstance}" id="instance">-->
+<!--						<xp:selectItem itemLabel="- Choose -"-->
+<!--							itemValue="" />-->
+<!--						<xp:selectItems>-->
+<!--							<xp:this.value><![CDATA[#{javascript:-->
+<!--								@DbColumn(["", "wow/common.nsf"], "Instances", 1)-->
+<!--							}]]></xp:this.value>-->
+<!--						</xp:selectItems>-->
+<!--						<xp:eventHandler event="onchange" submit="true"-->
+<!--							refreshMode="norefresh">-->
+<!--							<xp:this.action><![CDATA[#{javascript:-->
+<!--								compositeData.value.save()-->
+<!--							}]]></xp:this.action>-->
+<!--						</xp:eventHandler>-->
+<!--					</xp:comboBox>-->
+<!--					<xp:comboBox-->
+<!--						value="#{compositeData.value.eventRaidSize}" id="raidSize"-->
+<!--						defaultValue="10-man">-->
+<!--						<xp:selectItem itemLabel="- Choose -"-->
+<!--							itemValue="" />-->
+<!--						<xp:selectItem itemLabel="10-man" />-->
+<!--						<xp:selectItem itemLabel="25-man" />-->
+<!--						<xp:eventHandler event="onchange" submit="true"-->
+<!--							refreshMode="norefresh">-->
+<!--							<xp:this.action><![CDATA[#{javascript:-->
+<!--								compositeData.value.save()-->
+<!--							}]]></xp:this.action>-->
+<!--						</xp:eventHandler>-->
+<!--					</xp:comboBox>-->
+<!--					<xp:checkBox-->
+<!--						value="#{compositeData.value.eventHeroicText}" checkedValue="true"-->
+<!--						uncheckedValue="false" defaultChecked="false" text="Heroic"-->
+<!--						id="eventHeroic">-->
+<!--						<xp:eventHandler event="onchange" submit="true"-->
+<!--							refreshMode="norefresh">-->
+<!--							<xp:this.action><![CDATA[#{javascript:-->
+<!--								compositeData.value.save()-->
+<!--							}]]></xp:this.action>-->
+<!--						</xp:eventHandler>-->
+<!--					</xp:checkBox>-->
+<!--				</xp:td>-->
+<!--			</xp:tr>-->
+
+<!--			<xp:tr>-->
+<!--				<xp:td>Date:</xp:td>-->
+<!--				<xp:td>-->
+<!--					<xp:inputText id="eventDate"-->
+<!--						value="#{compositeData.value.eventDate}"-->
+<!--						defaultValue="#{javascript:@Today()}">-->
+<!--						<xp:this.converter>-->
+<!--							<xp:convertDateTime type="both"-->
+<!--								dateStyle="short" timeStyle="short">-->
+<!--							</xp:convertDateTime>-->
+<!--						</xp:this.converter>-->
+<!--						<xp:eventHandler event="onchange" submit="true"-->
+<!--							refreshMode="norefresh">-->
+<!--							<xp:this.action><![CDATA[#{javascript:-->
+<!--								compositeData.value.save()-->
+<!--							}]]></xp:this.action>-->
+<!--						</xp:eventHandler>-->
+<!--					</xp:inputText>-->
+<!--				</xp:td>-->
+<!--			</xp:tr>-->
+<!---->
+<!--			<xp:tr>-->
+<!--				<xp:td>Leader:</xp:td>-->
+<!--				<xp:td>-->
+<!---->
+<!--					<xp:repeat value="#{compositeData.value.eventLeader}" var="leader" id="eventLeaders">-->
+<!--						<xp:text styleClass="eventLeader" value="#{leader}"/>-->
+<!--						&#160;-->
+<!--						<xp:link id="eventLeaderNode" styleClass="delete" text="X" value="javascript:void(0)">-->
+<!--							<xp:eventHandler event="onclick" submit="true" refreshMode="partial" refreshId="eventLeaders">-->
+<!--								<xp:this.script><![CDATA[-->
+<!--									return XSP.confirm("#{javascript:'Remove ' + leader + ' as an event leader?'}");-->
+<!--								]]></xp:this.script>-->
+<!--								<xp:this.action><![CDATA[#{javascript:-->
+<!--									compositeData.value.removeEventLeader(leader);-->
+<!--									compositeData.value.save();-->
+<!--								}]]></xp:this.action>-->
+<!--							</xp:eventHandler>-->
+<!--						</xp:link>-->
+<!--					</xp:repeat>-->
+<!--					-->
+<!--					<xp:button styleClass="small" value="Add" id="button1">-->
+<!--					<xp:eventHandler event="onclick" submit="false">-->
+<!--						<xp:this.script><![CDATA[XSP.openDialog("#{id:addEventLeaderDialog}")]]></xp:this.script>-->
+<!--					</xp:eventHandler></xp:button>-->
+<!--					-->
+<!--					<xe:dialog id="addEventLeaderDialog">-->
+<!--			-->
+<!--						<xp:div id="signupsBox">-->
+<!--							<xp:table>-->
+<!--								<xp:tr>-->
+<!--									<xp:td>Name:</xp:td>-->
+<!--									<xp:td>-->
+<!--										<xp:comboBox id="newEventLeader">-->
+<!--											<xp:selectItem itemLabel="- Choose -"-->
+<!--												itemValue="" />-->
+<!--											<xp:selectItems>-->
+<!--												<xp:this.value><![CDATA[#{javascript:-->
+<!--													@DbColumn(["", "wownames.nsf"], "People", 2)-->
+<!--												}]]></xp:this.value>-->
+<!--											</xp:selectItems>-->
+<!--										</xp:comboBox>-->
+<!--									</xp:td>-->
+<!--								</xp:tr>-->
+<!--							</xp:table>-->
+<!--						</xp:div>-->
+<!--						-->
+<!--						<xp:button id="addLeader" value="Add Leader">-->
+<!--							<xp:eventHandler event="onclick" submit="true" refreshMode="partial" refreshId="eventLeaders">-->
+<!--								<xp:this.action><![CDATA[#{javascript:-->
+<!--									compositeData.value.addEventLeader(getComponent("newEventLeader").value);-->
+<!--									compositeData.value.save();-->
+<!--									//viewScope.newEventLeader = "";-->
+<!--								}]]></xp:this.action>-->
+<!--								<xp:this.script><![CDATA[-->
+<!--									XSP.closeDialog("#{id:addEventLeaderDialog}");-->
+<!--									//XSP.partialRefreshPost("#{id:eventCalendar}");-->
+<!--								]]></xp:this.script>-->
+<!--							</xp:eventHandler>-->
+<!--						</xp:button>-->
+<!--					</xe:dialog>-->
+<!--				</xp:td>-->
+<!--			</xp:tr>-->
+
+			<xp:tr>
+				<th>Groups:</th>
+				<xp:td>
+					<xp:radioGroup value="#{topic.eventGroupsText}"
+						defaultValue="1" id="eventGroups">
+						<xp:selectItem itemLabel="1" />
+						<xp:selectItem itemLabel="2" />
+						<xp:selectItem itemLabel="3" />
+						<xp:selectItem itemLabel="4" />
+						<xp:eventHandler event="onchange" submit="true"
+							refreshMode="partial" refreshId="#{compositeData.refreshId}"
+							execMode="partial">
+							<xp:this.script>
+								spinner(thisEvent, true)
+							</xp:this.script>
+							<xp:this.action><![CDATA[#{javascript:
+								compositeData.value.save()
+							}]]></xp:this.action>
+						</xp:eventHandler>
+					</xp:radioGroup>
+				</xp:td>
+			</xp:tr>
+
+			<xp:tr>
+				<th>Loot Tier:</th>
+				<xp:td>
+					<xp:comboBox id="lootTier"
+						value="#{compositeData.value.eventLootTier}">
+						<xp:this.defaultValue><![CDATA[#{javascript:
+							var level = @DbLookup(["", "wow/common.nsf"], "Instances", compositeData.value.getEventInstance(), "LootLevel", "[FailSilent]")
+							return @DbLookup("", "Loot Tiers by Level", level, 1, "[FailSilent]:[ReturnDocumentUniqueID]")
+						}]]></xp:this.defaultValue>
+						<xp:selectItem itemLabel="- Choose -"
+							itemValue="" />
+						<xp:selectItems>
+							<xp:this.value><![CDATA[#{javascript:
+								var result = []
+								var tiers = LootTiers.getLootTiersByName().toVector()
+								for(var i = 0; i < tiers.length; i++) {
+									result.push(tiers[i].name + "|" + tiers[i].id)
+								}
+								return result
+							}]]></xp:this.value>
+						</xp:selectItems>
+						<xp:eventHandler event="onchange" submit="true"
+							refreshMode="norefresh" execMode="partial">
+							<xp:this.action><![CDATA[#{javascript:
+								compositeData.value.save()
+							}]]></xp:this.action>
+						</xp:eventHandler>
+					</xp:comboBox>
+				</xp:td>
+			</xp:tr>
+			
+			<tr>
+				<th></th>
+				<td>
+					<xp:checkBox id="eventLineupSet" value="#{compositeData.value.eventLineupSetText}" text="Lineup Set"
+						checkedValue="true" uncheckedValue="false">
+						<xp:eventHandler event="onchange" submit="true"
+							refreshMode="norefresh" execMode="partial">
+							<xp:this.action><![CDATA[#{javascript:
+								compositeData.value.save()
+							}]]></xp:this.action>
+						</xp:eventHandler>
+					</xp:checkBox>
+					<br />
+					<xp:checkBox id="eventAttendanceMarked" value="#{compositeData.value.eventAttendanceMarkedText}" text="Attendance Marked"
+						checkedValue="true" uncheckedValue="false">
+						<xp:eventHandler event="onchange" submit="true"
+							refreshMode="norefresh" execMode="partial">
+							<xp:this.action><![CDATA[#{javascript:
+								compositeData.value.save()
+							}]]></xp:this.action>
+						</xp:eventHandler>
+					</xp:checkBox>
+				</td>
+			</tr>
+		</xp:table>
+	</xp:panel>
+</xp:view>

@@ -1,0 +1,1584 @@
+@font-face { font-family: "Airstrip Four"; src: url("airstrip.ttf"); }
+@font-face { font-family: "Capture it"; src: url("Capture it.ttf"); }
+
+html {
+	background-color: #090403;
+	color-interpolation: linearRGB;
+	color-interpolation-filters: linearRGB;
+}
+body { font-size: 1em }
+body.tundra {
+	font-family: "Calibri", sans-serif;
+	font-size: 1em;
+	font-size: 16px;
+	color: rgb(121, 90, 75);
+}
+.xspText, .xspTextComputedField, .xspTextLabel {
+	font-family: inherit;
+	font-weight: inherit;
+	font-style: inherit;
+	text-transform: inherit;
+	font-size: inherit;
+}
+h1.xspTextComputedField { font-size: 1.7em; font-weight: bold }
+form {
+	width: 939px;
+	height: auto;
+	margin: 0 auto;
+	margin-top: 200px;
+	border: 1px solid #110802;
+	background-image: url(content-background-1.8.png);
+	background-repeat: no-repeat;
+/*	background-color: #0d0604;*/
+	/* Lighter */
+	background-color: #0d0604;
+/*	background-position: center 202px;*/
+	background-position: center 2px;
+}
+
+table { max-width: 100%; }
+div.smallEditor { width: 700px; }
+
+#header, header {
+	height: 201px;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	
+	background-image: url("Header.png");
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+#header .emblem { display: none }
+#header a { display: none }
+
+#linksbar {
+	position: relative;
+	
+	height: 36px;
+	width: 100%;
+	padding-bottom: 1px;
+	border-bottom: 1px solid #586a1e;
+	background-image: url("Linksbar.png");
+	background-repeat: repeat-x;
+	background-color: #967f70;
+	
+	font-family: "Airstrip Four", sans-serif;
+	font-size: 22px;
+}
+#linksbar ul ul { display: none }
+#linksbar ul, #linksbar li { display: inline; margin: 0; padding: 0; list-style-type: none; }
+#linksbar a {
+	display: block;
+	height: 24px;
+	padding-top: 2px;
+	padding-left: 9px;
+	padding-right: 9px;
+	float: left;
+	
+	margin-top: 6px;
+	margin-left: 11px;
+	
+	color: #26130b;
+	text-shadow: 0px 1px rgba(254, 247, 205, 0.51);
+	text-decoration: none;
+}
+#linksbar .active a, #linksbar a:hover {
+	background-color: rgb(212, 180, 159);
+	border-radius: 5px;
+}
+#linksbar a[title="Mail"] {
+	position: absolute;
+	right: 51px;
+	top: 5px;
+	
+	height: 26px;
+	width: 57px;
+	padding: 0;
+	color: transparent;
+	overflow: hidden;
+	text-shadow: none;
+	background-image: url("mail.png");
+	background-repeat: no-repeat;
+	background-position: top right;
+}
+#linksbar .active a[title="Mail"], #linksbar a[title="Mail"]:hover,
+#linksbar .active a[title="Preferences"], #linksbar a[title="Preferences"]:hover {
+	background-color: transparent;
+	border-radius: 0;
+}
+#linksbar a[title="Mail"] span.label { display: none; }
+#linksbar a[title="Mail"] span.unreadCount {
+	color: #721838;
+	font-family: "Calibri", sans-serif;
+	font-size: 14px;
+	background-color: rgb(212, 180, 159);
+	border-radius: 5px;
+	
+	display: block;
+	width: 25px;
+	height: 17px;
+	text-align: center;
+}
+#linksbar a[title="Preferences"] {
+	position: absolute;
+	top: 2px;
+	right: 23px;
+	
+	height: 22px;
+	width: 22px;
+	padding: 0 !important;
+	color: transparent;
+	overflow: hidden;
+	text-shadow: none;
+	background-image: url("cog.png");
+	background-repeat: no-repeat;
+	background-position: top right;
+	background-color: transparent;
+	border: 0;
+}
+
+#linksbar .loginLink {
+	position: absolute;
+	right: 16px;
+	top: 8px;
+	color: #6a1634;
+}
+/* a.loginLink is IE-only - others get a dijit popup */
+#linksbar .loginLink .dijitButtonNode, #linksbar a.loginLink {
+	background-color: transparent;
+	background-image: url("log-in.png");
+	background-repeat: no-repeat;
+	width: 50px;
+	height: 20px;
+	padding: 0 !important;
+	border: 0;
+	color: transparent;
+}
+#linksbar a.loginLink {
+	display: block;
+	border-radius: 0 !important;
+}
+#linksbar .loginLink .dijitArrowButtonInner, #linksbar .loginLink .dijitArrowButtonChar { display: none; }
+
+#content {
+	margin: 16px;
+	padding: 16px;
+	
+/*	background-color: #110802;*/
+	/* Lighter */
+	background-color: #170601;
+	border: 1px solid #100602;
+	border-top-color: #332721;
+	background-image: -webkit-gradient(linear, left top, left 72, from(#22150e), to(transparent));
+	background-image: -moz-linear-gradient(top, #22150e, transparent 72px);
+	
+	position: relative;
+}
+
+.actionBar {
+	margin-bottom: 2em;
+	height: 25px;
+}
+.actionBar .action {
+	display: block;
+	float: left;
+	font-family: "Airstrip Four", sans-serif;
+	text-decoration: none;
+	font-size: 15px;
+	line-height: 18px;
+	color: #110802;
+	padding: 3px 9px;
+	margin-right: 8px;
+	margin-left: 8px;
+	
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#9db16d), to(#738d30));
+	background-image: -moz-linear-gradient(top, #9db16d, #738d30);
+	background-color: #738d30;
+	border-top: 1px solid #bbcb96;
+	border-bottom: 1px solid #647629;
+	border-left: 0;
+	border-radius: 8px;
+	box-shadow: 3px 0 0 #170601;
+	-webkit-box-shadow: 3px 0 0 #170601;
+	
+	position: relative;
+	z-index: 2;
+}
+.actionBar .action:hover {
+	border-top-color: #de7a9d;
+/*	border-left: 1px solid #a24c6b;*/
+	padding-left: 9px;
+	border-bottom: 1px solid #63192f;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#98566e), to(#721838));
+	background-image: -moz-linear-gradient(top, #98566e, #721838);
+}
+.actionBar .action.active, .actionBar .action.active:hover {
+	border-top: 0;
+	border-left: 0;
+	border-bottom: 1px solid #647629;
+	padding-top: 4px;
+	padding-left: 9px;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#66773d), to(#52671f));
+	background-image: -moz-linear-gradient(top, #66773d, #52671f);
+}
+.unreadCountTag {
+	display: block;
+	float: left;
+	font-size: 15px;
+	line-height: 18px;
+	font-weight: bold;
+	color: #d4b49f;
+	padding-right: 10px;
+	padding-left: 23px;
+	padding-top: 2px;
+	padding-bottom: 6px;
+	height: 18px;
+	
+	background-color: #8b3342;
+	border-radius: 8px;
+	
+	z-index: 1;
+	position: relative;
+	left: -23px;
+}
+
+.goToFavorites {
+	position: absolute;
+	top: 23px;
+	right: 200px;
+	color: transparent;
+	display: block;
+	overflow: hidden;
+	width: 24px;
+	height: 16px;
+	background-image: url("heart-green.png");
+	background-repeat: no-repeat;
+}
+
+div.searchContainer {
+	position: absolute;
+	top: 16px;
+	right: 16px;
+}
+div.searchContainer h2 { display: none; }
+div.searchContainer select { display: none; }
+div.searchContainer .query {
+	border: 1px solid #393a11;
+	border-radius: 5px;
+	padding: 5px;
+	font-size: 13px;
+	color: #758e28;
+	box-shadow: inset 0 0 5px rgba(117, 142, 40, 0.46);
+	-webkit-box-shadow: inset 0 0 5px rgba(117, 142, 40, 0.46);
+	background-color: #1c0f06;
+	width: 150px;
+	margin: 2px;
+	height: 17px;
+}
+div.searchContainer button {
+	color: transparent;
+	border: 0;
+	border-radius: 5px;
+	width: 31px;
+	height: 28px;
+	position: absolute;
+	top: 3px;
+	right: 3px;
+	/*background-image: url("magnifying-glass.png");*/
+	background-image: url("magnifying-glass.png"), -webkit-gradient(linear, left top, left bottom, from(#95a662), to(#758e28));
+	background-image: url("magnifying-glass.png"), -moz-linear-gradient(top, #95a662, #758e28);
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-color: #758e28;
+}
+
+
+.containerBox {
+	padding: 18px;
+	margin-bottom: 26px;
+
+	border: 1px solid black;
+	color: #ddc3ba;
+
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#7d5e4f), to(#5b3a2d));
+	background-image: -moz-linear-gradient(top, #7d5e4f, #5b3a2d);
+	background-color: #5b3a2d;
+	box-shadow: inset 0 0 5px rgba(255, 255, 190, 0.32);
+	-webkit-box-shadow: inset 0 0 5px rgba(255, 255, 190, 0.32);
+}
+
+.containerBox h1 {
+	color: #1d0c05;
+	font-family: "Capture it", sans-serif;
+	font-size: 24px;
+	text-transform: uppercase;
+}
+
+.notificationList { display: none }
+
+#footer, footer {
+	clear: both;
+	padding: 16px;
+	margin: 35px;
+	
+	min-height: 135px;
+	
+	background-image: url("ogre.png");
+	background-repeat: no-repeat;
+	background-position: top right;
+}
+div.activeUsers:before {
+	content: "Who's Online?";
+	text-transform: uppercase;
+	font-family: "Capture it", sans-serif;
+	font-size: 18px;
+	color: #721838;
+	display: block;
+}
+div.activeUsers {
+	color: #5b3a2d;
+	width: 750px;
+}
+
+div.loginInfo {
+	margin-top: 1em;
+}
+
+a, a.xspLink { color: #758e28; }
+
+button, .button, input[type=button] {
+	display: inline-block;
+	color: #758e28;
+/*	background-color: #1e0e05;*/
+	/* Lighter */
+	background-color: #2a1402;
+	padding: 5px 10px;
+	border-radius: 5px;
+	border: 0;
+	font-size: 14px;
+	font-weight: bold;
+	cursor: pointer;
+}
+*[disabled] {
+	opacity: 0.5;
+	cursor: default;
+}
+.paddedButton {
+	margin: 1em;
+}
+
+fieldset { border: 0; padding: 0; }
+.xspRadioButton td { background-color: transparent !important; }
+
+.clear { clear: both; }
+
+em { font-style: italic }
+
+/************************************************************************************
+ * /Forums.xsp 
+ ************************************************************************************/
+	ol.categories { display: block; margin: 0; padding: 0 }
+	li.category {
+		display: block;
+		list-style-type: none;
+		padding: 8px 26px;
+		/*background-color: #160a02;*/
+		/* Lighter */
+		background-color: #1e0c01;
+		margin: 14px;
+	}
+	li.category h2 {
+		font-family: "Capture it", sans-serif;
+		font-size: 18px;
+		text-transform: uppercase;
+		padding-top: 6px;
+		padding-bottom: 6px;
+	
+		margin-bottom: 5px;
+	
+		background-repeat: no-repeat;
+	}
+	ol.categories li[title="Public Access"] h2 {
+		background-image: url("icon-universal-access.png");
+		padding-left: 36px;
+	}
+	ol.categories li[title="Members Only"] h2 {
+		background-image: url("icon-group.png");
+		padding-left: 40px;
+	}
+	ol.categories li[title="Roles and Gameplay"] h2 {
+		background-image: url("icon-robot.png");
+		padding-left: 29px;
+	}
+	ol.categories li[title="Instances"] h2 {
+		background-image: url("icon-strategy.png");
+		padding-left: 36px;
+	}
+	ol.categories li[title="Risen Rabble Rousing"] h2 {
+		background-image: url("icon-megaphone.png");
+		background-position-y: 3px;
+		padding-left: 30px;
+	}
+	ol.categories li[title="Administrative"] h2 {
+		background-image: url("icon-umbrella.png");
+		padding-left: 29px;
+	}
+
+	table.forums { width: 100% }
+	table.forums td { vertical-align: top; }
+	table.forums .unread, table.forums .topicCount, table.forums .postCount { display: none; }
+	table.forums .name a {
+/*		color: #d4b49f;*/
+		/* Lighter */
+		color: #dfc4af;
+		display: inline-block;
+		padding-right: 20px;
+	}
+	table.forums .name a h3 { display: inline; }
+	table.forums .name .subtitle {
+/*		color: #452c23;*/
+		/* Lighter */
+		color: #4f3427;
+		font-style: italic;
+/*		font-size: 12px;*/
+		font-size: 13px;
+		display: inline-block;
+	}
+	table.forums .latestPost {
+		width: 250px;
+/*		font-size: 12px;*/
+		font-size: 13px;
+/*		color: #452c23;*/
+		/* Lighter */
+		color: #4f3427;
+	}
+	.forums .latestPost a {
+/*		color: #d4b49f;*/
+		/* Lighter */
+		color: #dfc4af;
+	}
+	.forums .latestPost a.userLink {
+/*		color: #452c23;*/
+		/* Lighter */
+		color: #4f3427;
+		text-decoration: none;
+	}
+
+/************************************************************************************
+ * /Forum.xsp 
+ ************************************************************************************/
+/*	button.newForum { display: none; }*/
+	div.topPager { display: none; }
+	div.forumNameHeader {
+		padding: 12px 10px;
+/*		background-color: #1e0e05;*/
+		/* Lighter */
+		background-color: #1e0c01;
+	}
+	h1.forumName:before { content: "Forum: "; }
+	h1.forumName, h1.forumName span {
+		color: #6c4a3d;
+		font-size: 24px;
+		font-weight: bold;
+	}
+	h1.forumName { padding: 0; }
+	h1.forumName a { color: #6c4a3d; }
+	h1.forumName + .subtitle {
+		display: block;
+		color: #5b3a2d;
+		font-size: 14px;
+		font-weight: bold;
+		padding: 0 10px;
+/*		background-color: #1e0e05;*/
+		/* Lighter */
+		background-color: #1e0c01;
+	}
+	div.forumNameHeader h2 {
+		color: #57372a;
+		font-weight: bold;
+		font-size: 14px;
+	}
+
+	div.restricted { display: none; }
+
+	.topics {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 14px;
+	}
+	.topics .name a {
+/*		color: #d4b49f;*/
+		/* Lighter */
+		color: #dfc4af;
+		text-decoration: underline;
+		font-weight: bold;
+	}
+	.topics .sticky, .topics .unread { display: none; }
+	.topics td {
+		padding-top: 10px;
+		height: 34px;
+		vertical-align: top;
+	}
+	.topics td.name {
+		padding-left: 38px;
+		background-repeat: no-repeat;
+		background-position: 6px 10px;
+	}
+	.topics a { color: #758e28; text-decoration: none; }
+	.topics td.name a.userLink { color: #758e28; text-decoration: none; font-weight: normal; }
+	.topics .stickyForum td {
+/*		background-color: #1e0e05;*/
+		/* Lighter */
+		background-color: #1e0c01;
+	}
+	.topics .eventForum td.name { background-image: url("month-calendar.png"); }
+	.topics .stickyForum td.name { background-image: url("alert.png"); }
+	.topics .unreadForum td.name { background-image: url("speech-bubbles.png"); }
+	.topics .latestPost a { display: block; }
+	.topics .postCount .xspTextComputedField:before {
+		content: "Replies: ";
+	}
+	.topics .replies { width: 100px; }
+
+/************************************************************************************
+ * /Topic.xsp 
+ ************************************************************************************/
+	.topicHeader {
+		color: #6c4a3d;
+/*		background-color: #1e0e05;*/
+		/* Lighter */
+		background-color: #2a1402;
+		padding: 12px 10px;
+		
+		position: relative;
+	}
+	.topicHeader h1, .topicHeader h2 {
+		font-size: 24px;
+		font-weight: bold;
+	}
+	.topicHeader h1 a { color: #6c4a3d; }
+	.topicHeader h1 a:hover { text-decoration: underline !important }
+	.topicHeader h2 {
+/*		color: #D4B49F;*/
+		/* Lighter */
+		color: #dfc4af;
+	}
+	
+	.makeFavoriteButton, .removeFavoriteButton, .editTopicButton, .deleteTopicButton {
+		position: absolute;
+		right: 8px;
+		top: 8px;
+		
+		display: block;
+		width: 24px;
+		height: 16px;
+		color: transparent;
+		overflow: hidden;
+		background-color: transparent;
+		border: 0;
+		background-repeat: no-repeat;
+		
+		cursor: pointer;
+	}
+	.makeFavoriteButton { background-image: url("heart-brown.png"); }
+	.removeFavoriteButton { background-image: url("heart-green.png"); }
+	.editTopicButton {
+		background-image: url("pencil.png");
+		width: 17px;
+		height: 17px;
+		right: 39px;
+	}
+	.deleteTopicButton {
+		background-image: url("cross.png");
+		width: 15px;
+		height: 15px;
+		right: 60px;
+		top: 8px;
+	}
+	
+	.switchToRaidCompButton {
+		padding-left: 35px;
+		background-image: url("switch.png");
+		background-position: 10px 5px;
+		background-repeat: no-repeat;
+	}
+	
+	.posts {
+		clear: right;
+	}
+	.post {
+		min-height: 166px;
+		padding: 12px 17px;
+		padding-bottom: 62px;
+/*		background-color: #160a03;*/
+		/* Lighter */
+		background-color: #1e0c01;
+		margin: 10px 0;
+		position: relative;
+	}
+	
+	.post .author {
+		float: left;
+		width: 163px;
+	}
+	.post .title { display: none; }
+	.post .avatarContainer {
+		height: 113px;
+		width: 163px;
+		margin-top: -1em;
+		margin-bottom: 5px;
+		text-align: center;
+		background-color: #090403;
+		display: table-cell;
+		vertical-align: middle;
+	}
+	.post .noAvatar {
+		background-image: url("bunny-avatar.png");
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	.post .forumAvatar {
+		max-width: 163px;
+		max-height: 113px;
+		vertical-align: middle;
+	}
+	.post .username {
+		font-weight: bold;
+/*		color: #d4b49f;*/
+		/* Lighter */
+		color: #dfc4af;
+	}
+	.post .usernameTitleBlock {
+		font-size: 0.9em;
+/*		color: #452c23;*/
+		/* Lighter */
+		color: #4f3427;
+		font-style: italic;
+	}
+	.post .postCountBlock {
+		font-size: 0.9em;
+/*		color: #452c23;*/
+		/* Lighter */
+		color: #4f3427;
+	}
+	.post .time {
+/*		color: #452c23;*/
+		/* Lighter */
+		color: #4f3427;
+		margin-left: 178px;
+		
+	}
+	.post .photoBox {
+		margin: 1em 0;
+		margin-left: 178px;
+		background-color: rgba(0, 0, 0, 0.3);
+		padding: 1em;
+		text-align: center;
+	}
+	.post .photoBox img { max-width: 100%; }
+	.post .body, .post .appQuestionsBox {
+		margin-top: 1em;
+		margin-left: 178px;
+		color: #7b6455;
+		width: 661px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.post .appQuestionsBox .question {
+		margin: 1em 0;
+		font-weight: bold;
+	}
+	.post .appQuestionsBox .field {
+		margin: 1em;
+	}
+	.post .body p + p { margin-top: 1em; }
+	.post .body img { max-width: 100%; }
+	.post .signature {
+		border-top: 1px solid #110802;
+		padding-top: 16px;
+		margin-top: 16px;
+		margin-left: 178px;
+	}
+	.post .editHistory, .post .edit-history {
+		margin-top: 1em;
+		margin-left: 178px;
+		font-size: 12px;
+	}
+	.replyButton {
+		padding-left: 35px;
+		background-image: url("speech-bubble-green.png");
+		background-position: 10px 5px;
+		background-repeat: no-repeat;
+	}
+	.post .quoteButton {
+		position: absolute;
+		right: 14px;
+		bottom: 9px;
+		
+		display: block;
+/*		color: #442b21;*/
+		/* Lighter */
+		color: #573c2c;
+/*		background-color: #110802;*/
+		background-color: #170601;
+		padding: 5px 10px;
+		border-radius: 5px;
+		
+		padding-left: 40px;
+		background-image: url("speech-bubble.png");
+		background-repeat: no-repeat;
+		background-position: 10px 5px;
+	}
+	.post .editButton, .post .deleteButton {
+		display: block;
+		overflow: hidden;
+		position: absolute;
+		top: 3px;
+		color: transparent;
+		width: 20px;
+		height: 20px;
+		background-repeat: no-repeat;
+		background-position: center center;
+		background-color: transparent;
+	}
+	.post .editButton {
+		right: 9px;
+		background-image: url("pencil.png");
+	}
+	.post .deleteButton {
+		right: 35px;
+		background-image: url("cross.png");
+	}
+	.post .quoteTitle {
+		font-style: italic;
+	}
+	.post .quoteBody, blockquote {
+		padding: 10px 58px;
+		border-radius: 6px;
+/*		color: #160a03;*/
+		/* Lighter */
+		color: #281605;
+		min-height: 57px;
+		margin-bottom: 1em;
+		
+		background: url("left-quote.png") no-repeat left top,
+					url("right-quote.png") no-repeat right bottom;
+		background-color: #7b6455;
+	}
+	.post .quoteBody .quoteBody {
+		background-color: rgba(0, 0, 0, 0.1);
+	}
+	
+	.eventInfoHeader {
+		margin-right: 230px;
+		margin-top: 1em;
+		color: #6c4a3d;
+		font-weight: bold;
+/*		font-size: 12px;*/
+		font-size: 13px;
+	}
+	.eventInfoHeader h3 {
+		font-size: 24px;
+	}
+	.eventInfoHeader .value {
+		color: #7b6459;
+		display: inline-block;
+		padding-right: 10px;
+	}
+	.eventInfo { margin-right: 230px; }
+	
+	a.toggleAttended { display: none }
+	tr:hover a.toggleAttended {
+		font-size: 11px;
+		display: inline;
+	}
+
+/************************************************************************************
+ * /Post.xsp
+ ************************************************************************************/
+	.existingPosts { display: none; }
+
+/************************************************************************************
+ * /EventCalendar.xsp
+ ************************************************************************************/
+	#content.calendarPage {
+		background: transparent;
+		border: 0;
+	}
+	h1.calendarHeader { display: none; }
+	.cal-header, .cal-header .xspTextComputedField {
+		font-family: "Capture it";
+		color: #5b3a2d;
+		font-size: 72px;
+		text-align: center;
+		text-transform: uppercase;
+	}
+	.calendarContainer {
+		border: 1px solid #110802;
+		box-shadow: inset 0 0 10px rgba(212, 180, 159, 0.3);
+		-webkit-box-shadow: inset 0 0 10px rgba(212, 180, 159, 0.3);
+		background-image: -webkit-gradient(linear, left top, left bottom, from(#78594a), to(#5b3a2d));
+		background-image: -moz-linear-gradient(top, #78594a, #5b3a2d);
+		background-color: #5b3a2d;
+	}
+	.calendar {
+		margin: 30px 20px;
+		display: block;
+		font-size: 14px;
+	}
+	.calendar thead {
+		display: table;
+		clear: left;
+		width: 100%;
+	}
+	.calendar tbody {
+		display: table;
+		width: 100%;
+		border-image: url("calendar-border.png") 7 8 7 7 repeat repeat;
+		-webkit-border-image: url("calendar-border.png") 7 8 7 7 repeat repeat;
+		-moz-border-image: url("calendar-border.png") 7 8 7 7 repeat repeat;
+		border-width: 8px;
+	}
+	.calendar td {
+		width: 118px;
+		height: 96px;
+		border-top: 1px solid #6e4d3e;
+		border-left: 1px solid #6e4d3e;
+		color: #231712;
+		position: relative;
+		vertical-align: bottom;
+/*		overflow: hidden;*/
+		background-color: #795a4b;
+	}
+	.calendar td .cellHolder {
+		/*display: block;
+		width: 118px;
+		height: 96px;
+		position: relative;
+		vertical-align: bottom;
+		display: table-cell;*/
+	}
+	.calendar tr td.today {
+		/*border: 2px solid #5b3a2d !important;*/
+		background-image: url("you-are-here.png") !important;
+	}
+	.calendar .even td {
+		background-color: #6e4d3e;
+		border-color: #795a4b;
+	}
+	.calendar td .label {
+		position: absolute;
+		top: 8px;
+		right: 16px;
+		font-weight: bold;
+	}
+	.calendar .day-header td {
+		font-family: "Capture it";
+		font-size: 24px;
+		text-align: center;
+		border: 0;
+		height: 30px;
+		text-transform: uppercase;
+		background-color: transparent;
+	}
+	.calendar .containsRaid {
+		background-image: url("dragon.png");
+		background-repeat: no-repeat;
+		background-position: left bottom;
+	}
+	.calendar .raids {
+		vertical-align: bottom;
+	}
+	.calendar .raid {
+		background-color: rgba(17, 8, 2, 0.39);
+		text-align: center;
+		height: 20px;
+		width: 98px;
+		padding: 0 10px;
+		padding-top: 2px;
+		font-weight: bold;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.calendar .raid a {
+		color: #090403;
+		text-decoration: none;
+		overflow: hidden;
+	}
+	.calendar .raid + .raid {
+		border-top: 1px solid rgb(17, 8, 2);
+	}
+	.calendar .raid.selected {
+		background-image: url("check.png");
+		background-repeat: no-repeat;
+	}
+	
+	.calendarContainer .next, .calendarContainer .previous, .calendarNext, .calendarPrevious {
+		font-family: "Airstrip Four", sans-serif;
+		font-size: 18px;
+/*		color: #d4b49f;*/
+		/* Lighter */
+		color: #dfc4af;
+		text-shadow: 0 1px 1px rgba(0, 0, 0, 0.46);
+		text-decoration: none;
+		
+		display: block;
+		height: 20px;
+		padding-top: 15px;
+		padding-bottom: 10px;
+	}
+	.calendarContainer .next, .calendarNext {
+		float: right;
+		margin-right: 15px;
+		padding-right: 35px;
+		background-image: url("arrow-right-shadow.png");
+		background-repeat: no-repeat;
+		background-position: right 14px;
+	}
+	.calendarContainer .previous, .calendarPrevious {
+		float: left;
+		margin-left: 15px;
+		padding-left: 35px;
+		background-image: url("arrow-left-shadow.png");
+		background-repeat: no-repeat;
+		background-position: left 14px;
+	}
+	
+	.createRaidButton, .createEventButton, .multiEventSignupButton, .airstripButton {
+		font-family: "Airstrip Four", sans-serif;
+		font-size: 22px;
+		font-weight: normal;
+		text-shadow: 0 2px 2px rgba(0, 0, 0, 0.75);
+		
+		display: inline-block;
+		box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		border: 1px solid #020000;
+		border-radius: 0;
+		box-shadow: 0 0 16px rgba(108, 74, 61, 0.4);
+		-webkit-box-shadow: 0 0 16px rgba(108, 74, 61, 0.4);
+		margin: 10px;
+		
+		height: 36px;
+		padding: 5px 10px;
+		padding-left: 45px;
+		
+		background-image: url("box-button-background.png");
+		background-repeat: repeat-x;
+		
+		text-decoration: none;
+		cursor: pointer;
+	}
+	.createRaidButton:hover, .createEventButton:hover, .multiEventSignupButton:hover, .airstripButton:hover,
+	.createRaidButton:active, .createEventButton:active, .multiEventSignupButton:active, .airstripButton:active {
+		text-decoration: none !important;
+		color: #721838;
+	}
+	.createRaidButton {
+		background: url("button-image-create-raid.png") no-repeat 10px 3px,
+					url("box-button-background.png") repeat-x left top;
+	}
+	.createEventButton {
+		background: url("button-image-create-event.png") no-repeat 10px 3px,
+					url("box-button-background.png") repeat-x left top;
+	}
+	.multiEventSignupButton {
+		float: right;
+		background: url("button-image-hyper-signup.png") no-repeat 10px 3px,
+					url("box-button-background.png") repeat-x left top;
+	}
+
+/************************************************************************************
+ * /RaidComp.xsp
+ ************************************************************************************/
+	.raidCompTabs {
+		margin-right: 230px;
+		width: 620px;
+	}
+
+/************************************************************************************
+ * /Home.xsp
+ ************************************************************************************/
+	#content.homePage {
+		background: transparent;
+		border: 0;
+	}
+	
+	.homeBox {
+		width: 381px;
+		height: 276px;
+		float: left;
+		margin-right: 18px;
+	}
+	.homeBox[title="Welcome"] p:first-child .first-word {
+		color: #1d0c05;
+		font-family: "Capture it", sans-serif;
+		font-size: 24px;
+		text-transform: uppercase;
+		padding-right: 5px;
+	}
+	.homeBox[title="Welcome"] {
+		height: 213px;
+		position: relative;
+		background: url("murky.png") no-repeat 360px 178px,
+					-webkit-gradient(linear, left top, left bottom, from(#7d5e4f), to(#5b3a2d)) #5b3a2d;
+		background: url("murky.png") no-repeat 360px 178px,
+					-moz-linear-gradient(top, #7d5e4f, #5b3a2d) #5b3a2d;
+	}
+	.homeBox p + p {
+		margin-top: 1em;
+	}
+	.homeBox[title="Shoutbox"] h1 {
+		padding-left: 35px;
+		background-image: url("shoutbox.png");
+		background-repeat: no-repeat;
+	}
+	.shoutbox-list {
+		width: 100%;
+		margin-top: 3px;
+		margin-bottom: 2px;
+		height: 215px;
+		width: 369px;
+		padding: 5px;
+		border: 1px solid black;
+		background-color: #a59286;
+		color: #1d0c06;
+		
+		overflow: auto;
+		font-size: 13px;
+	}
+	.shoutbox-list a { color: #1d0c06; }
+	.shoutbox-input {
+		border: 1px solid black;
+		background-color: #a59286;
+		width: 369px;
+		padding: 5px;
+		color: #1d0c06;
+		font-size: 12px;
+	}
+	::-webkit-input-placeholder { color: inherit; }
+	:-moz-placeholder { color: inherit; }
+	
+	.applyButton {
+		position: absolute;
+		top: 267px;
+		width: 357px;
+		box-sizing: content-box;
+		-moz-box-sizing: content-box;
+		height: 27px;
+		left: -11px;
+		text-align: center;
+		
+		padding: 4px 15px;
+		padding-left: 45px;
+		background: url("application.png") no-repeat 75px 3px,
+					url("box-button-background.png") repeat-x left top;
+		box-shadow: outset 0 0 16px rgba(252, 202, 165, 0.2);
+		-webkit-box-shadow: outset 0 0 16px rgba(252, 202, 165, 0.2);
+	}
+	
+	.homeFooter {
+		clear: left;
+		font-size: 14px;
+		width: 834px;
+		height: 170px;
+		padding: 20px 10px;
+		background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(141, 77, 59, 0.07)), to(transparent));
+		background-image: -moz-linear-gradient(top, rgba(141, 77, 59, 0.07), rgba(0, 0, 0, 0.0));
+		background-repeat: no-repeat;
+	}
+	.homeFooter .newsFeed {
+		width: 350px;
+	}
+	.homeFooter .newsFeed:before {
+		content: attr(title);
+		text-transform: uppercase;
+		font-family: "Capture it", sans-serif;
+		font-size: 24px;
+		color: #5b3a2d;
+		display: block;
+	}
+	.homeFooter .newsFeed[title="Recent Guild Achievements"] {
+		float: right;
+	}
+	.newsFeed ol { padding: 0 }
+	.homeFooter .newsFeed li {
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+	}
+	.homeFooter .newsFeed li > span {
+		display: block;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.homeFooter .newsFeed a {
+		color: #7b6455;
+		text-decoration: underline;
+	}
+	
+	.homePage .photos ol { margin: 0; }
+	.homePage .photos li {
+		width: 382px;
+		height: 255px;
+		margin: 0;
+	}
+	.homePage .photos li > a {
+		width: 380px;
+		height: 253px;
+	}
+	.homePage .photos img {
+		max-width: 380px;
+		max-height: 253px;
+	}
+	
+/************************************************************************************
+ * /Library.xsp
+ ************************************************************************************/
+	#content.libraryPage {
+		background: transparent;
+		border: 0;
+	}
+	.containerBox[title="Raid Strat Videos"] ul, .containerBox[title="Raid Strat Videos"] li {
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		display: inline;
+	}
+	.containerBox[title="Raid Strat Videos"] a {
+		color: transparent;
+		display: inline-block;
+		width: 400px;
+		height: 104px;
+		background-repeat: no-repeat;
+		margin-right: 16px;
+		margin-bottom: 20px;
+	}
+	a[title="Firelands"] { background-image: url("banner-firelands.png"); }
+	a[title="The Bastion of Twilight"] { background-image: url("banner-bastion.png"); }
+	a[title="Throne of the Four Winds"] { background-image: url("banner-throne.png"); }
+	a[title="Blackwing Descent"] { background-image: url("banner-blackwing.png"); }
+	
+	.lootLinks {
+		padding-top: 250px;
+		background-image: url("raining-epics.png");
+		background-position: top center;
+		background-repeat: no-repeat;
+		
+		text-align: center;
+	}
+	.viewLootsButton, .viewLootScoresButton {
+		padding-top: 5px;
+		padding-right: 5px;
+		padding-bottom: 4px;
+		
+		background: url("magnifying-glass-green.png") no-repeat 10px 3px,
+					url("box-button-background.png") repeat-x left top;
+	}
+	
+	.containerBox[title="Photo Gallery"] {
+		height: 400px;
+		position: relative;
+	}
+	.containerBox[title="Photo Gallery"] p {
+		margin-top: 0.5em;
+		margin-bottom: 0.25em;
+		font-size: 13px;
+	}
+	.containerBox[title="Photo Gallery"] a.leftLink {
+		display: block;
+		width: 32px;
+		height: 36px;
+		
+		position: absolute;
+		left: 16px;
+		top: 194px;
+		
+		background-image: url("double-arrow-left.png");
+		background-repeat: no-repeat;
+		color: transparent;
+	}
+	.containerBox[title="Photo Gallery"] a.rightLink {
+		display: block;
+		width: 32px;
+		height: 36px;
+
+		position: absolute;
+		right: 16px;
+		top: 194px;
+		
+		background-image: url("double-arrow-right.png");
+		background-repeat: no-repeat;
+		color: transparent;
+	}
+	.photos ol {
+		margin: 0;
+		margin-left: 30px;
+		padding: 0;
+		display: block;
+	}
+	.photos li {
+		list-style-type: none;
+		display: block;
+		float: left;
+		width: 218px;
+		height: 158px;
+		margin: 20px;
+		margin-top: 0;
+	}
+	.photos .caption {
+		font-size: 11px;
+		width: 218px;
+		height: 1.3em;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		text-align: center;
+	}
+	.photos li > a {
+		display: table-cell;
+		text-align: center;
+		vertical-align: middle;
+		border: 1px solid black;
+		width: 216px;
+		height: 136px;
+		background-color: rgba(0, 0, 0, 0.3);
+	}
+	.photos a:hover {
+		border-color: #721538;
+	}
+	.photos img {
+		max-width: 216px;
+		max-height: 136px;
+	}
+
+/************************************************************************************
+ * Pagers
+ ************************************************************************************/
+	.xspPagerContainer, .xspPagerRight { background-color: transparent; color: #721838; }
+	.xspPagerContainer a { color: #721838 !important; }
+	.xspPagerNav.xspFirst, .xspPagerNav.xspLast { display: none; }
+	.xspPagerNav.xspPrevious, .xspPagerNav.xspNext { color: transparent; }
+	.xspPagerNav.xspPrevious a, .xspPagerNav.xspNext a {
+		display: inline-block;
+		color: transparent !important;
+		width: 21px;
+		height: 15px;
+		background-repeat: no-repeat;
+	}
+	.xspPagerNav.xspPrevious a { background-image: url("arrow-left-green.png"); }
+	.xspPagerNav.xspNext a { background-image: url("arrow-right-green.png"); }
+	.xspPagerNav span span { border: 0 !important; }
+
+/************************************************************************************
+ * Tabbed tables
+ * http://www.youtube.com/watch?v=0sZ0Yn16Dgg !important
+ ************************************************************************************/
+	.tundra .dijitContentPane, .tundra .dijitTabPaneWrapper, .tundra .dijitTabContainer {
+		background: transparent;
+		padding-left: 0;
+		padding-right: 0;
+		padding-top: 0;
+	}
+	.tundra .dijitTabPaneWrapper {
+		border: 0;
+	}
+	.tundra .dijitTabContainerTop-tabs { border-bottom: 1px solid #7b6455 !important }
+	*[wairole="tablist"] {
+		border-bottom: 2px solid #7b6455 !important;
+		padding-bottom: 1px !important;
+		padding-left: 0 !important;
+	}
+	.dijitTab {
+		background: #634c3d !important;
+		border: 0 !important;
+		border-top-left-radius: 6px;
+		border-top-right-radius: 6px;
+		
+		color: #391c0c !important;
+		font-weight: bold !important;
+		
+		padding-right: 10px !important;
+	}
+	.dijitTabChecked {
+		background: #7b6455 !important;
+	}
+	
+	.missingInfo {
+		display: inline-block;
+		width: 13px;
+		height: 13px;
+		background-image: url("alert-brown.png");
+		background-repeat: no-repeat;
+		vertical-align: top;
+		margin-top: 3px;
+		margin-left: 3px;
+	}
+	.dijitTabPane {
+		overflow-x: hidden;
+	}
+
+/************************************************************************************
+ * Data tables
+ ************************************************************************************/
+	table.lineup {
+		border-collapse: collapse;
+		width: 100%;
+	}
+	table.fields {
+		border-collapse: collapse;
+		margin: 1em 0;
+	}
+	table.lineup th, table.fields th, table.fields > tbody > tr > td:first-child {
+/*		color: #160a03;*/
+		/* Lighter */
+		color: #1e0c01;
+		font-weight: bold;
+		background-color: #7b6455;
+		padding: 3px 5px;
+		text-align: left;
+		font-size: 14px;
+	}
+	table.fields th, table.fields > tbody > tr > td:first-child { min-width: 100px; }
+	table.lineup td {
+		padding: 5px;
+		color: #6c4a3d;
+		font-size: 13px;
+		font-weight: bold;
+	}
+	table.fields td { padding: 5px; }
+	table.lineup tr:nth-child(odd) td {
+/*		background-color: #1e0e05;*/
+		/* Lighter */
+		background-color: #2a1402;
+	}
+	div.signupGroup h3 {
+		background: #7b6455;
+		border: 0;
+		border-top-left-radius: 6px;
+		border-top-right-radius: 6px;
+		display: inline-block;
+		
+		color: #391c0c;
+		font-weight: bold;
+		
+		padding: 4px 10px;
+	}
+	div.signupGroup {
+		margin: 2em 0;
+	}
+	
+	table.lineup .icon {
+		width: 13px;
+	}
+	table.lineup tr.selected td.icon {
+		background-image: url("lineup-check.png");
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	table.lineup tr.selected td.icon img {
+		display: none;
+	}
+	table.lineup .inPlaceEditButton {
+		display: inline-block;
+		color: transparent;
+		background-image: url("pencil.png");
+		background-repeat: no-repeat;
+		width: 17px;
+		height: 17px;
+	}
+	
+	
+	table.fieldLayout {
+		font-size: 16px;
+		margin: 1em 0;
+	}
+	table.fieldLayout th {
+		font-weight: bold;
+		text-align: right;
+	}
+	table.fieldLayout td {
+		min-width: 75px;
+	}
+
+/************************************************************************************
+ * Sidebars
+ ************************************************************************************/
+	.right-sidebar {
+		float: right;
+		width: 209px;
+/*		margin-top: 112px;*/
+/*		font-size: 12px;*/
+		font-size: 13px;
+	}
+	.right-sidebar .section .title {
+		font-weight: bold;	
+		padding: 3px 5px;
+		color: #7b6455;
+/*		background-color: #1e0e05;*/
+		/* Lighter */
+		background-color: #2a1402;
+	}
+	.right-sidebar .section.null .title {
+/*		color: #160a03;*/
+		/* Lighter */
+		color: #1e0c01;
+		background-color: #7b6455;
+	}
+	.right-sidebar .section.tanks img, .right-sidebar .section.healers img, .right-sidebar .section.dps img {
+		position: absolute;
+		left: 20px;
+	}
+	.right-sidebar .tag {
+		position: absolute;
+		right: 5px;
+	}
+	.right-sidebar .charlist, .right-sidebar .bufflist {
+		padding: 5px 0;
+	}
+	.right-sidebar .charlist div div, .right-sidebar .bufflist div {
+		padding-left: 44px;
+		line-height: 24px;
+		background-position: 30px center;
+		background-repeat: no-repeat;
+		position: relative;
+	}
+	.right-sidebar .bufflist img { display: none; }
+	.right-sidebar .bufflist .active {
+		background-image: url("buff-check.png");
+	}
+	.right-sidebar .bufflist .maybe {
+		background-image: url("buff-question.png");
+		background-position: 34px center;
+	}
+	.right-sidebar .bufflist .inactive {
+		background-image: url("buff-cross.png");
+	}
+	.right-sidebar .special .bufflist div {
+		background: transparent;
+	}
+	.right-sidebar .special .count {
+		position: relative;
+		left: -10px;
+	}
+	
+/************************************************************************************
+ * Class colors
+ ************************************************************************************/
+	.death_knight { color: rgb(196, 31, 59) }
+	.druid { color: rgb(255, 125, 10) }
+	.hunter { color: rgb(171, 212, 115) }
+	.mage { color: rgb(105, 204, 240) }
+	.paladin { color: rgb(245, 140, 186) }
+	.priest { color: rgb(255, 255, 255) }
+	.rogue { color: rgb(255, 245, 105) }
+	.shaman { color: rgb(36, 89, 255) }
+	.warlock { color: rgb(148, 130, 202) }
+	.warrior { color: rgb(199, 156, 110) }
+
+	
+/************************************************************************************
+ * Typeahead menus and loot
+ ************************************************************************************/
+	.dijitPopup { max-height: 200px }
+	ul.dijitMenu {
+		border: 1px solid #444;
+	}
+	ul.dijitMenu li {
+		padding: 2px;
+		background-color: black;
+	}
+	ul.dijitMenu li + li { border-top: 1px solid #aaa }
+	ul.dijitMenu pre { margin: 0 }
+	div.dijitTextBox input { background-color: white !important; color: black !important }
+	
+	.item { min-height: 22px }
+	.item .heroic, table.loot .heroic {
+		color: #1EFF00;
+		font-size: 95%;
+		font-style: italic;
+	}
+	
+	.dijitMenu .item img { float: left }
+	.dijitMenu .item p { margin-left: 23px }
+	.dijitMenu .item .level { float: right }
+
+	.ratio { width: 75px; text-align: right }
+	
+	/* Wowhead(?) uses links with this class and an inline background-image, so I may as well handle those */
+	.icontiny {
+		background-repeat: no-repeat;
+		padding-left: 20px;
+	}
+	
+/************************************************************************************
+* Dojo dialogs and ExtLib pickers
+************************************************************************************/
+	.tundra .dijitTooltipDialog .dijitTooltipContainer, .tundra .dijitDialog.dijitContentPane, .tundra .dijitDialog {
+		min-width: 220px;
+		
+		/* based on .containerBox */
+		font-weight: bold;
+		background: #7b6455;
+		border: 1px solid black;
+		color: #ddc3ba;
+
+		background-image: -webkit-gradient(linear, left top, left bottom, from(#7d5e4f), to(#5b3a2d));
+		background-image: -moz-linear-gradient(top, #7d5e4f, #5b3a2d);
+		background-color: #5b3a2d;
+		box-shadow: inset 0 0 5px rgba(255, 255, 190, 0.32);
+		-webkit-box-shadow: inset 0 0 5px rgba(255, 255, 190, 0.32);
+	}
+	.tundra .dijitDialog .dijitDialogTitleBar {
+		color: #1E0C01;
+		border-bottom: 1px solid #586a1e;
+		background-image: url("Linksbar.png");
+		background-repeat: repeat-x;
+		background-color: #967f70;
+	}
+	.tundra .dijitDialog .dijitDialogPaneContent {
+		background: transparent;
+		border: 0;
+	}
+	.dijitDialog form {
+		width: auto;
+		height: auto;
+		margin: auto;
+		border: 0;
+		background: transparent;
+	}
+	
+	body .list2, body .list1 {
+		background-color: rgba(0, 0, 0, 0.2);
+	}
+	body .xspPickerBody {
+		background-color: transparent;
+	}
+	body .xspPickerItemSelected {
+		background-color: rgba(0, 0, 0, 0.2) !important;
+	}
+
+/************************************************************************************
+* OneUI Inline Lists
+************************************************************************************/
+
+	.lotusFilter .lotusClose {
+		font-size: 0.9em;
+		padding-left: 0.25em;
+	}
+	.lotusFilter { margin-right: 0.25em }
+
+/************************************************************************************
+* Dojo icons
+************************************************************************************/
+
+	.tundra .dijitContentPaneError {
+		background-image: url("tango/emblem-important-16x16.png") !important;
+	}
+	.tundra .dijitContentPaneLoading {
+		background-image: url("loading/bar.gif") !important;
+	}

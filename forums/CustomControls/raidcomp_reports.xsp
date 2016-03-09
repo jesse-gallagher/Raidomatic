@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core"
+	xmlns:xc="http://www.ibm.com/xsp/custom" xmlns:xe="http://www.ibm.com/xsp/coreex">
+	
+	<xp:this.beforePageLoad><![CDATA[#{javascript:
+		viewScope.currentRaidReport = new com.raidomatic.model.RaidReport();
+		viewScope.currentRaidReport.setTopicId(topic.getId());
+		viewScope.currentRaidReport.setCreatedBy(@UserName());
+	}]]></xp:this.beforePageLoad>
+	
+	<xp:div rendered="#{javascript:compositeData.topic.eventLog != '' &amp;&amp; compositeData.topic.eventLog != null}">
+		Old-Style Combat Log:&#160;<xp:link value="#{compositeData.topic.eventLog}" text="#{compositeData.topic.eventLog}"/>
+	</xp:div>
+	
+	<xp:repeat value="#{compositeData.topic.raidReports}" rows="100000" var="raidReport" indexVar="rindex">
+		<xp:this.facets>
+			<xp:text xp:key="header" escape="false" disableTheme="true"><xp:this.value><![CDATA[
+				<table class="lineup loot">
+					<tr>
+						<th></th>
+						<th>URL</th>
+						<th>Note</th>
+						<th>Group</th>
+						<th>Added By</th>
+					</tr>
+			]]></xp:this.value></xp:text>
+			<xp:text xp:key="footer" escape="false" disableTheme="true"><xp:this.value><![CDATA[
+				</table>
+			]]></xp:this.value></xp:text>
+		</xp:this.facets>
+		
+		<xp:tr styleClass="#{javascript:rindex % 2 == 1 ? 'even' : 'odd'}">
+			<td class="delete">
+				<xp:link id="editRaidReport" rendered="#{raidReport.isEditable}" styleClass="inPlaceEditButton">
+					E
+					<xp:eventHandler event="onclick" submit="true"
+						refreshMode="partial" execMode="partial" refreshId="#{compositeData.refreshId}">
+						<xp:this.action><![CDATA[#{javascript:
+							viewScope.currentRaidReport = raidReport
+							viewScope.raidReportUrl = raidReport.url;
+							viewScope.raidReportNotes = raidReport.notes;
+							viewScope.raidReportGroup = raidReport.groupText;
+						}]]></xp:this.action>
+					</xp:eventHandler>
+				</xp:link>
+			</td>
+			<td><xp:link value="#{raidReport.url}" text="#{raidReport.url}"/></td>
+			<td><xp:text value="#{raidReport.notes}"/></td>
+			<td>Group&#160;<xp:text value="#{raidReport.groupText}"/></td>
+			<td><xc:Username value="#{raidReport.createdBy}" titleBlock="false"/></td>
+		</xp:tr>
+	</xp:repeat>
+	
+	<xp:br />
+	<hr />
+	<xp:br />
+
+	<xp:text tagName="h3">
+		<xp:this.value><![CDATA[#{javascript:
+			viewScope.currentRaidReport.docExists ? "Modify Report" : "Add Report"
+		}]]></xp:this.value>
+	</xp:text>
+	
+	
+	<xp:table styleClass="fields">
+		<tr>
+			<td>URL:</td>
+			<td><xp:inputText id="newCombatLog" value="#{viewScope.raidReportUrl}" styleClass="url" /></td>
+		</tr>
+		<tr>
+			<td>Note:</td>
+			<td><xp:inputText id="newCombatLogNotes" value="#{viewScope.raidReportNotes}" styleClass="url" /></td>
+		</tr>
+		<tr>
+			<td>Group:</td>
+			<td>
+				<xp:comboBox value="#{viewScope.raidReportGroup}" defaultValue="1" id="group">
+					<xp:selectItems><xp:this.value><![CDATA[#{javascript:
+						var result = []
+						for(var i = 1; i <= compositeData.topic.getEventGroups(); i++) {
+							result.push("Group " + i + "|" + i)
+						}
+						return result
+					}]]></xp:this.value></xp:selectItems>
+				</xp:comboBox>
+			</td>
+		</tr>
+	</xp:table>
+	
+	<xp:button id="raidReportAdd" value="Add">
+		<xp:eventHandler event="onclick" submit="true" refreshMode="partial" refreshId="#{compositeData.refreshId}">
+			<xp:this.action><![CDATA[#{javascript:
+				var report = viewScope.currentRaidReport;
+				report.setTopicId(compositeData.topic.id);
+				report.setUrl(viewScope.raidReportUrl);
+				report.setNotes(viewScope.raidReportNotes);
+				report.setGroupText(viewScope.raidReportGroup);
+				report.save();
+				
+				viewScope.raidReportUrl = "";
+				viewScope.raidReportNotes = "";
+				viewScope.raidReportGroup = "1";
+				
+				viewScope.currentRaidReport = new com.raidomatic.model.RaidReport();
+				viewScope.currentRaidReport.setTopicId(topic.getId());
+				viewScope.currentRaidReport.setCreatedBy(@UserName());
+			}]]></xp:this.action>
+			<xp:this.script><![CDATA[
+				spinner(thisEvent)
+			]]></xp:this.script>
+		</xp:eventHandler>
+	</xp:button>
+	<xp:button id="raidReportCancel" value="Cancel">
+		<xp:eventHandler event="onclick" submit="true"
+			refreshMode="partial" refreshId="#{compositeData.refreshId}">
+			<xp:this.action><![CDATA[#{javascript:
+				viewScope.raidReportUrl = "";
+				viewScope.raidReportNotes = "";
+				viewScope.raidReportGroup = "1";
+				
+				viewScope.currentRaidReport = new com.raidomatic.model.RaidReport();
+				viewScope.currentRaidReport.setTopicId(topic.getId());
+				viewScope.currentRaidReport.setCreatedBy(@UserName());
+			}]]></xp:this.action>
+			<xp:this.script><![CDATA[
+				spinner(thisEvent)
+			]]></xp:this.script>
+		</xp:eventHandler>
+	</xp:button>
+	
+	<xp:button id="button1" value="Delete" styleClass="red" rendered="#{viewScope.currentRaidReport.docExists}">
+		<xp:eventHandler event="onclick" submit="true"
+			refreshMode="partial" refreshId="#{compositeData.refreshId}">
+			<xp:this.action><![CDATA[#{javascript:
+				viewScope.currentRaidReport.remove();
+				
+				viewScope.raidReportUrl = "";
+				viewScope.raidReportNotes = "";
+				viewScope.raidReportGroup = "1";
+				
+				viewScope.currentRaidReport = new com.raidomatic.model.RaidReport();
+				viewScope.currentRaidReport.setTopicId(topic.getId());
+				viewScope.currentRaidReport.setCreatedBy(@UserName());
+			}]]></xp:this.action>
+			<xp:this.script><![CDATA[
+				if(confirm("Are you sure you want to delete this raid report?")) {
+					spinner(thisEvent, true)
+					return true
+				}
+				return false
+			]]></xp:this.script>
+		</xp:eventHandler>
+	</xp:button>
+	
+<!--	<xp:button id="fetchXML" value="Fetch Boss Data" rendered="#{javascript:false}">-->
+<!--		<xp:eventHandler event="onclick" submit="true"-->
+<!--			refreshMode="partial" refreshId="xmlOutput">-->
+<!--			<xp:this.action><![CDATA[#{javascript:-->
+<!--				viewScope.xmlOutput = "hi there"-->
+<!--			}]]></xp:this.action>-->
+<!--		</xp:eventHandler>-->
+<!--	</xp:button>-->
+<!--	<xp:text id="xmlOutput" tagName="div" value="#{viewScope.xmlOutput}"/>-->
+<!--	-->
+<!--	<xp:repeat value="#{topic.bosses}" var="boss" rows="1000">-->
+<!--		<xp:this.facets>-->
+<!--			<xp:text xp:key="header" escape="false" disableTheme="true"><xp:this.value><![CDATA[-->
+<!--				<ul>-->
+<!--			]]></xp:this.value></xp:text>-->
+<!--			<xp:text xp:key="footer" escape="false" disableTheme="true"><xp:this.value><![CDATA[-->
+<!--				</ul>-->
+<!--			]]></xp:this.value></xp:text>-->
+<!--		</xp:this.facets>-->
+<!--		-->
+<!--		-->
+<!--		<xp:text value="#{boss.name}" />-->
+<!--		-->
+<!--	</xp:repeat>-->
+
+</xp:view>

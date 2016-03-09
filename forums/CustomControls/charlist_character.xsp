@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core">
+
+	<xp:div styleClass="#{javascript:@Trim(@LowerCase(compositeData.className.replace(' ', '_')) + ' ' + @LowerCase(compositeData.className.replace(' ', '_')) + '_' + @LowerCase(compositeData.spec.replace(' ', '_')))}"
+		style="white-space: nowrap">
+		<xp:image url="#{javascript:'/' + @LowerCase(compositeData.className.replace(' ', '_')) + '/' + @LowerCase(compositeData.spec.replace(' ', '_')) + '.gif'}"/>
+		<xp:text disableTheme="true" value="#{compositeData.name}" />
+<!--		<xp:text styleClass="tag" rendered="#{viewScope.topic.eventGroups &gt; 0}" value="#{compositeData.group}"/>-->
+		<xp:text styleClass="tag" rendered="#{compositeData.hideTag != true &amp;&amp; topic.eventLootTier != '' &amp;&amp; topic.eventLootTier != null}">
+			<xp:this.value><![CDATA[#{javascript:
+				var character = Characters.getByName(compositeData.name);
+				var player = character.player;
+				var needs, attendance;
+				if(topic.eventLootTier == "" || topic.eventLootTier == null) {
+					needs = player.getNeedCount();
+					attendance = player.getAttendanceCount();
+				} else {
+					needs = player.getNeedCountForLootTier(LootTiers.getById(topic.eventLootTier));
+					attendance = player.getAttendanceCountForLootTier(LootTiers.getById(topic.eventLootTier));
+				}
+				if(attendance == 0) { return ""; }
+				var tier = RaidSupport.getLootTier((needs / attendance * 100).toFixed(0))
+				tier.min + (tier.max ? "-" + tier.max : "+")
+			}]]></xp:this.value>
+		</xp:text>
+	</xp:div>
+</xp:view>

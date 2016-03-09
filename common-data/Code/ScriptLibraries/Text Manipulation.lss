@@ -1,0 +1,17 @@
+'++LotusScript Development Environment:2:5:(Options):0:72
+Option Public
+Option Declare
+
+
+'++LotusScript Development Environment:2:5:(Forward):0:1
+Declare Function URLEncode(inputText As String) As String
+
+'++LotusScript Development Environment:2:5:(Declarations):0:2
+
+'++LotusScript Development Environment:2:1:URLEncode:1:8
+Function URLEncode(inputText As String) As String
+	Dim session As New NotesSession, doc As NotesDocument
+	Set doc = session.CurrentDatabase.CreateDocument
+	doc.Input = inputText
+	URLEncode = Implode(Evaluate({ @UrlEncode("Domino"; Input) }, doc))
+End Function

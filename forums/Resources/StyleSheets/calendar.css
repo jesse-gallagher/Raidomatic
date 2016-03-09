@@ -1,0 +1,69 @@
+h2.cal-header {
+	font-weight: bold;
+	text-align: center;
+}
+div.cal-pager {
+	background-color: rgb(64, 64, 64);
+	padding: 4px;
+	text-align: right;
+}
+
+table.calendar { border-collapse: collapse; width: 100% }
+table.calendar td {
+	border: 1px solid #999;
+	height: 100px;
+	vertical-align: top;
+	width: 14%;
+}
+table.calendar tr.day-header td {
+	height: auto;
+	font-weight: bold;
+	background-color: #555;
+	text-align: center;
+}
+table.calendar span.label {
+	display: block;
+	padding: 2px 5px;
+	width: auto;
+	text-align: right;
+	font-weight: bold;
+	background-color: #444;
+}
+table.calendar td.past span.label, table.calendar td.future span.label {
+	color: #999;
+	font-weight: normal;
+	background-color: #222;
+}
+table.calendar td.today { background-color: #222 }
+
+table.calendar div.raid {
+	display: block;
+	margin: 2px;
+	padding: 3px;
+	border: 1px solid black;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	background-color: #36c;
+	
+	color: black;
+}
+table.calendar div.raid a { color: black }
+table.calendar div.raid span.time {
+	display: block;
+	float: left;
+}
+table.calendar div.raid span + span { display: block; margin-left: 55px }
+
+table.calendar div.signed-up {
+	background-image: url("tango/accessories-text-editor-16x16.png");
+	background-repeat: no-repeat;
+	background-position: right center;
+	padding-right: 18px;
+}
+table.calendar div.selected {
+	background-image: url("bullet_home.png");
+	background-repeat: no-repeat;
+	background-position: right center;
+	padding-right: 18px;
+}

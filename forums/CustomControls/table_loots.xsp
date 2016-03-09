@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom">
+
+	<xp:dataTable var="loot" indexVar="lootIndex" rows="#{javascript:Configuration.getDocumentItemValue('Forum Options', 'ForumDataTableRows')[0]}" value="#{compositeData.value}" id="lootTable" styleClass="lineup loot">
+		<xp:column loaded="${compositeData.showItem != false}">
+			<xp:this.facets><xp:text xp:key="header" value="Item Name"/></xp:this.facets>
+			<xc:itemLink value="#{loot.item}"/>
+		</xp:column>
+		<xp:column loaded="${compositeData.showItem != false}">
+			<xp:this.facets><xp:text xp:key="header" value="ilvl"/></xp:this.facets>
+			<xc:integer value="#{loot.item.level}"/>
+		</xp:column>
+		<xp:column>
+			<xp:this.facets><xp:text xp:key="header" value="Result"/></xp:this.facets>
+			<xp:text value="#{loot.result}" rendered="#{javascript:compositeData.readOnly || !loot.isEditable()}"/>
+			<xp:comboBox id="lootResult" value="#{loot.result}" rendered="#{javascript:!compositeData.readOnly &amp;&amp; loot.isEditable()}">
+				<xp:selectItem itemLabel="Bank"></xp:selectItem>
+				<xp:selectItem itemLabel="Banked Need"/>
+				<xp:selectItem itemLabel="Banked Greed"/>
+				<xp:eventHandler event="onchange" submit="true" refreshMode="partial" refreshId="lootTable">
+					<xp:this.action><![CDATA[#{javascript:
+						loot.save()
+					}]]></xp:this.action>
+					<xp:this.script><![CDATA[
+						spinner(thisEvent)
+					]]></xp:this.script>
+				</xp:eventHandler>
+			</xp:comboBox>
+		</xp:column>
+		<xp:column>
+			<xp:this.facets><xp:text xp:key="header" value="Character"/></xp:this.facets>
+			<xp:text rendered="#{loot.characterName == ''}" value="#{loot.outOfGuildCharacter}" />
+			<xp:link rendered="#{loot.characterName != ''}" value="/characters/#{javascript:RUtils.urlEncode(loot.characterName)}" text="#{loot.characterName}"/>
+		</xp:column>
+		<xp:column>
+			<xp:this.facets><xp:text xp:key="header" value="Tier"/></xp:this.facets>
+			<xp:text rendered="#{loot.lootTierId != ''}" value="#{loot.lootTier.name}" />
+		</xp:column>
+		<xp:column>
+			<xp:this.facets><xp:text xp:key="header" value="Date"/></xp:this.facets>
+			<xp:link value="/topics/#{loot.topic.id}" text="#{loot.topic.eventDate}"/>
+		</xp:column>
+	</xp:dataTable>
+	
+	<xp:pager layout="Previous Group Next" id="pager2" for="lootTable"
+		partialRefresh="true" />
+</xp:view>

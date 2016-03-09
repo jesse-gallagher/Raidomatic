@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><note class="filter" maintenanceversion="1.4" replicaid="05257F710059A2B6" version="9.0" xmlns="http://www.lotus.com/dxl">
+<noteinfo noteid="16e" sequence="4" unid="86F1E3E3051786A08525780D0067C3A3">
+<created><datetime dst="true">20110103T145322,91-04</datetime></created>
+<modified><datetime>20160309T111904,53-05</datetime></modified>
+<revised><datetime dst="true">20121219T070550,90-04</datetime></revised>
+<lastaccessed><datetime>20160309T111904,52-05</datetime></lastaccessed>
+<addedtofile><datetime>20160309T111904,52-05</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Jesse Gallagher/O=MTC</name><name>CN=Jesse Gallagher/O=Frost</name></updatedby>
+<wassignedby><name>CN=Jesse Gallagher/O=Frost</name></wassignedby>
+<item name="$TITLE" sign="true"><text>wowhead.js</text></item>
+<item name="$Flags"><text>h534Q</text></item>
+<item name="$PublicAccess" sign="true"><text>1</text></item>
+</note>

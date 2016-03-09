@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom" xmlns:xe="http://www.ibm.com/xsp/coreex"
+	beforePageLoad="#{pageController.beforePageLoad}" afterPageLoad="#{pageController.afterPageLoad}"
+	dojoParseOnLoad="true">
+	
+	<xp:this.dataContexts>
+		<xp:dataContext var="topic" value="#{viewScope.topic}"/>
+		<xp:dataContext var="baseURL" value="#{pageController.baseURL}"/>
+	</xp:this.dataContexts>
+	<xp:this.navigationRules>
+		<xp:navigationRule outcome="raidcomp" viewId="/RaidComp.xsp?topicId=#{topic.id}"/>
+	</xp:this.navigationRules>
+	
+	<xc:Layout>
+	
+		<xc:ForumHeader/>
+		
+		<xp:div id="topicHeader">
+			<div class="topicHeader">
+				
+				<xp:button id="editTopic" value="Edit Topic" rendered="#{topic.isEditable and viewScope.editTopic != true}" styleClass="editTopicButton">
+					<xp:eventHandler event="onclick" submit="true" refreshMode="partial" refreshId="topicHeader"
+						action="#{pageController.editTopic}"/>
+				</xp:button>
+				<xp:div id="favorite" loaded="${javascript:@UserName() != 'Anonymous'}">
+					<xp:button id="makeFavorite" value="I love this topic!" styleClass="makeFavoriteButton" rendered="#{!topic.isFavorite}">
+						<xp:eventHandler event="onclick" submit="true" refreshMode="partial" refreshId="favorite"
+							action="#{topic.addFavorite}" execMode="partial" immediate="true">
+						</xp:eventHandler>
+					</xp:button>
+					<xp:button id="removeFavorite" value="I hate this topic now." styleClass="removeFavoriteButton" rendered="#{topic.isFavorite}">
+						<xp:eventHandler event="onclick" submit="true" refreshMode="partial" refreshId="favorite"
+							action="#{topic.removeFavorite}" execMode="partial" immediate="true">
+						</xp:eventHandler>
+					</xp:button>
+				</xp:div>
+				<xp:button id="deleteTopic" value="Delete Topic" styleClass="deleteTopicButton" rendered="#{topic.isEditable}">
+					<xp:eventHandler event="onclick" submit="true" refreshMode="complete"
+						action="#{pageController.deleteTopic}">
+						<xp:this.script><![CDATA[
+							return XSP.confirm("Delete this topic? This will delete all posts, signups, loot, and raid reports associated with this topic.");
+						]]></xp:this.script>
+					</xp:eventHandler>
+				</xp:button>
+				
+				
+				<h1>
+					<xp:text value="#{topic.forum.category.title}" disableTheme="true"/>
+					:&#160;
+					<xp:link value="/Forums/#{topic.forum.id}" text="#{topic.forum.title}"/>
+				</h1>
+				<xp:text value="#{topic.title}" tagName="h2" rendered="#{!viewScope.editTopic}"/>
+				<xp:inputText value="#{viewScope.topicTitle}" rendered="#{viewScope.editTopic == true}" />
+			</div>
+			
+			<xp:checkBoxGroup value="#{viewScope.topicAttributes}"
+				style="border: 0" id="topicAttributes" rendered="#{viewScope.editTopic == true}">
+				<xp:selectItem itemLabel="Sticky" />
+				<xp:selectItem itemLabel="Event" />
+				<xp:eventHandler event="onchange" submit="true" refreshMode="partial" refreshId="editEventInfo">
+				</xp:eventHandler>
+			</xp:checkBoxGroup>
+				
+			<xp:table rendered="#{topic.isApplication}" styleClass="fields">
+				<tr>
+					<td>Application Status:</td>
+					<td>
+						<xp:text value="#{topic.applicationStatus}" rendered="#{!viewScope.editTopic}"/>
+						<xp:comboBox value="#{viewScope.topicApplicationStatus}" id="applicationStatus" defaultValue="New Application"
+							rendered="#{viewScope.editTopic == true}">
+							<xp:selectItem itemLabel="New Application"/>
+							<xp:selectItem itemLabel="Rejected"/>
+							<xp:selectItem itemLabel="Declined Invitation"/>
+							<xp:selectItem itemLabel="Disappeared"/>
+							<xp:selectItem itemLabel="Invited as Initiate"/>
+							<xp:selectItem itemLabel="Invited as Returning Member"/>
+							<xp:selectItem itemLabel="Promoted to Full Member"/>
+							<xp:selectItem itemLabel="Already a Member"/>
+						</xp:comboBox>
+						
+						<xp:div>
+							<xp:this.rendered><![CDATA[#{javascript:
+								topic.enrolledUser == null
+								&& Players.getByName(topic.getApplicationResponse("DesiredUsername")) == null
+								&& (topic.applicationStatus == "New Application" || topic.applicationStatus == "")
+							}]]></xp:this.rendered>
+							<xp:button id="enrollUserButton" value="Enroll User">
+								<xp:eventHandler event="onclick" submit="true" refreshMode="partial" refreshId="topicHeader"
+									action="#{topic.enrollUser}">
+									<xp:this.script><![CDATA[
+										if(XSP.confirm("Enroll this user as a forum member?")) {
+											spinner(thisEvent, { disableCaller: true });
+										} else {
+											return false;
+										}
+									]]></xp:this.script>
+								</xp:eventHandler>
+							</xp:button>
+						</xp:div>
+						<xp:div>
+							<xp:this.rendered><![CDATA[#{javascript:
+								!(topic.enrolledUser == null
+								&& Players.getByName(topic.getApplicationResponse("DesiredUsername")) == null
+								&& (topic.applicationStatus == "New Application" || topic.applicationStatus == ""))
+							}]]></xp:this.rendered>
+							<xp:link value="/Players/#{javascript:topic.getApplicationResponse('DesiredUsername')}" text="Open User"/>
+						</xp:div>
+					</td>
+				</tr>
+			</xp:table>
+			
+			<xp:div id="editEventInfo" styleClass="eventInfoHeader">
+				<xc:eventSetup value="#{topic}" editable="#{viewScope.editTopic}" rendered="#{javascript:topic.eventDate != null || (viewScope.topicAttributes != null &amp;&amp; viewScope.topicAttributes.contains('Event'))}"/>
+			</xp:div>
+			
+			<xp:button id="moveTopic" value="Move Topic" style="float: right" rendered="#{viewScope.editTopic == true}">
+				<xp:eventHandler event="onclick" submit="false">
+					<xp:this.script><![CDATA[
+						XSP.openDialog("#{id:moveTopicDialog}");
+					]]></xp:this.script>
+				</xp:eventHandler>
+			</xp:button>
+			<xe:dialog id="moveTopicDialog" title="Move Topic" rendered="#{viewScope.editTopic == true}">
+				<table class="fields">
+					<tr>
+						<th scope="row">New Forum:</th>
+						<td>
+							<xp:comboBox id="newForumBox" defaultValue="#{topic.forumId}">
+								<xp:selectItems value="#{pageController.moveTopicChoices}"/>
+							</xp:comboBox>
+						</td>
+					</tr>
+				</table>
+				
+				<xp:button id="confirmMoveTopic" value="Move">
+					<xp:eventHandler event="onclick" submit="true" refreshMode="complete"
+						action="#{pageController.moveTopic}">
+						<xp:this.script><![CDATA[
+							spinner(thisEvent, { disableCaller: true })
+						]]></xp:this.script>
+					</xp:eventHandler>
+				</xp:button>
+			</xe:dialog>
+				
+			<xp:button id="saveTopic" value="Save Topic" rendered="#{viewScope.editTopic == true}">
+				<xp:eventHandler event="onclick" submit="true" refreshMode="complete"
+					action="#{pageController.saveTopic}">
+					<xp:this.script><![CDATA[
+						spinner(thisEvent, { disableCaller: true })
+					]]></xp:this.script>
+				</xp:eventHandler>
+			</xp:button>
+		</xp:div>
+		
+		<xc:raidcomp_sidebar styleClass="right-sidebar"
+			topic="#{topic}" id="right-sidebar"
+			rendered="#{javascript: topic.eventDate != null &amp;&amp; topic.getSignups().size() &gt; 0}" />
+		
+		
+		<xp:div id="eventInfoBox" styleClass="eventInfo">
+		
+			<xc:eventInfo topic="#{topic}" editable="false" showSignups="true" />
+	
+			<xp:button id="switchToRaidComp" styleClass="switchToRaidCompButton"
+				value="Switch to Raid Comp">
+				<xp:this.rendered><![CDATA[#{javascript:
+					var roles = database.queryAccessRoles(@UserName());
+					topic.eventDate != null && (roles.contains("[RaidLeader]") || roles.contains("[ForumOfficer]") || topic.eventLeader.contains(@UserName()))
+				}]]></xp:this.rendered>
+				<xp:eventHandler event="onclick" submit="true" action="raidcomp"/>
+			</xp:button>
+		
+			<xe:djTabContainer id="djTabContainer1" rendered="#{topic.eventDate != null}" style="margin: 1em 0"
+				doLayout="false" tabStrip="false">
+
+
+				<xe:djTabPane title="Sign Up" id="signupPane">
+					<xp:this.rendered><![CDATA[#{javascript:
+						!com.raidomatic.JSFUtil.getUserName().equalsIgnoreCase('Anonymous')
+						&& Players.current.characters.length > 0
+						&& topic.eventDate.after(@Now())
+					}]]></xp:this.rendered>
+					<xp:table rendered="#{javascript:topic.getSignup() == null}" styleClass="lineup">
+						<tr>
+							<th>Character</th>
+							<th>Role</th>
+							<th>Status</th>
+							<th></th>
+						</tr>
+						<tr>
+							<td>
+								<xp:comboBox id="signupPreferredCharacter" value="#{viewScope.signupPreferredCharacter}">
+									<xp:selectItems value="#{pageController.signupCharacterChoices}"/>
+									<xp:eventHandler event="onchange" submit="true" refreshMode="partial" refreshId="signupPreferredRole"/>
+								</xp:comboBox>
+							</td>
+							<td>
+								<xp:comboBox id="signupPreferredRole" value="#{viewScope.signupPreferredRole}">
+									<xp:selectItem itemLabel="Any Role" itemValue=""/>
+									<xp:selectItems value="#{pageController.signupRoleChoices}"/>
+								</xp:comboBox>
+							</td>
+							<td>
+								<xp:comboBox id="signupStatus" value="#{viewScope.signupStatus}">
+									<xp:selectItem itemLabel="- Choose -" itemValue=""/>
+									<xp:selectItem itemLabel="Available"/>
+									<xp:selectItem itemLabel="Tentative"/>
+								</xp:comboBox>
+							</td>
+							<td>
+								<xp:button id="signMeUp" value="Sign Me Up!">
+									<xp:this.rendered><![CDATA[#{javascript:
+										!com.raidomatic.JSFUtil.getUserName().equalsIgnoreCase('Anonymous')
+										&& topic.getSignup() == null
+										&& topic.eventDate.after(@Now())
+									}]]></xp:this.rendered>
+									<xp:eventHandler event="onclick" submit="true" refreshMode="partial" refreshId="eventInfoBox"
+										action="#{pageController.signMeUp}">
+										<xp:this.script><![CDATA[
+											spinner(thisEvent, { disableCaller: true })
+										]]></xp:this.script>
+									</xp:eventHandler>
+								</xp:button>
+							</td>
+						</tr>
+					</xp:table>
+				
+					<xp:button id="cancelSignup" value="Eh, Frack That Now" styleClass="paddedButton">
+						<xp:this.rendered><![CDATA[#{javascript:
+							!com.raidomatic.JSFUtil.getUserName().equalsIgnoreCase('Anonymous')
+							&& topic.getSignup() != null
+							&& !topic.getSignup().isCanceled()
+							&& topic.eventDate.after(@Now())
+						}]]></xp:this.rendered>
+						<xp:eventHandler event="onclick" submit="true" refreshMode="partial" refreshId="eventInfoBox"
+							action="#{pageController.cancelSignup}">
+							<xp:this.script><![CDATA[
+								spinner(thisEvent)
+							]]></xp:this.script>
+						</xp:eventHandler>
+					</xp:button>
+					<xp:button id="unCancelSignup" value="Wait, I Want To Go Again" styleClass="paddedButton">
+						<xp:this.rendered><![CDATA[#{javascript:
+							!com.raidomatic.JSFUtil.getUserName().equalsIgnoreCase('Anonymous')
+							&& topic.getSignup() != null
+							&& topic.getSignup().isCanceled()
+							&& topic.eventDate.after(@Now())
+						}]]></xp:this.rendered>
+						<xp:eventHandler event="onclick" submit="true" refreshMode="partial" refreshId="eventInfoBox"
+							action="#{pageController.unCancelSignup}">
+							<xp:this.script><![CDATA[
+								spinner(thisEvent)
+							]]></xp:this.script>
+						</xp:eventHandler>
+					</xp:button>
+					
+					<xp:div style="padding: 0.5em">
+						<xp:this.rendered><![CDATA[#{javascript:
+							var roles = database.queryAccessRoles(@UserName());
+							topic.eventDate != null && (roles.contains("[RaidLeader]") || roles.contains("[ForumOfficer]") || topic.eventLeader.contains(@UserName()))
+						}]]></xp:this.rendered>
+				
+						<h5>Add Other Character</h5>
+						<xc:raidcomp_addplayer topic="#{topic}" styleClass="add-player"
+							refreshId="eventInfoBox" />
+					</xp:div>
+				</xe:djTabPane>
+				<xe:djTabPane id="lootPane">
+					<xp:this.title><![CDATA[#{javascript:
+						if(topic.eventDate.before(@Now()) && topic.loots.length == 0) {
+							return "Loots <span class='missingInfo'></span>";
+						} else {
+							return "Loots";
+						}
+					}]]></xp:this.title>
+					<xc:raidcomp_loot id="raidcomp_loot"
+						refreshId="raidcomp_loot" topic="#{topic}" />
+				</xe:djTabPane>
+				<xe:djTabPane id="logsPane">
+					<xp:this.title><![CDATA[#{javascript:
+						if(topic.eventDate.before(@Now()) && topic.raidReports.length == 0) {
+							return "Logs <span class='missingInfo'></span>";
+						} else {
+							return "Logs";
+						}
+					}]]></xp:this.title>
+					<xc:raidcomp_reports topic="#{topic}" id="raidcomp_reports"
+						refreshId="raidcomp_reports" />
+				</xe:djTabPane>
+
+			</xe:djTabContainer>
+		</xp:div>
+		
+		<xp:repeat value="#{topic.posts}" var="post" rows="${javascript:Configuration.getDocumentItemValue('Forum Options', 'ForumPostsPerTopicPage')[0]}"
+			id="postList" styleClass="posts" indexVar="postIndex" first="#{pageController.first}">
+			<xp:this.facets>
+				<xp:panel disableTheme="true" xp:key="header">
+					<xc:pager styleClass="topPager" id="pager1" for="postList" pageCount="#{javascript:Configuration.getDocumentItemValue('Forum Options', 'ForumTopicPagerPages')[0]}" baseURL="#{baseURL}"/>
+				</xp:panel>
+				<xp:panel disableTheme="true" xp:key="footer">
+					<xc:pager styleClass="bottomPager" id="pager2" for="postList" pageCount="#{javascript:Configuration.getDocumentItemValue('Forum Options', 'ForumTopicPagerPages')[0]}" baseURL="#{baseURL}"/>
+				</xp:panel>
+			</xp:this.facets>
+			
+			<div class="post" id="post-#{post.id}">
+				
+				<xc:DateTime tagName="div" styleClass="time" value="#{post.dateTime}"/>
+				<xp:text styleClass="title" value="#{post.title}" tagName="div" />
+				<xp:div styleClass="author">
+					<xp:div>
+						<xp:this.styleClass><![CDATA[#{javascript:
+							var topicCreatorPrefs = UserPrefs.getForUser(post.getCreatedBy());
+							"avatarContainer" + (topicCreatorPrefs == null || topicCreatorPrefs.avatarMode == "" || topicCreatorPrefs.avatarMode == "None" ? " noAvatar" : "")
+						}]]></xp:this.styleClass>
+						<xc:officialForumAvatar>
+							<xp:this.rendered><![CDATA[#{javascript:
+								var topicCreatorPrefs = UserPrefs.getForUser(post.getCreatedBy())
+								topicCreatorPrefs != null && topicCreatorPrefs.getAvatarMode() == "Official Forum"
+							}]]></xp:this.rendered>
+							<xp:this.charName><![CDATA[#{javascript:
+								var topicCreatorPrefs = UserPrefs.getForUser(post.getCreatedBy())
+								topicCreatorPrefs == null ? "" : topicCreatorPrefs.getAvatarCharacter()
+							}]]></xp:this.charName>
+						</xc:officialForumAvatar>
+						<xp:image styleClass="forumAvatar">
+							<xp:this.rendered><![CDATA[#{javascript:
+								var topicCreatorPrefs = UserPrefs.getForUser(post.getCreatedBy())
+								var showByURL = topicCreatorPrefs != null && topicCreatorPrefs.getAvatarMode() == "URL"
+								if(showByURL) {
+									if(UserPrefs.getCurrent().getDoc().getItemValueString("HideGIFAvatars") == "Yes" && topicCreatorPrefs.getAvatarUrlMimeType().contains("image/gif")) { return false; }
+								}
+								return showByURL
+							}]]></xp:this.rendered>
+							<xp:this.url><![CDATA[#{javascript:
+								var topicCreatorPrefs = UserPrefs.getForUser(post.getCreatedBy())
+								topicCreatorPrefs == null ? "" : topicCreatorPrefs.getAvatarUrl()
+							}]]></xp:this.url>
+						</xp:image>
+					</xp:div>
+					<xc:Username value="#{post.createdBy}" titleBlock="true" postCount="true" />
+				</xp:div>
+				
+				<xp:panel id="appQuestionsBox" styleClass="appQuestionsBox" rendered="#{postIndex==0 &amp;&amp; topic.isApplication}">
+					<xp:this.data>
+						<xp:dominoView var="questions" viewName="Application Questions"/>
+					</xp:this.data>
+					
+					<h2>Guild Application</h2>
+					<xp:repeat value="#{questions}" var="question" rows="1000">
+						<xp:div styleClass="questionBlock">
+							<xp:div styleClass="question"><xp:label for="field" value="#{question.Question}"></xp:label></xp:div>
+							<xp:div styleClass="field">
+								<xp:text id="field" value="#{topic.applicationResponses[question.FieldName]}"/>
+							</xp:div>
+						</xp:div>
+					</xp:repeat>
+				</xp:panel>
+				
+				<xp:div rendered="#{post.screenshotUrl != ''}" styleClass="photoBox">
+					<a href="#{post.screenshotUrl}"><xp:image url="#{post.screenshotUrl}"/></a>
+				</xp:div>
+				
+				<xp:text styleClass="body" contentType="HTML"
+					tagName="div" value="#{post.body}">
+					<xp:this.converter>
+						<xp:customConverter
+							getAsObject="#{javascript:value}">
+							<xp:this.getAsString><![CDATA[#{javascript:
+								RUtils.tidy(value
+									.replace("<embed ", "<embed wmode='opaque' ").replace("<object ", "<object wmode='opaque' ")
+									.replace("[QUOTETITLE]</p>", "</p><div class='quoteTitle'>")
+									.replace("[QUOTETITLE]", "<div class='quoteTitle'>")
+									.replace("<p>[/QUOTETITLE]", "</div></p>")
+									.replace("[/QUOTETITLE]", "</div>")
+									.replace("[QUOTE]</p>", "</p><div class='quoteContainer'><div class='quoteBody'>")
+									.replace("[QUOTE]", "<div class='quoteContainer'><div class='quoteBody'>")
+									.replace("<p>[/QUOTE]", "</div></div></p>")
+									.replace("[/QUOTE]", "</div></div>").
+									replace("font-family: Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255);", "")
+									//.replace(/\[QUOTETITLE\](.*)\[\/QUOTETITLE\]/g, "<div class='quoteTitle'>$1</div>")
+									//.replace(/\[QUOTE\]([.|\n]*)\[\/QUOTE\]/g, "<div class='quoteContainer'>$1</div>")
+								)
+							}]]></xp:this.getAsString>
+						</xp:customConverter>
+					</xp:this.converter>
+				</xp:text>
+				<xp:div styleClass="tags" rendered="#{javascript:post.tags.length != 0}">
+					Tags:&#160; 
+					<xp:repeat value="#{post.tags}" var="tag">
+						<xp:link value="/tags/#{tag}" text="#{tag}"/>&#160;
+					</xp:repeat>
+				</xp:div>
+				<xp:div styleClass="signature">
+					<xp:this.rendered><![CDATA[#{javascript:
+						if((post.player == null || post.player.shortName != @UserName()) && UserPrefs.getCurrent().isHideOtherSignatures()) {
+							return false;
+						}
+						return post.player != null && post.player.signature != ''
+					}]]></xp:this.rendered>
+					<xp:text value="#{post.player.signature}" escape="false" htmlFilter="acf"/>
+				</xp:div>
+				<xp:panel id="versionsPanel" rendered="#{javascript:post.versions.length &gt; 0}">
+					<xp:this.dataContexts>
+						<xp:dataContext var="versionInfo"><xp:this.value><![CDATA[#{javascript:
+							var history = [];
+							for(var i = 0; i < post.versions.length; i++) {
+								var version = post.versions[i];
+								if(history.length == 0 || history[history.length-1].name != version.nextVersionBy) {
+									history.push({
+										name: version.nextVersionBy,
+										count: 1,
+										latest: version.nextVersionAt
+									});
+								} else {
+									history[history.length-1].count++;
+									history[history.length-1].latest = version.nextVersionAt;
+								}
+							}
+							return history;
+						}]]></xp:this.value></xp:dataContext>
+					</xp:this.dataContexts>
+					<xp:repeat var="postVersion" rows="1000" value="#{versionInfo}">
+						<xp:this.facets>
+							<xp:text disableTheme="true" xp:key="header" escape="false"><xp:this.value><![CDATA[
+								<div class="edit-history">
+							]]></xp:this.value></xp:text>
+							<xp:text disableTheme="true" xp:key="footer" escape="false"><xp:this.value><![CDATA[
+								</div>
+							]]></xp:this.value></xp:text>
+						</xp:this.facets>
+						<div class="edit">
+							Edited&#160;<xp:text disableTheme="true"><xp:this.value><![CDATA[#{javascript:
+								postVersion.count == 1 ? "" : postVersion.count == 2 ? "twice " : (postVersion.count.toFixed(0) + " times ")
+							}]]></xp:this.value></xp:text>
+							by&#160;<xc:Username value="#{postVersion.name}" titleBlock="false"/>
+							&#160;<xp:text disableTheme="true"><xp:this.value><![CDATA[#{javascript:
+								postVersion.count == 1 ? "" : ", most recently "
+							}]]></xp:this.value></xp:text>
+							at&#160;<xc:DateTime value="#{postVersion.latest}"/>
+						</div>
+					</xp:repeat>
+				</xp:panel>
+				<xp:div styleClass="actions">
+					<xp:link styleClass="quoteButton button gray small" text="Reply with quote"
+						value="/Post.xsp">
+						<xp:this.rendered><![CDATA[#{javascript:
+							@UserName().toLowerCase() != "anonymous"
+						}]]></xp:this.rendered>
+						<xp:this.parameters>
+							<xp:parameter name="topicId"
+								value="#{post.topicId}" />
+							<xp:parameter name="replyPostId"
+								value="#{post.id}" />
+							<xp:parameter name="quote" value="true"/>
+						</xp:this.parameters>
+					</xp:link>
+					<xp:link styleClass="editButton button gray small" text="Edit"
+						value="/Posts/#{post.id}" rendered="#{post.isEditable}" />
+					<xp:link styleClass="deleteButton button red small" text="Delete" rendered="#{post.isEditable &amp;&amp; post != topic.posts[0]}" id="deletePost">
+						<xp:eventHandler event="onclick" submit="true"
+							refreshMode="partial" refreshId="postList"
+							action="#{post.delete}">
+							<xp:this.script><![CDATA[
+								if(XSP.confirm("Are you sure you want to delete this post?")) {
+									spinner(thisEvent);
+									return true;
+								}
+								return false;
+							]]></xp:this.script>
+						</xp:eventHandler>
+					</xp:link>
+				</xp:div>
+			</div>
+		</xp:repeat>
+		<xp:link styleClass="replyButton button gray small" text="Reply to Thread" value="/Post.xsp" loaded="${javascript:@UserName() != 'Anonymous'}">
+			<xp:this.parameters>
+				<xp:parameter name="topicId" value="#{topic.id}" />
+			</xp:this.parameters>
+		</xp:link>
+		
+		<div style="margin-top: 4em"><xc:ForumHeader/></div>
+	</xc:Layout>
+</xp:view>

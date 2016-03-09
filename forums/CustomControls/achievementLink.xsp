@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core">
+	<xp:span styleClass="achievement" rendered="#{compositeData.value != null}">
+		<xp:image
+			rendered="#{compositeData.showIcon}"
+			url="http://static.wowhead.com/images/wow/icons/small/#{javascript:compositeData.value.iconName.toLowerCase()}.jpg"
+			width="18" height="18" />
+		<xp:link
+			value="http://www.wowhead.com/achievement=#{compositeData.value.id}"
+			text="#{compositeData.value.title}" />
+	</xp:span>
+</xp:view>

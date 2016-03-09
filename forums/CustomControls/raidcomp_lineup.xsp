@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom">
+
+	<xp:panel styleClass="lineup-panel">
+		<xp:div styleClass="lineup-options"/>
+		<xp:button styleClass="small paddedButton" value="Select All" rendered="#{javascript:compositeData.topic.signups.length &gt; 0}" id="selectAll">
+			<xp:eventHandler event="onclick" submit="true"
+				refreshMode="partial" refreshId="#{compositeData.refreshId}"
+				execMode="partial">
+				<xp:this.script><![CDATA[
+					spinner(thisEvent)
+				]]></xp:this.script>
+				<xp:this.action><![CDATA[#{javascript:
+					for(var i = 0; i < compositeData.topic.signups.length; i++) {
+						var signup = compositeData.topic.signups[i];
+						signup.setSelected(true);
+						signup.save();
+					}
+				}]]></xp:this.action>
+			</xp:eventHandler>
+		</xp:button>
+		<xp:repeat value="#{compositeData.topic.signups}" var="line" indexVar="lineIndex" rows="1000" id="lineup">
+			<xp:this.facets>
+				<xp:panel xp:key="header" disableTheme="true">
+					<xp:text disableTheme="true" escape="false"><xp:this.value><![CDATA[
+						<table class="lineup">
+					]]></xp:this.value></xp:text>
+					<thead>
+						<th></th>
+						<th>Player</th>
+						<th>Character</th>
+						<th>Status</th>
+						<th>Desired</th>
+						<th class="role-selector"><xp:image url="/tank.png"></xp:image></th>
+						<th class="role-selector"><xp:image url="/healer.png"></xp:image></th>
+						<th class="role-selector"><xp:image url="/dps.png"></xp:image></th>
+						<xp:text rendered="#{javascript:compositeData.topic.getEventGroups() &gt; 1}" value="Group" tagName="th"/>
+					</thead>
+				</xp:panel>
+				<xp:panel xp:key="footer" disableTheme="true">
+					<xp:text disableTheme="true" escape="false"><xp:this.value><![CDATA[
+						</table>
+					]]></xp:this.value></xp:text>
+				</xp:panel>
+			</xp:this.facets>
+		
+			<xp:tr rendered="#{!line.canceled}">
+				<xp:this.styleClass><![CDATA[#{javascript:
+					if(line.isCanceled()) { return '' }
+					requestScope.lineup_index = requestScope.lineup_index == null ? 1 : requestScope.lineup_index + 1;
+					[(requestScope.lineup_index % 2) == 0 ? 'even' : 'odd', @LowerCase(line.getStatus()), line.isSelected() ? 'selected' : 'not-selected'].join(' ')
+				}]]></xp:this.styleClass>
+				<xp:td>
+					<xp:checkBox value="#{line.selectedText}" id="selected" rendered="#{!line.canceled}"
+						checkedValue="true" uncheckedValue="false" defaultChecked="#{line.selected}">
+						<xp:eventHandler event="onchange" submit="true" refreshMode="partial" refreshId="#{compositeData.refreshId}" execMode="partial"
+							action="#{line.save}">
+							<xp:this.script><![CDATA[
+								spinner(thisEvent)
+							]]></xp:this.script>
+						</xp:eventHandler>
+					</xp:checkBox>
+				</xp:td>
+				<xp:td><xp:span title="Raid Group: #{line.raidGroup}"><xc:Username titleBlock="false" value="#{line.player.dispName}"/></xp:span></xp:td>
+				<xp:td styleClass="character">
+					<xp:image style="vertical-align: middle" url="#{javascript:@LowerCase('/' + line.getCharacter().getClassName() + '/' + line.getSpec().get('name') + '.gif').replace(' ', '_')}"/>
+					<xp:comboBox value="#{line.assignedCharacter}" id="character" defaultValue="#{line.preferredCharacter}" rendered="#{!line.canceled}">
+						<xp:selectItems value="#{line.player.characterNames}" />
+						<xp:eventHandler event="onchange" submit="true" refreshMode="partial" refreshId="#{compositeData.refreshId}" execMode="partial"
+							action="#{line.save}">
+							<xp:this.script><![CDATA[
+								spinner(thisEvent)
+							]]></xp:this.script>
+						</xp:eventHandler>
+					</xp:comboBox>
+					<xp:text value="#{line.assignedCharacter}" rendered="#{line.canceled}"/>
+				</xp:td>
+				
+				<xp:td><xp:text disableTheme="true" value="#{line.status}"/></xp:td>
+				<xp:td><xp:text disableTheme="true" value="#{line.preferredRole}"/></xp:td>
+				
+				<xp:td>
+					<xp:radio value="#{line.assignedRole}" selectedValue="Tank" groupName="role" id="radioTank" rendered="#{!line.canceled}" defaultSelected="#{line.preferredRole=='Tank'}">
+						<xp:eventHandler event="onchange" submit="true" refreshMode="partial" refreshId="#{compositeData.refreshId}" execMode="partial">
+							<xp:this.script><![CDATA[
+								spinner(thisEvent, true)
+							]]></xp:this.script>
+							<xp:this.action><![CDATA[#{javascript:
+								line.save()
+							}]]></xp:this.action>
+						</xp:eventHandler>
+						<xp:this.disabled>#{javascript: !line.getAvailableRoles().contains("Tank") }</xp:this.disabled>
+					</xp:radio>
+				</xp:td>
+				<xp:td>
+					<xp:radio value="#{line.assignedRole}" selectedValue="Healer" groupName="role" id="radioHealer" rendered="#{!line.canceled}">
+						<xp:eventHandler event="onchange" submit="true" refreshMode="partial" refreshId="#{compositeData.refreshId}" execMode="partial">
+							<xp:this.script><![CDATA[
+								spinner(thisEvent, true)
+							]]></xp:this.script>
+							<xp:this.action><![CDATA[#{javascript:
+								line.save()
+							}]]></xp:this.action>
+						</xp:eventHandler>
+						<xp:this.disabled>#{javascript: !line.getAvailableRoles().contains("Healer") }</xp:this.disabled>
+					</xp:radio>
+				</xp:td>
+				<xp:td>
+					<xp:radio value="#{line.assignedRole}" selectedValue="DPS" groupName="role" id="radioDPS" rendered="#{!line.canceled}">
+						<xp:eventHandler event="onchange" submit="true" refreshMode="partial" refreshId="#{compositeData.refreshId}" execMode="partial">
+							<xp:this.script><![CDATA[
+								spinner(thisEvent, true)
+							]]></xp:this.script>
+							<xp:this.action><![CDATA[#{javascript:
+								line.save()
+							}]]></xp:this.action>
+							</xp:eventHandler>
+							<xp:this.disabled>#{javascript: !line.getAvailableRoles().contains("DPS") }</xp:this.disabled>
+						</xp:radio>
+					</xp:td>
+					
+				
+				<xp:td rendered="#{topic.eventGroups &gt; 1 &amp;&amp; !line.canceled}" styleClass="group" id="groupCell">
+					<xp:comboBox value="#{line.groupText}" defaultValue="1" id="group">
+						<xp:selectItems><xp:this.value><![CDATA[#{javascript:
+							var result = []
+							for(var i = 1; i <= topic.getEventGroups(); i++) {
+								result.push("Group " + i + "|" + i)
+							}
+							return result
+						}]]></xp:this.value></xp:selectItems>
+						<xp:eventHandler event="onchange" submit="true" refreshMode="partial" refreshId="#{compositeData.refreshId}" execMode="partial">
+							<xp:this.script><![CDATA[
+								spinner(thisEvent)
+							]]></xp:this.script>
+							<xp:this.action><![CDATA[#{javascript:
+								line.save()
+							}]]></xp:this.action>
+						</xp:eventHandler>
+					</xp:comboBox>
+				</xp:td>
+			</xp:tr>
+		</xp:repeat>
+	</xp:panel>
+</xp:view>

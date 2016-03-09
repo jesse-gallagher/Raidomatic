@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core">
+	<xp:inputText id="tags" value="#{compositeData.value.tags}">
+		<xp:typeAhead mode="partial" minChars="1"
+			valueList="class guide" valueListSeparator="; " tokens=";"
+			ignoreCase="true">
+		</xp:typeAhead>
+	</xp:inputText>
+	
+</xp:view>

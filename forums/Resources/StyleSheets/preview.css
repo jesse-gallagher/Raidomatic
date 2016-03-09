@@ -1,0 +1,8 @@
+html body {
+	background-color: white;
+	color: black;
+	
+	padding: 3%;
+}
+
+p { margin-bottom: 1em }

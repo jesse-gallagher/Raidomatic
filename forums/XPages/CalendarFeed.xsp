@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" rendered="false">
+	<xp:this.afterPageLoad><![CDATA[#{javascript:
+		com.raidomatic.servlet.CalendarServlet.printFeed(facesContext.getExternalContext().getRequest(), facesContext.getExternalContext().getResponse())
+	}]]></xp:this.afterPageLoad>
+</xp:view>

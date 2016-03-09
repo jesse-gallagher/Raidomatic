@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom"
+	beforePageLoad="#{pageController.beforePageLoad}" afterPageLoad="#{pageController.afterPageLoad}">
+	
+	<xp:this.dataContexts>
+		<xp:dataContext var="post" value="#{pageController.post}"/>
+		<xp:dataContext var="baseURL" value="#{pageController.baseURL}"/>
+	</xp:this.dataContexts>
+
+	<xp:this.resources>
+		<xp:script src="/JSON.jss" clientSide="false"></xp:script>
+		<xp:script src="/EditorButtons.jss" clientSide="false"></xp:script>
+		<xp:dojoModule name="dijit.Editor" />
+	</xp:this.resources>
+
+	<xc:Layout contentStyleClass="newPostPage">
+		<div class="topicHeader">
+			<xp:text value="#{post.topic.forum.category.title}: #{post.topic.forum.title}" tagName="h1"/>
+			<xp:text value="#{post.topic.title}" tagName="h2" />
+		</div>
+
+		<xp:inputText id="postTitle" value="#{post.title}"
+			defaultValue="RE: #{post.topic.title}" style="width: 80%" />
+		<xp:br />
+		<xp:br />
+
+		<!--		<xp:inputRichText id="html" value="#{post.body}"-->
+		<!--			htmlFilterIn="acf" htmlConversionWarning="noWarning">-->
+		<!--			<xp:this.dojoAttributes>-->
+		<!--				<xp:dojoAttribute name="toolbar">-->
+		<!--					<xp:this.value><![CDATA[#{javascript:-->
+		<!--						JSON.serialize(getRichTextEditorButtons())-->
+		<!--					}]]></xp:this.value>-->
+		<!--				</xp:dojoAttribute>-->
+		<!--				<xp:dojoAttribute name="mode" value="source" />-->
+		<!--			</xp:this.dojoAttributes>-->
+		<!--		</xp:inputRichText>-->
+		<div class="normalEditor">
+			<xp:inputTextarea id="html" value="#{post.body}" dojoType="ibm.xsp.widget.layout.CKEditorWrapper"
+				defaultValue="#{pageController.defaultBody}">
+				<xp:this.dojoAttributes>
+					<xp:dojoAttribute name="toolbar">
+						<xp:this.value><![CDATA[#{javascript:
+							JSON.serialize(getRichTextEditorButtons())
+						}]]></xp:this.value>
+					</xp:dojoAttribute>
+					<xp:dojoAttribute name="mode" value="source" />
+	<!--				<xp:dojoAttribute name="enterMode" value="2"/>-->
+				</xp:this.dojoAttributes>
+			</xp:inputTextarea>
+		</div>
+		
+		<table class="fields">
+			<tr>
+				<th scope="row">Tags:</th>
+				<td><xc:postTags value="#{post}"/></td>
+			</tr>
+			<tr>
+				<th scope="row">Photo URL:</th>
+				<td><xp:inputText value="#{post.screenshotUrl}" styleClass="url" /></td>
+			</tr>
+		</table>
+		
+		<xp:br />
+		<xp:button id="savePost" value="Save Post">
+			<xp:eventHandler event="onclick" submit="true"
+				refreshMode="complete" save="true">
+					<xp:this.action>
+						<xp:actionGroup>
+							<xp:executeScript><xp:this.script><![CDATA[#{javascript:
+								post.save()
+								var postCount = post.topic.posts.size()
+								var pageCount = postCount / Configuration.getItemValue("ForumPostsPerTopicPage")[0]
+								pageCount = parseInt(pageCount, 10) + (pageCount % 1 == 0 ? 0 : 1) 
+								facesContext.getExternalContext().redirect("/" + database.getFilePath().replace("\\", "/") + "/Topics/" + post.getTopicId() + "?page=" + pageCount.toFixed(0) + "#post-" + post.getId())
+							}]]></xp:this.script></xp:executeScript>
+						</xp:actionGroup>
+					</xp:this.action>
+					<xp:this.script><![CDATA[
+						spinner(thisEvent, { disableCaller: true })
+					]]></xp:this.script>
+			</xp:eventHandler>
+		</xp:button>
+
+		<xp:div styleClass="existingPosts" rendered="#{javascript:post.topic.posts.length &gt; 0}">
+			<h2>Existing Posts</h2>
+			<xp:repeat value="#{post.topic.posts}" var="post" rows="10000" styleClass="smallPosts">
+				<xp:panel styleClass="post">
+					<xc:Username value="#{post.createdBy}" styleClass="author" tagName="div"
+						titleBlock="false" />
+					<xc:DateTime value="#{post.dateTime}" tagName="div" styleClass="datetime" />
+					<xp:text tagName="div" styleClass="body" contentType="HTML"
+						value="#{post.body}" />
+				</xp:panel>
+			</xp:repeat>
+		</xp:div>
+	</xc:Layout>
+</xp:view>

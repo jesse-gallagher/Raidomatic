@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core">
+	<xp:dataTable var="player" rows="#{javascript:Configuration.getDocumentItemValue('Forum Options', 'ForumDataTableRows')[0]}" value="#{compositeData.value}" id="playerTable" styleClass="lineup">
+		
+		<xp:column>
+			<xp:this.facets><xp:text xp:key="header" value="Name"/></xp:this.facets>
+			<xp:link text="#{player.name}" value="/players/#{player.name}"/>
+		</xp:column>
+		<xp:column>
+			<xp:this.facets><xp:text xp:key="header" value="Characters"/></xp:this.facets>
+			<xp:text value="#{javascript: try { player.characterNames.sort().join(', ') } catch(e) { print('Error while sorting characters in table_players.xsp'); return '' }}" rendered="#{javascript:player.characters.length != 0}"/>
+		</xp:column>
+		<xp:column>
+			<xp:this.facets><xp:text xp:key="header" value="Attendances"/></xp:this.facets>
+			<xp:text rendered="#{javascript:player.characters.length != 0}">
+				<xp:this.value><![CDATA[#{javascript:
+					!viewScope.lootTierId || viewScope.lootTierId == "" ? player.attendanceCount : player.getAttendanceCountForLootTier(LootTiers.getById(viewScope.lootTierId))
+				}]]></xp:this.value>
+				<xp:this.converter>
+					<xp:convertNumber type="number" integerOnly="true" />
+				</xp:this.converter>
+			</xp:text>
+		</xp:column>
+		<xp:column>
+			<xp:this.facets><xp:text xp:key="header" value="Needs"/></xp:this.facets>
+			<xp:text rendered="#{javascript:player.characters.length != 0}">
+				<xp:this.value><![CDATA[#{javascript:
+					!viewScope.lootTierId || viewScope.lootTierId == "" ? player.needCount : player.getNeedCountForLootTier(LootTiers.getById(viewScope.lootTierId))
+				}]]></xp:this.value>
+				<xp:this.converter>
+					<xp:convertNumber type="number" integerOnly="true" />
+				</xp:this.converter>
+			</xp:text>
+		</xp:column>
+		<xp:column>
+			<xp:this.facets><xp:text xp:key="header" value="Loot Tier"/></xp:this.facets>
+			<xp:text rendered="#{javascript:player.characters.length != 0 &amp;&amp; player.attendanceCount &gt; 0}">
+				<xp:this.value><![CDATA[#{javascript:
+					var attendanceCount = !viewScope.lootTierId || viewScope.lootTierId == "" ? player.attendanceCount : player.getAttendanceCountForLootTier(LootTiers.getById(viewScope.lootTierId));
+					var needCount = !viewScope.lootTierId || viewScope.lootTierId == "" ? player.needCount : player.getNeedCountForLootTier(LootTiers.getById(viewScope.lootTierId));
+					var tier = RaidSupport.getLootTier((needCount / attendanceCount * 100).toFixed(0))
+						tier.min + (tier.max ? "-" + tier.max : "+")
+				}]]></xp:this.value>
+			</xp:text>
+		</xp:column>
+		<xp:column>
+			<xp:this.facets><xp:text xp:key="header" value="Tier Name"/></xp:this.facets>
+			<xp:text rendered="#{javascript:player.characters.length != 0 &amp;&amp; player.attendanceCount &gt; 0}">
+				<xp:this.value><![CDATA[#{javascript:
+					var attendanceCount = !viewScope.lootTierId || viewScope.lootTierId == "" ? player.attendanceCount : player.getAttendanceCountForLootTier(LootTiers.getById(viewScope.lootTierId));
+					var needCount = !viewScope.lootTierId || viewScope.lootTierId == "" ? player.needCount : player.getNeedCountForLootTier(LootTiers.getById(viewScope.lootTierId));
+					var tier = RaidSupport.getLootTier((needCount / attendanceCount * 100).toFixed(0))
+						tier.name
+				}]]></xp:this.value>
+			</xp:text>
+		</xp:column>
+		
+	</xp:dataTable>
+
+	<xp:pager layout="Previous Group Next" id="pager2" for="playerTable"
+		partialRefresh="true" />
+</xp:view>

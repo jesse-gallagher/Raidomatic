@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core">
+	<xp:dataTable var="group" indexVar="groupIndex" rows="#{javascript:Configuration.getDocumentItemValue('Forum Options', 'ForumDataTableRows')[0]}" value="#{compositeData.value}" id="groupTable" styleClass="lineup groupd">
+		<xp:column>
+			<xp:this.facets><xp:text xp:key="header" value="Name"/></xp:this.facets>
+			<xp:link value="/Groups/#{group.id}" text="#{group.name}"/>
+		</xp:column>
+		<xp:column>
+			<xp:this.facets><xp:text xp:key="header" value="Category"/></xp:this.facets>
+			<xp:text value="#{group.category}"/>
+		</xp:column>
+		<xp:column>
+			<xp:this.facets><xp:text xp:key="header" value="Description"/></xp:this.facets>
+			<xp:text value="#{group.description}"/>
+		</xp:column>
+	</xp:dataTable>
+
+	<xp:pager layout="Previous Group Next" id="pager2" for="groupTable"
+		partialRefresh="true" />
+</xp:view>

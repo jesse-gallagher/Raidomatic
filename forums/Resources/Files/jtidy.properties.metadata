@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><note class="form" maintenanceversion="1.4" replicaid="05257F710059B13D" version="9.0" xmlns="http://www.lotus.com/dxl">
+<noteinfo noteid="b2a" sequence="10" unid="536CA6E2D547E94385257AF10050C13E">
+<created><datetime dst="true">20130112T104203,50-04</datetime></created>
+<modified><datetime>20160309T112007,06-05</datetime></modified>
+<revised><datetime dst="true">20141110T172602,31-04</datetime></revised>
+<lastaccessed><datetime>20160309T112007,05-05</datetime></lastaccessed>
+<addedtofile><datetime>20160309T112007,05-05</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Jesse Gallagher/O=Frost</name><name>CN=Jesse Gallagher/O=IKSG</name></updatedby>
+<wassignedby><name>CN=Jesse Gallagher/O=IKSG</name></wassignedby>
+<item name="$TITLE"><text>jtidy.properties</text></item>
+<item name="$Flags"><text>345CgQ</text></item>
+<item name="$FlagsExt"><text>D</text></item>
+<item name="$FileModDT" sign="true"><datetime dst="true">20100621T162804,00-04</datetime></item>
+<item name="$MimeCharSet"><text>UTF-8</text></item>
+<item name="$DesignerVersion"><text>8.5.3</text></item>
+
+
+<item name="$FileNames" sign="true"><text>jtidy.properties</text></item></note>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><note class="filter" maintenanceversion="1.4" replicaid="05257F710059B13D" version="9.0" xmlns="http://www.lotus.com/dxl">
+<noteinfo noteid="132" sequence="23" unid="77DA80CBE34E817E85257747006975A3">
+<created><datetime dst="true">20100619T151153,95-04</datetime></created>
+<modified><datetime>20160309T111941,45-05</datetime></modified>
+<revised><datetime dst="true">20141110T172610,20-04</datetime></revised>
+<lastaccessed><datetime>20160309T111941,44-05</datetime></lastaccessed>
+<addedtofile><datetime>20160309T111941,44-05</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Jesse Gallagher/O=Frost</name><name>CN=Jesse Gallagher/O=IKSG</name></updatedby>
+<wassignedby><name>CN=Jesse Gallagher/O=IKSG</name></wassignedby>
+<item name="$TITLE" sign="true"><text>Network</text></item>
+<item name="$PublicAccess" sign="true"><text>1</text></item>
+<item name="$Flags"><text>s34Q</text></item>
+
+
+<item name="$POID"><datetime>20130122T145537,32-05</datetime></item></note>

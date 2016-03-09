@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom"
+	beforePageLoad="#{pageController.beforePageLoad}" afterPageLoad="#{pageController.afterPageLoad}"
+	pageTitle="Search">
+	<xp:this.dataContexts>
+		<xp:dataContext var="searchQuery" value="#{pageController.searchQuery}"/>
+		<xp:dataContext var="searchScope" value="#{pageController.searchScope}"/>
+		<xp:dataContext var="searchResult" value="#{pageController.searchResult}"/>
+	</xp:this.dataContexts>
+	
+	<xc:Layout>
+		<xc:SearchPosts />
+		
+		<xp:panel disableTheme="true" loaded="${searchQuery != '' and searchQuery != null}">
+			<xp:pager layout="Previous Group Next" id="pager1" for="searchResults"
+				partialRefresh="true" />
+			<xp:repeat value="${searchResult}" var="post" id="searchResults" rows="50">
+				<xp:this.facets>
+					<xp:text xp:key="header" escape="false" disableTheme="true"><xp:this.value><![CDATA[
+						<table class="postList lineup">
+							<tr>
+								<th class="unread"></th>
+								<th>Title</th>
+								<th>Created By</th>
+								<th>Date/Time</th>
+							</tr>
+					]]></xp:this.value></xp:text>
+					<xp:text xp:key="footer" escape="false" disableTheme="true"><xp:this.value><![CDATA[
+						</table>
+					]]></xp:this.value></xp:text>
+				</xp:this.facets>
+			
+				<xp:tr>
+					<xp:td styleClass="unread">
+						<xp:image url="/tango/internet-group-chat.png"
+							rendered="#{!post.topic.isRead}" />
+					</xp:td>
+					<xp:td>
+						<xp:link value="/Topics/#{post.topicId}?showPost=#{post.id}#post-#{post.id}">
+							<xp:text value="#{post.title}" />
+						</xp:link>
+					</xp:td>
+					<xp:td>
+						<xp:text value="#{post.createdBy}" />
+					</xp:td>
+					<xp:td>
+						<xc:DateTime value="#{post.dateTime}" />
+					</xp:td>
+				</xp:tr>
+			</xp:repeat>
+			<xp:pager layout="Previous Group Next" id="pager2" for="searchResults"
+				partialRefresh="true" />
+		</xp:panel>
+		<div class="clear"/>
+	</xc:Layout>
+</xp:view>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core">
+	<xp:div styleClass="#{javascript:'section ' + compositeData.sectionClass}">
+		<xp:div styleClass="title">
+			<xp:callback id="header" facetName="header"/>
+		</xp:div>
+		<xp:div styleClass="#{javascript:'body ' + compositeData.bodyClass}" rendered="#{compositeData.renderBody}">
+			<xp:callback id="sectionBody"></xp:callback>
+		</xp:div>
+	</xp:div>
+</xp:view>

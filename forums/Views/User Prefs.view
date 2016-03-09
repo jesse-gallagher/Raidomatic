@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<note class='view' xmlns='http://www.lotus.com/dxl' version='9.0' maintenanceversion='1.4'
+ replicaid='05257F710059B13D'>
+<noteinfo noteid='62e' unid='998157FAEECB9846852577930066B7D9' sequence='18'>
+<created><datetime dst='true'>20100903T144157,37-04</datetime></created>
+<modified><datetime>20160309T111954,01-05</datetime></modified>
+<revised><datetime dst='true'>20141110T172646,88-04</datetime></revised>
+<lastaccessed><datetime>20160309T111954,00-05</datetime></lastaccessed>
+<addedtofile><datetime>20160309T111954,00-05</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Jesse Gallagher/O=Frost</name><name>CN=Jesse Gallagher/O=IKSG</name></updatedby>
+<wassignedby><name>CN=Jesse Gallagher/O=IKSG</name></wassignedby>
+<item name='$FormatNote' summary='true'>
+<rawitemdata type='4'>
+AQCaavzHgitX2SJ1WABHdyWF
+</rawitemdata></item>
+<item name='$FormulaClass' sign='true'><text>1</text></item>
+<item name='$TITLE' sign='true'><text>User Prefs</text></item>
+<item name='$Index' sign='true'><text/></item>
+<item name='$Formula' summary='true' sign='true'><formula compiled='true'>
+WAACAA4AAgAkNJAAVgEDAAUAHAAYAAMAAwACAAkAS2V5JDQkQ29uZmxpY3QEAAQAAAAeAAUABABG
+b3JtAQAJAFVzZXJQcmVmcwAKAgMABwAKAAQACUwxUw==
+</formula></item>
+<item name='$Collation' summary='true'>
+<rawitemdata type='2'>
+EAABAABEgGYAAAADAEtleQ==
+</rawitemdata></item>
+<item name='$ViewFormat' summary='true' sign='true'>
+<rawitemdata type='5'>
+AQACAAUACkAAAFZDAQADAAMAAAAAAFAAAQAACgAAAAAAAAAAAAICAAAAVkMAAAIABAAcAAAAUAAB
+AAAKAAAAAAAAAAAAAgIAAABLZXlLZXkkNFVOSUQcAAIADgACACQ0kABWAQMABwAMAAUACTBTMEUA
+JgABAAAAAQEACQEAAAoBAQ4KAAABAK0rAQABAAEAAAAAAAAAAABXQwEFAAkAAAAAAAAAAAAAAAAA
+AAAAAAAEAAAAAAD//wAAAAAAAAAAAAAAAAAAV0MBAQAJAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAA
+//8AAAAAAAAAAAAAAAAAAEIAEAAAAAEA////AAUA////AAEAAAAAAAAAAAAAAAAAAQD///8AAQD/
+//8AAAABAAAAAAABAAAAAAABAAAAAAAAAAgAAAAAAAEA
+</rawitemdata></item>
+<item name='$Comment' sign='true'><text/></item>
+<item name='$DesignerVersion'><text>8.5.2</text></item>
+<item name='$Flags'><text>Y</text></item></note>
+

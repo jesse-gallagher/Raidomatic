@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom" xmlns:xe="http://www.ibm.com/xsp/coreex"
+	beforePageLoad="#{pageController.beforePageLoad}" afterPageLoad="#{pageController.afterPageLoad}"
+	pageTitle="Forum List">
+	
+	<xp:this.dataContexts>
+		<xp:dataContext var="forumPageMode"><xp:this.value><![CDATA[${javascript:
+			param.mode ? param.mode :
+			UserPrefs.current.forumPageMode == "Recent" ? "recent" :
+			""	
+		}]]></xp:this.value></xp:dataContext>
+	</xp:this.dataContexts>
+
+	<xc:Layout>
+
+		<xc:ForumHeader />
+		
+		<xp:repeat xp:key="index" var="category" rows="1000" value="${Categories.categoriesByIndex}" loaded="${forumPageMode=='' or forumPageMode=='index'}">
+			<xp:this.facets>
+				<xp:text disableTheme="true" xp:key="header" escape="false">
+					<xp:this.value><![CDATA[
+						<ol class="categories" id="categoriesList">
+					]]></xp:this.value>
+				</xp:text>
+				<xp:text disableTheme="true" xp:key="footer" escape="false">
+					<xp:this.value><![CDATA[
+						</ol>
+					]]></xp:this.value>
+				</xp:text>
+			</xp:this.facets>
+			<xp:panel rendered="#{javascript:category.getForums().size() != 0}">
+				<li class="category" id="categoryItem" title="#{category.title}">
+					<xp:div id="currentCategory">
+						<xp:text value="#{category.title}" tagName="h2" id="categoryTitle"></xp:text>
+
+						<xp:dataTable value="#{category.forums}" var="forum" rows="1000" styleClass="forums">
+<!--							<xp:column styleClass="unread">-->
+<!--								<xp:this.facets><xp:text xp:key="header" value="" disableTheme="true"/></xp:this.facets>-->
+<!--								<xp:image url="/tango/internet-group-chat.png" rendered="#{!forum.isRead}" />-->
+<!--								&#160;-->
+<!--							</xp:column>-->
+							<xp:column styleClass="name">
+								<xp:this.facets><xp:text xp:key="header" value="Title" disableTheme="true"/></xp:this.facets>
+								<xp:link value="/Forums/#{forum.id}">
+									<xp:text tagName="h3" value="#{forum.title}" />
+								</xp:link>
+								<xp:text styleClass="subtitle" value="#{forum.subtitle}" />
+							</xp:column>
+							<xp:column styleClass="latestPost">
+								<xp:this.facets><xp:text xp:key="header" value="Latest Post" disableTheme="true"/></xp:this.facets>
+								Last post by&#160;
+								<xc:Username value="#{forum.latestPostBy}" titleBlock="false" />
+								&#160;
+								<xp:link value="/Topics/#{forum.latestPostTopicId}?page=last#post-#{forum.latestPostId}">
+									<xc:RelativeDateTime value="#{forum.latestPostAt}" />
+								</xp:link>
+							</xp:column>
+						</xp:dataTable>
+					</xp:div>
+				</li>
+			</xp:panel>
+		</xp:repeat>
+	
+		<xc:RecentPosts xp:key="recentPosts" count="15" loaded="${forumPageMode=='recent' and UserPrefs.current.forumRecentMode == 'Posts'}"/>
+		<xc:RecentTopics xp:key="recentTopics" count="15" loaded="${forumPageMode=='recent' and UserPrefs.current.forumRecentMode != 'Posts'}"/>
+	</xc:Layout>
+</xp:view>

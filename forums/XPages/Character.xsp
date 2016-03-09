@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom" xmlns:xe="http://www.ibm.com/xsp/coreex"
+	beforePageLoad="#{pageController.beforePageLoad}" afterPageLoad="#{pageController.afterPageLoad}">
+	<xp:this.dataContexts>
+		<xp:dataContext var="character" value="#{pageController.character}"/>
+		<xp:dataContext var="newChar" value="#{param.newChar == 'true'}"/>
+		<xp:dataContext var="baseURL" value="#{pageController.baseURL}"/>
+	</xp:this.dataContexts>
+	
+	
+	<xc:Layout>
+		<xp:div id="characterInfo">
+			<xp:button id="editCharacter" value="Edit Character" rendered="#{character.isEditable and viewScope.editCharacter != true}" styleClass="editTopicButton">
+				<xp:eventHandler event="onclick" submit="true" refreshMode="partial" refreshId="characterInfo"
+					action="#{pageController.editCharacter}"/>
+			</xp:button>
+		
+			<h1>Character</h1>
+			
+			<xp:div style="float: right" rendered="#{viewScope.editCharacter != true and character.name != ''}">
+				<xc:officialForumAvatar charName="#{character.name}"/>
+			</xp:div>
+			<table class="fields">
+				<xp:tr>
+					<td>Name:</td>
+					<td>
+						<xp:inputText value="#{viewScope.characterName}" id="characterName" rendered="#{viewScope.editCharacter == true}"/>
+						<xp:div rendered="#{viewScope.editCharacter != true }">
+							<xp:link value="http://us.battle.net/wow/en/character/thorium-brotherhood/#{character.name}/" text="#{character.name}"/>
+						</xp:div>
+					</td>
+				</xp:tr>
+				<tr>
+					<td>Player:</td>
+					<td>
+						<xc:Username value="#{character.player.name}" titleBlock="false" rendered="#{viewScope.editCharacter != true}"/>
+						<xp:comboBox id="characterPlayer" value="#{viewScope.characterPlayer}" rendered="#{viewScope.editCharacter == true}">
+							<xp:selectItems value="#{pageController.playerNames}"/>
+						</xp:comboBox>
+					</td>
+				</tr>
+				<xp:tr rendered="#{character.primarySpec != null}">
+					<td>Primary Spec:</td>
+					<td>
+						<xp:link value="http://us.battle.net/wow/en/character/thorium-brotherhood/#{character.name}/talent/primary">
+							<xp:image url="#{javascript:'/' + @LowerCase(character.className.replace(' ', '_')) + '/' + @LowerCase(character.primarySpec.replace(' ', '_')) + '.gif'}"/>
+							<xp:text disableTheme="true" value="#{character.primarySpec}"/>
+						</xp:link>
+					</td>
+				</xp:tr>
+				<xp:tr rendered="#{character.primarySpec != null}">
+					<td>Primary Group:</td>
+					<td>
+						<xp:text value="#{character.primaryGroup}" rendered="#{viewScope.editCharacter != true}"/>
+						<xp:comboBox id="primaryGroup" value="#{viewScope.characterPrimaryGroup}" rendered="#{viewScope.editCharacter == true}">
+							<xp:selectItem itemLabel="None" itemValue=""/>
+							<xp:selectItem itemLabel="Core"/>
+							<xp:selectItem itemLabel="Progression"/>
+						</xp:comboBox>
+					</td>
+				</xp:tr>
+				<xp:tr rendered="#{character.secondarySpec != null}">
+					<td>Secondary Spec:</td>
+					<td>
+						<xp:link value="http://us.battle.net/wow/en/character/thorium-brotherhood/#{character.name}/talent/secondary">
+							<xp:image url="#{javascript:'/' + @LowerCase(character.className.replace(' ', '_')) + '/' + @LowerCase(character.secondarySpec.replace(' ', '_')) + '.gif'}"/>
+							<xp:text disableTheme="true" value="#{character.secondarySpec}"/>
+						</xp:link>
+					</td>
+				</xp:tr>
+				<xp:tr rendered="#{character.secondarySpec != null}">
+					<td>Secondary Group:</td>
+					<td>
+						<xp:text value="#{character.secondaryGroup}" rendered="#{viewScope.editCharacter != true}"/>
+						<xp:comboBox id="secondaryGroup" value="#{viewScope.characterSecondaryGroup}" rendered="#{viewScope.editCharacter == true}">
+							<xp:selectItem itemLabel="None" itemValue=""/>
+							<xp:selectItem itemLabel="Core"/>
+							<xp:selectItem itemLabel="Progression"/>
+						</xp:comboBox>
+					</td>
+				</xp:tr>
+			</table>
+			
+			<xp:button id="lookUpCharacter" value="Look Up Character" style="margin-bottom: 2em; display: block" rendered="#{viewScope.editCharacter == true }">
+				<xp:eventHandler event="onclick" submit="true" refreshMode="partial" refreshId="characterInfo"
+					action="#{pageController.lookUpCharacter}">
+					<xp:this.script><![CDATA[
+						spinner(thisEvent, { disableCaller: true })
+					]]></xp:this.script>
+				</xp:eventHandler>
+			</xp:button>
+			
+			<xp:button id="saveCharacter" value="Save Character" style="margin-bottom: 2em"
+				rendered="#{pageController.saveable}">
+				<xp:eventHandler event="onclick" submit="true" refreshMode="complete"
+					action="#{pageController.saveCharacter}">
+					<xp:this.script><![CDATA[
+						if(dojo.byId("#{id:characterName}").value == "") {
+							XSP.alert("Character name is required.");
+							return false;
+						}
+						spinner(thisEvent, { disableCaller: true });
+					]]></xp:this.script>
+				</xp:eventHandler>
+			</xp:button>
+		</xp:div>
+		
+		<xe:djTabContainer tabStrip="false" doLayout="false" loaded="${param.newChar != 'true'}">
+			<xe:djTabPane id="signupsTab" title="Signups" partialRefresh="true">
+				<xc:table_signups value="#{character.signups}"/>
+			</xe:djTabPane>
+			<xe:djTabPane id="lootsTab" title="Loots" partialRefresh="true">
+				<xc:table_loots readOnly="true" value="#{character.loots}"/>
+			</xe:djTabPane>
+		</xe:djTabContainer>
+		
+	</xc:Layout>
+</xp:view>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom">
+	
+	<xp:eventHandler event="onClientLoad" submit="false">
+		<xp:this.script><![CDATA[
+			setInterval(function() {
+				XSP.partialRefreshGet("#{id:recentTopics}", {
+					onError: function() { },
+					onSuccess: function() { }
+				});
+			}, 1 * 60 * 1000);
+		]]></xp:this.script>
+	</xp:eventHandler>
+	
+<!--	<xc:table_topics value="${Topics.topicsByLatestPostAtDesc}" showSticky="false" showForum="true" showPager="false" count="#{compositeData.count}" id="recentTopics" />-->
+	<xp:repeat id="topics" value="${Topics.topicsByLatestPostAtDesc}" var="topic" rows="#{compositeData.count}">
+		<xp:this.facets>
+			<xp:panel xp:key="header" disableTheme="true">
+				<xp:text escape="false" disableTheme="true"><xp:this.value><![CDATA[
+					<table class="topics recentTopics">
+				]]></xp:this.value></xp:text>
+			</xp:panel>
+			<xp:panel xp:key="footer" disableTheme="true">
+				<xp:text escape="false" disableTheme="true"><xp:this.value><![CDATA[
+					</table>
+				]]></xp:this.value></xp:text>
+				
+			</xp:panel>
+		</xp:this.facets>
+		<tr class="#{javascript: topic.read ? '' : 'unreadForum' }">
+			<td class="unread"><xp:image url="/tango/internet-group-chat.png" rendered="#{!topic.isRead}" styleClass="unreadIcon" /></td>
+			<td class="name">
+				<xp:link value="/Topics/#{topic.id}?page=last#post-#{topic.latestPostId}">
+					<xp:span rendered="#{topic.eventDate != null}">
+						[Event:&#160;
+						<xp:text value="#{topic.eventDate}">
+							<xp:this.converter>
+								<xp:convertDateTime type="both"
+									dateStyle="short" timeStyle="short">
+								</xp:convertDateTime>
+							</xp:this.converter>
+						</xp:text>
+						]&#160;
+					</xp:span>
+					<xp:text value="#{topic.title}"/>
+				</xp:link>
+				<br/>
+				Last Post:&#160;<xc:DateTime value="#{topic.latestPostAt}"/>&#160;by&#160;<xc:Username value="#{topic.latestPostBy}" titleBlock="false"/>
+			</td>
+			<td class="replies">
+				Replies:&#160;<xc:integer value="#{javascript:topic.postCount - 1}"/>
+			</td>
+			<td class="userInfo">
+				Started by&#160;<xc:Username value="#{topic.firstPostBy}" titleBlock="false"/>&#160;<xc:DateTime value="#{topic.firstPostAt}"/>
+				<br/>
+				Forum:&#160;<xp:link value="/Forums/#{topic.forumId}" text="#{topic.forum.title}"/>
+			</td>
+		</tr>
+	</xp:repeat>
+	
+	<xp:pager layout="Previous Group Next" id="pager1" for="topics"></xp:pager>
+	<p class="clear"></p>
+</xp:view>

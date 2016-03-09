@@ -1,0 +1,538 @@
+'++LotusScript Development Environment:2:5:(Options):0:74
+Option Public
+Option Declare
+
+Use "ls.snapps.JSONArray"
+Use "ls.snapps.JSONObject"
+
+'++LotusScript Development Environment:2:5:(Forward):0:1
+Declare Class JSONReader
+Declare Class ArrayEnd
+Declare Class ObjectEnd
+Declare Class Colon
+Declare Class Comma
+
+'++LotusScript Development Environment:2:5:(Declarations):0:10
+%REM
+Copyright 2007, 2008, 2009 SNAPPS (Strategic Net Applications, Inc.)
+
+Licensed under the Apache License, Version 2.0 (the "License"); 
+you may not use this file except in compliance with the License. 
+You may obtain a copy of the License at 
+
+	http://www.apache.org/licenses/LICENSE-2.0 
+
+Unless required by applicable law or agreed to in writing, software 
+distributed under the License is distributed on an "AS IS" BASIS, 
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+See the License for the specific language governing permissions and limitations under the License.
+%END REM
+
+'*************************************************
+'Globalization constants
+Const ERR_INVALID_JSON = "Invalid JSON format."
+Const ERR_MOVE_PAST_LAST = "Invalid JSON format.  Attempting to move past last character."
+Const ERR_MOVE_PAST_FIRST = "Invalid JSON format.  Attempting to move past first character."
+Const ERR_INFINITE_LOOP = "Invalid JSON format.  Parser is inside infinite loop."
+Const ERR_CURRENT_CHAR = "Current character = "
+Const ERR_PREVIOUS_CHAR = "Previous character = "
+Const ERR_REMAINING_STRING = "Remaining string = "
+Const ERR_ATLINE = " at line "
+Const ERR_PREFIX = "ERROR "
+'*************************************************
+
+Class JSONReader
+	'*********************************************************************************************
+	'* Version:	1.0.3
+	'* Purpose:	This class provides a way to parse JSON text into either a
+	'*					JSONObject or JSONArray object or some combination.  However,
+	'*					it will always return some type of object (if the JSON is valid).
+	'*					Both the JSONObject and JSONArray classes have an Items property.
+	'*					You can put the value of the returned object Items property into a variant
+	'*					then step through the results.
+	'*
+	'*					This class uses the ls.class.JSONArray and ls.class.JSONObject classes.
+	'*
+	'*					Example:
+	'*						dim sJSON as String
+	'*						dim jsonReader as JSONReader
+	'*						dim vResults as Variant
+	'*						dim vPieces as Variant
+	'*						set jsonReader = New JSONReader
+	'*						sJSON = |{"a":[15,25],"b":"Some text"}|
+	'*						vResults = jsonReader.Parse(sJSON)		'this is a JSONObject
+	'*						vPieces = vResults.Items
+	'*
+	'* Methods:	Parse(JSON string)
+	'*
+	'* Author:		Troy Reimer (treimer@snapps.com)
+	'*********************************************************************************************
+	
+	Private m_sJSON As String			'the original string
+	Private m_iIndex As Long			'the current character index
+	Private m_iPrevIndex As Long		'the previous character index
+	Private m_iLen As Long				'the current string length
+	Private m_iOrigLen As Long		'the original string length
+	Private m_sChar As String			'the current character
+	Private m_sPrev As String			'the previous character
+	Private m_sWorking As String		'the remaining string
+	Private m_vToken As Variant		'the current token value
+	Private m_sEscapes List As String	'a list of escape characters
+	Private m_bHasOperator As Boolean	'flag indicating a number has an operator
+																'like a date (1/27/2009)
+	
+	Private OBJECT_END As ObjectEnd
+	Private ARRAY_END As ArrayEnd
+	Private COLON As Colon
+	Private COMMA As Comma
+	
+	Public Sub New
+		Set OBJECT_END = New ObjectEnd
+		Set ARRAY_END = New ArrayEnd
+		Set COLON = New Colon
+		Set COMMA = New Comma
+		
+		Me.m_sEscapes(|"|) = |"|
+		Me.m_sEscapes(|\|) = |\|
+		Me.m_sEscapes(|/|) = |/|
+		Me.m_sEscapes(|b|) = Chr(8)
+		Me.m_sEscapes(|f|) = Chr(12)
+		Me.m_sEscapes(|n|) = Chr(10)
+		Me.m_sEscapes(|r|) = Chr(13)
+		Me.m_sEscapes(|t|) = Chr(9)
+	End Sub
+	
+%REM
+Parse
+%END REM
+	Public Function Parse(p_sJSON As String) As Variant
+		'*********************************************************************************************
+		'* Purpose:	This is the only public method for this class.  It returns an object
+		'*					created from parsing the input JSON string.
+		'*
+		'* Input:			p_sJSON:	The JSON string to parse
+		'*
+		'* Output:		Either a JSONArray or JSONObject or combination
+		'*
+		'* Calls:			ParseMe	
+		'*********************************************************************************************
+		Dim sFirstChar As String
+		Dim sLastChar As String
+		
+		On Error Goto ErrorHandler
+		
+		Me.m_sJSON = Trim(p_sJSON)
+		Me.m_iIndex = 0
+		Me.m_iPrevIndex = -1
+		Me.m_iLen = Len(Me.m_sJSON)
+		Me.m_iOrigLen = Len(Me.m_sJSON)
+		Me.m_sWorking = Me.m_sJSON
+		Me.m_sChar = Left(Me.m_sWorking, 1)
+		
+		sFirstChar = Left(Me.m_sJSON, 1)
+		sLastChar = Right(Me.m_sJSON, 1)
+		
+		If (sFirstChar = "[" And sLastChar = "]") Or (sFirstChar = "{" And sLastChar = "}") Then
+			Set Parse = Me.ParseMe
+		Else
+			Set Parse = Nothing
+			Error 1000, ERR_INVALID_JSON
+		End If		
+		
+Done:
+		Exit Function
+		
+ErrorHandler:
+		On Error Goto 0
+		Error Err, Getthreadinfo(10) & ": " & ERR_PREFIX & Err & ": {" & Error$ & "}" & ERR_ATLINE & Erl & ".  " & _
+		ERR_CURRENT_CHAR & "'" & Me.m_sChar & "'; " & _
+		ERR_PREVIOUS_CHAR & "'" & Me.m_sChar & "'; " & _
+		ERR_REMAINING_STRING & "'" & Me.m_sWorking & "'"
+	End Function
+	
+%REM
+ParseMe
+%END REM
+	Private Function ParseMe As Variant
+		'*********************************************************************************************
+		'* Purpose:	This function moves to the next character in the remaining string
+		'*					and returns either a new JSONObject / JSONArray or the value of the
+		'*					current token.
+		'*
+		'* Output:		An object or value for the current token
+		'*
+		'* Calls:			CreateJSONArray
+		'*					CreateJSONObject
+		'*					GetNext
+		'*					GetNumericValue
+		'*					GetPrevious
+		'*					GetStringValue
+		'*					SkipWhiteSpace
+		'*********************************************************************************************
+		Dim sChar As String
+		
+		Call Me.SkipWhiteSpace
+		sChar = Me.m_sChar
+		Call Me.GetNext
+		If Me.m_iIndex <> Me.m_iPrevIndex Then	'check to make sure we are not in a loop
+			Me.m_iPrevIndex = Me.m_iIndex
+			Select Case sChar
+			Case |{|	'begin object
+				Set Me.m_vToken = Me.CreateJSONObject
+				
+			Case |}|	'end object
+				Set Me.m_vToken = Me.OBJECT_END
+				
+			Case |[|	'begin array		
+				Set Me.m_vToken = Me.CreateJSONArray
+				
+			Case |]|	'end array
+				Set Me.m_vToken = Me.ARRAY_END
+				
+			Case |"|	'string
+				Me.m_vToken = Me.GetStringValue
+				
+			Case |,|	'comma
+				Set Me.m_vToken = Me.COMMA
+				
+			Case |:|	'colon
+				Set Me.m_vToken = Me.COLON
+				
+			Case |t|	'true
+				Call Me.MoveNextN(3)
+				Me.m_vToken = True
+				
+			Case |f|	'false
+				Call Me.MoveNextN(4)
+				Me.m_vToken = False			
+				
+			Case |n|	'null
+				Call Me.MoveNextN(3)
+				Me.m_vToken = Null
+				
+			Case Else	'probably a numeric value
+				Call Me.GetPrevious
+				If Isnumeric(Me.m_sChar) Or Me.m_sChar = "-" Then
+					'this is a number
+					Me.m_vToken = Me.GetNumericValue
+				End If
+			End Select
+			
+			If Isobject(Me.m_vToken) Then
+				Set ParseMe = Me.m_vToken
+			Else
+				ParseMe = Me.m_vToken
+			End If
+		Else
+			'error we are in a loop
+			Error 1000, ERR_INFINITE_LOOP
+		End If	
+		
+	End Function
+	
+	
+%REM
+CreateArray
+%END REM
+	Private Function CreateJSONArray As JSONArray
+		'*********************************************************************************************
+		'* Purpose:	This function creates and populates a JSONArray object with all of its
+		'*					values.
+		'*
+		'* Output:		A poplated JSONArray object
+		'*
+		'* Calls:			ParseMe
+		'*					SkipWhiteSpace
+		'*********************************************************************************************
+		Dim jsonArray As JSONArray
+		Dim vValue As Variant		
+		
+		Set jsonArray = New JSONArray
+		Call Me.SkipWhiteSpace		
+		If Me.m_sChar = "{" Or Me.m_sChar = "[" Or Me.m_sChar = "]" Then
+			'value is an object
+			Set vValue = Me.ParseMe
+		Else
+			vValue = Me.ParseMe
+		End If
+		
+		While Typename(Me.m_vToken) <> "ARRAYEND"
+			Call jsonArray.AddItem(vValue)
+			If Typename(Me.ParseMe) = "COMMA" Then
+				Call Me.SkipWhiteSpace
+				If Me.m_sChar = "{" Or Me.m_sChar = "[" Then
+					Set vValue = Me.ParseMe
+				Else
+					vValue = Me.ParseMe
+				End If				
+			End If
+		Wend
+		Set CreateJSONArray = jsonArray
+	End Function
+	
+%REM
+CreateJSONObject
+%END REM
+	Private Function CreateJSONObject As JSONObject
+		'*********************************************************************************************
+		'* Purpose:	This function creates and populates a JSONObject object with all of its
+		'*					values.
+		'*
+		'* Output:		A poplated JSONObject object
+		'*
+		'* Calls:			ParseMe
+		'*					SkipWhiteSpace
+		'*********************************************************************************************
+		Dim jsonObject As JSONObject
+		Dim vKey As Variant
+		
+		Set jsonObject = New JSONObject
+		Call Me.SkipWhiteSpace	
+		vKey = Me.ParseMe
+		
+		While Typename(Me.m_vToken) <> "OBJECTEND"
+			Call Me.ParseMe	'this character should be a colon
+			If Typename(Me.m_vToken) <> "OBJECTEND" Then
+				Call jsonObject.AddItem(Cstr(vKey), Me.ParseMe)
+				If Typename(Me.ParseMe) = "COMMA" Then
+					vKey = Me.ParseMe
+				End If
+			End If
+		Wend
+		Set CreateJSONObject = jsonObject
+	End Function
+	
+%REM
+GetDigits
+%END REM
+	Private Function GetDigits As String
+		'*********************************************************************************************
+		'* Purpose:	This function walks the remaining string until a non-numeric value
+		'*					is found.  It returns the digits found.
+		'*
+		'* Output:		A string of digits
+		'*
+		'* Calls:			GetNext
+		'*********************************************************************************************
+		Dim sReturn As String
+		
+		While Isnumeric(Me.m_sChar) Or Me.m_sChar = "+" Or Me.m_sChar = "-" Or Me.m_sChar = "*" Or Me.m_sChar = "/"
+			If Me.m_sChar = "+" Or Me.m_sChar = "-" Or Me.m_sChar = "*" Or Me.m_sChar = "/" Then
+				Me.m_bHasOperator = True
+			End If
+			sReturn = sReturn & Me.m_sChar
+			Call Me.GetNext
+		Wend	
+		
+		GetDigits = sReturn
+	End Function
+	
+%REM
+GetNext
+%END REM
+	Private Function GetNext As String
+		'*********************************************************************************************
+		'* Purpose:	This function moves the "pointer" to the next character in the string.
+		'*
+		'* Output:		The next character in the string
+		'*********************************************************************************************
+		Me.m_iLen = Me.m_iLen - 1
+		Me.m_iIndex = Me.m_iIndex + 1
+		If Me.m_iLen < 0 Then
+			'for some reason we are trying to move past the last character.
+			Error 1000, ERR_MOVE_PAST_LAST
+		End If
+		If Me.m_iIndex > Me.m_iOrigLen Then
+			Me.m_iIndex = Me.m_iOrigLen
+		End If
+		Me.m_sPrev = Left(Me.m_sWorking, 1)
+		Me.m_sWorking = Right(Me.m_sWorking, Me.m_iLen)
+		Me.m_sChar = Left(Me.m_sWorking, 1)
+		GetNext = Me.m_sChar
+	End Function
+	
+%REM
+GetNumericValue
+%END REM
+	Private Function GetNumericValue As Variant
+		'*********************************************************************************************
+		'* Purpose:	This function returns either a Long or Double value for the numeric
+		'*					string being parsed.
+		'*
+		'* Output:		Long or Double number
+		'*
+		'* Calls:			GetDigits
+		'*					GetNext
+		'*********************************************************************************************
+		Dim sReturn As String
+		Dim bIsFloatingPoint As Boolean
+		Dim vEval As Variant
+		
+		Me.m_bHasOperator = False
+		
+		sReturn = Me.m_sChar
+		Call Me.GetNext
+		sReturn = sReturn & GetDigits
+		
+		If Me.m_bHasOperator Then
+			vEval = Evaluate(sReturn)
+			sReturn = Cstr(vEval(0))
+			bIsFloatingPoint = True
+		Else
+			'check to see if this is a floating point number
+			If Me.m_sChar = "." Then
+				sReturn = sReturn & Me.m_sChar
+				Call Me.GetNext
+				sReturn = sReturn & GetDigits
+				bIsFloatingPoint = True
+			End If
+			
+			If Lcase(Me.m_sChar) = "e" Then
+				sReturn = sReturn & Me.m_sChar
+				Call Me.GetNext
+				If Me.m_sChar = "+" Or Me.m_sChar = "-" Then
+					sReturn = sReturn & Me.m_sChar
+					Call Me.GetNext
+					sReturn = sReturn & GetDigits
+				End If
+				bIsFloatingPoint = True
+			End If
+		End If		
+		
+		'return either a double or long value
+		If bIsFloatingPoint Then
+			GetNumericValue = Cdbl(sReturn)
+		Else
+			GetNumericValue = Clng(sReturn)
+		End If
+		
+		
+	End Function
+	
+%REM
+GetPrevious
+%END REM
+	Private Function GetPrevious As String
+		'*********************************************************************************************
+		'* Purpose:	This function moves the "pointer" to the previous character in the string.
+		'*
+		'* Output:		The previous character in the string
+		'*********************************************************************************************
+		Me.m_iLen = Me.m_iLen + 1
+		Me.m_iIndex = Me.m_iIndex - 1
+		If Me.m_iLen > Me.m_iOrigLen Then
+			Me.m_iLen = Me.m_iOrigLen
+		End If
+		If Me.m_iIndex < 0 Then
+			'for some reason we are trying to move past the first character.
+			Error 1000, ERR_MOVE_PAST_FIRST
+		End If
+		Me.m_sWorking = Me.m_sPrev & Me.m_sWorking
+		Me.m_sChar = Left(Me.m_sWorking, 1)
+		Me.m_sPrev = Mid(Me.m_sJSON, Me.m_iIndex, 1)
+		GetPrevious = Me.m_sChar
+	End Function	
+	
+%REM
+GetStringValue
+%END REM
+	Private Function GetStringValue As String
+		'*********************************************************************************************
+		'* Purpose:	This function returns the string value contained within quotes.
+		'*					It also accounts for unicode characters and escape characters.
+		'*
+		'* Output:		The string value
+		'*
+		'* Calls:			GetNext
+		'*					GetPrevious
+		'*********************************************************************************************
+		Dim sReturn As String
+		Dim sUnicode As String
+		Dim vEval As Variant
+		Dim x As Integer
+		While Me.m_sChar <> |"|
+			If Me.m_sChar = |\| Then
+				Call Me.GetNext
+				If Me.m_sChar = "u" Then	'unicode character
+					sUnicode = ""
+					For x = 1 To 4		'retrieve the four digit unicode
+						Call Me.GetNext
+						If Me.m_sChar = |"| Then
+							Call Me.GetPrevious
+							Exit For
+						Else
+							sUnicode = sUnicode & Me.m_sChar
+						End If
+					Next
+					sReturn = sReturn & Uchr$("&h" & sUnicode)
+				Else
+					'transform if this is an escaped char
+					If Iselement(Me.m_sEscapes(Me.m_sChar)) Then
+						sReturn = sReturn & Me.m_sEscapes(Me.m_sChar)
+					End If					
+				End If
+			Else
+				sReturn = sReturn & Me.m_sChar
+			End If			
+			Call Me.GetNext
+		Wend
+		Call Me.GetNext
+		GetStringValue = sReturn
+	End Function
+	
+%REM
+MoveNextN
+%END REM
+	Private Sub MoveNextN(p_iCount As Integer)
+		'*********************************************************************************************
+		'* Purpose:	This sub moves the "pointer" the specified number of places.
+		'*********************************************************************************************
+		Dim x As Integer
+		For x = 1 To p_iCount
+			Call Me.GetNext
+		Next
+	End Sub
+	
+%REM
+Peek
+%END REM
+	Private Function Peek As String
+		'*********************************************************************************************
+		'* Purpose:	This function looks at  the next character in the string but doesn't move there.
+		'*
+		'* Output:		The next character in the string.
+		'*********************************************************************************************
+		Peek = Left(Me.m_sWorking, 1)
+	End Function
+	
+%REM
+SkipWhiteSpace
+%END REM
+	Private Sub SkipWhiteSpace
+		'*********************************************************************************************
+		'* Purpose:	This sub moves the "pointer" to the next non-space character.
+		'*********************************************************************************************
+		Dim sPeek As String
+		sPeek = Me.Peek		
+		While sPeek = " " Or Asc(sPeek) = 10 Or Asc(sPeek) = 13
+			Call Me.GetNext
+			sPeek = Me.Peek
+		Wend
+	End Sub	
+End Class
+
+'***************************************************************************************************
+' These classes are used as markers to indicate that a stopping point is reached.
+' They are only used for their TypeNames.
+'***************************************************************************************************
+Class ArrayEnd
+End Class
+
+Class ObjectEnd
+End Class
+
+Class Colon
+End Class
+
+Class Comma
+End Class

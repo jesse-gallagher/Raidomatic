@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><note class="filter" maintenanceversion="1.4" replicaid="05257F710059A2B6" version="9.0" xmlns="http://www.lotus.com/dxl">
+<noteinfo noteid="132" sequence="8" unid="D26F54CC5449B13A85257758006B6ECE">
+<created><datetime dst="true">20100706T153327,18-04</datetime></created>
+<modified><datetime>20160309T111904,03-05</datetime></modified>
+<revised><datetime dst="true">20100706T150822,76-04</datetime></revised>
+<lastaccessed><datetime>20160309T111904,02-05</datetime></lastaccessed>
+<addedtofile><datetime>20160309T111904,02-05</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Jesse Gallagher/O=MTC</name></updatedby>
+<wassignedby><name>CN=Jesse Gallagher/O=MTC</name></wassignedby>
+<item name="$DesignerVersion" sign="true"><text>7</text></item>
+<item name="$POID"><datetime dst="true">20080415T145425,69-04</datetime></item>
+<item name="$TITLE" sign="true"><text>Progress Bar</text></item>
+<item name="$PublicAccess" sign="true"><text>1</text></item>
+
+
+<item name="$Class"><text>WoW-Design</text></item>
+<item name="$Flags"><text>s34Q</text></item></note>

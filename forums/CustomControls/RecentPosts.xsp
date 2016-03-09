@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom">
+	
+	<xp:eventHandler event="onClientLoad" submit="false">
+		<xp:this.script><![CDATA[
+			setInterval(function() {
+				XSP.partialRefreshGet("#{id:recentPosts}", {
+					onError: function() { }
+				});
+			}, 1 * 60 * 1000);
+		]]></xp:this.script>
+	</xp:eventHandler>
+	
+	
+	<xp:repeat var="post" rows="#{compositeData.count}" value="#{Posts.postsByDateTimeDesc}" id="recentPosts">
+		<xp:this.facets>
+			<xp:text xp:key="header" escape="false" disableTheme="true"><xp:this.value><![CDATA[
+				<table class="topics">
+			]]></xp:this.value></xp:text>
+			<xp:text xp:key="footer" escape="false" disableTheme="true"><xp:this.value><![CDATA[
+				</table>
+			]]></xp:this.value></xp:text>
+		</xp:this.facets>
+	
+		<xp:tr styleClass="#{javascript:!post.topic.read ? 'unreadForum' : post.topic.isEvent ? 'event' : ''}">
+			<td class="unread"><xp:image url="/tango/internet-group-chat.svg" rendered="#{!post.topic.isRead}"/></td>
+			<td class="name"><xp:link value="/Topics/#{post.topicId}?showPost=#{post.id}#post-#{post.id}"><xp:text value="#{javascript:post.title == '' ? '(Untitled)' : post.title}"/></xp:link></td>
+			<td><xc:Username value="#{post.createdBy}" titleBlock="false" /></td>
+			<td class="latestPost"><xc:DateTime value="#{post.dateTime}"/></td>
+		</xp:tr>
+	</xp:repeat>
+</xp:view>

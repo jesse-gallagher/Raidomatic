@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom" pageTitle="Applications">
+
+	<xc:Layout>
+		<h1>Guild Applications</h1>
+		
+		<xp:pager layout="Previous Group Next" id="pager1" for="guildApplications"
+			partialRefresh="true" />
+		<xp:repeat id="guildApplications" var="topic"
+			rows="#{javascript:Configuration.getDocumentItemValue('Forum Options', 'ForumDataTableRows')[0]}">
+			<xp:this.value><![CDATA[#{javascript:
+				Topics.applications.toArray().sort(function(a, b) {
+					var translateAppStatusToInteger = function(appStatus) {
+						switch(appStatus) {
+							case "New Application": return 0;
+							case "Invited as Initiate": return 1;
+							case "Promoted to Full Member": return 2;
+							case "Invited as Returning Member": return 3;
+							case "Rejected": return 4;
+							case "Declined Invitation": return 5;
+							case "Disappeared": return 6;
+							case "Already a Member": return 7;
+						}
+						return -1;
+					}
+					var statusA = translateAppStatusToInteger(a.applicationStatus);
+					var statusB = translateAppStatusToInteger(b.applicationStatus);
+					return statusA > statusB ? 1 : statusA == statusB ? 0 : -1;
+				});
+			}]]></xp:this.value>
+			<xp:this.facets>
+				<xp:text xp:key="header" escape="false" disableTheme="true"><xp:this.value><![CDATA[
+					<table class="lineup">
+						<tr>
+							<th>Title</th>
+							<th>Status</th>
+							<th>Latest Post</th>
+						</tr>
+				]]></xp:this.value></xp:text>
+				<xp:text xp:key="footer" escape="false" disableTheme="true"><xp:this.value><![CDATA[
+					</table>
+				]]></xp:this.value></xp:text>
+			</xp:this.facets>
+			
+			<tr>
+				<td><xp:link value="/Topics/#{topic.id}" text="#{topic.title}"/></td>
+				<td><xp:text value="#{topic.applicationStatus}"/></td>
+				<td><xc:DateTime value="#{topic.latestPostAt}"/></td>
+			</tr>
+		</xp:repeat>
+		<xp:pager layout="Previous Group Next" id="pager2" for="guildApplications"
+			partialRefresh="true" />
+	</xc:Layout>
+</xp:view>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config>
+  <faces-config-extension>
+    <namespace-uri>http://www.ibm.com/xsp/custom</namespace-uri>
+    <default-prefix>xc</default-prefix>
+    <public>true</public>
+  </faces-config-extension>
+  <composite-component>
+    <component-type>charlist</component-type>
+    <composite-name>charlist</composite-name>
+    <composite-file>/charlist.xsp</composite-file>
+    <composite-extension>
+      <designer-extension>
+        <in-palette>true</in-palette>
+      </designer-extension>
+    </composite-extension>
+    <property>
+      <property-name>value</property-name>
+      <property-class>object</property-class>
+      <display-name>Value</display-name>
+    </property>
+    <property>
+      <property-name>title</property-name>
+      <property-class>string</property-class>
+      <display-name>Title</display-name>
+    </property>
+    <property>
+      <property-name>sectionClass</property-name>
+      <property-class>string</property-class>
+      <display-name>sectionClass</display-name>
+    </property>
+    <property>
+      <property-name>tag</property-name>
+      <property-class>string</property-class>
+    </property>
+  </composite-component>
+</faces-config>

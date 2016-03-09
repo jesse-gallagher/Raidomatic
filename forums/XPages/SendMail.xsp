@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom" xmlns:xe="http://www.ibm.com/xsp/coreex"
+	pageTitle="Send Mail">
+	
+	<xp:this.data>
+		<xp:dominoDocument ignoreRequestParams="true" formName="Memo" action="createDocument" var="memo"/>
+	</xp:this.data>
+
+	<xc:Layout>
+		<table>
+			<tr>
+				<td>To:</td>
+				<td><xp:inputText value="#{memo.SendTo}"/></td>
+			</tr>
+			<tr>
+				<td>Subject:</td>
+				<td><xp:inputText value="#{memo.Subject}"/></td>
+			</tr>
+		</table>
+		
+		<xp:inputRichText value="#{memo.Body}" id="bodyField"/>
+		
+		<xp:button value="Send" id="button1">
+			<xp:eventHandler event="onclick" submit="true" refreshMode="complete">
+				<xp:this.action><![CDATA[#{javascript:
+					memo.getDocument(true).send();
+				}]]></xp:this.action>
+			</xp:eventHandler>
+		</xp:button>
+	</xc:Layout>
+
+</xp:view>

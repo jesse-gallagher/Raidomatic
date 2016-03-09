@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom" xmlns:xe="http://www.ibm.com/xsp/coreex"
+	beforePageLoad="#{pageController.beforePageLoad}" afterPageLoad="#{pageController.afterPageLoad}">
+	<xp:this.dataContexts>
+		<xp:dataContext var="player" value="#{pageController.player}"/>
+		<xp:dataContext var="baseURL" value="#{pageController.baseURL}"/>
+	</xp:this.dataContexts>
+	
+	<xc:Layout>
+		<h1>Player</h1>
+		
+		<table class="fields">
+			<tr>
+				<td>Name</td>
+				<td><xp:inputText value="#{player.name}"/></td>
+			</tr>
+			<tr>
+				<td>Alternate Names</td>
+				<td><xp:inputText value="#{player.alternateNames}" multipleSeparator="," readonly="true" /></td>
+			</tr>
+			<tr>
+				<td>Display Name</td>
+				<td><xp:text value="#{player.dispName}"/></td>
+			</tr>
+		</table>
+		
+		<xe:djTabContainer id="djTabContainer1" doLayout="false" tabStrip="false">
+			<xe:djTabPane title="Characters" id="charactersTab" partialRefresh="true">
+				<xc:table_characters showPlayer="false" value="#{player.characters}"/>
+				
+				<xp:link value="/Character.xsp?newChar=true&amp;player=#{javascript:pageController.urlEncode(player.name)}" text="New Character" styleClass="button" style="margin-top: 1em"
+					rendered="#{pageController.canCreateNewCharacters}"/>
+			</xe:djTabPane>
+			<xe:djTabPane title="Signups" id="signupsTab" partialRefresh="true">
+				<xc:table_signups value="#{player.signups}"/>
+			</xe:djTabPane>
+			<xe:djTabPane title="Loots" id="lootsTab" partialRefresh="true">
+				<xc:table_loots readOnly="true" value="#{player.loots}"/>
+			</xe:djTabPane>
+			<xe:djTabPane title="Loot Tiers" id="lootTiersTab" partialRefresh="false">
+				<xp:dataTable id="lootTiers" value="#{LootTiers.lootTiersByName}" var="lootTier" styleClass="lineup" rows="10000">
+					<xp:column>
+						<xp:this.facets><xp:text xp:key="header" value="Name"/></xp:this.facets>
+						<xp:text value="#{lootTier.name}"/>
+					</xp:column>
+					<xp:column>
+						<xp:this.facets><xp:text xp:key="header" value="Attendances"/></xp:this.facets>
+						<xc:integer value="#{pageController.currentAttendances}"/>
+					</xp:column>
+					<xp:column>
+						<xp:this.facets><xp:text xp:key="header" value="Needs"/></xp:this.facets>
+						<xc:integer value="#{pageController.currentNeedCount}"/>
+					</xp:column>
+					<xp:column>
+						<xp:this.facets><xp:text xp:key="header" value="PLS"/></xp:this.facets>
+						<xp:text value="#{pageController.currentLootRatioTier}"/>
+					</xp:column>
+				</xp:dataTable>
+			</xe:djTabPane>
+			<xe:djTabPane title="Posts" id="postsTab" partialRefresh="true">
+				<xp:dataTable id="postsList" value="#{player.posts}" rows="30" var="post" styleClass="lineup">
+					<xp:column>
+						<xp:this.facets><xp:text xp:key="header" value="Topic"/></xp:this.facets>
+						<xp:link value="/Topics/#{post.topicId}" text="#{post.topic.title}"/>
+					</xp:column>
+					<xp:column>
+						<xp:this.facets><xp:text xp:key="header" value="Created"/></xp:this.facets>
+						<xc:DateTime value="#{post.dateTime}"/>
+					</xp:column>
+				</xp:dataTable>
+				<xp:pager layout="Previous Group Next" id="pager2" for="postsList" partialRefresh="true" />
+				<div style="clear: both"></div>
+			</xe:djTabPane>
+		</xe:djTabContainer>
+		
+	</xc:Layout>
+</xp:view>

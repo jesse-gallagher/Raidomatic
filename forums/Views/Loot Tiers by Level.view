@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='utf-8'?>
+<note class='view' xmlns='http://www.lotus.com/dxl' version='9.0' maintenanceversion='1.4'
+ replicaid='05257F710059B13D'>
+<noteinfo noteid='4f6' unid='F1EBCB2FFB6F418F8525781000748DEC' sequence='11'>
+<created><datetime dst='true'>20110106T171305,08-04</datetime></created>
+<modified><datetime>20160309T111951,00-05</datetime></modified>
+<revised><datetime dst='true'>20141110T172604,75-04</datetime></revised>
+<lastaccessed><datetime>20160309T111950,99-05</datetime></lastaccessed>
+<addedtofile><datetime>20160309T111950,99-05</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Jesse Gallagher/O=Frost</name><name>CN=Jesse Gallagher/O=IKSG</name></updatedby>
+<wassignedby><name>CN=Jesse Gallagher/O=IKSG</name></wassignedby>
+<item name='$FormatNote' summary='true'>
+<rawitemdata type='4'>
+AQALYvJOK0JU07tpBABmdiWF
+</rawitemdata></item>
+<item name='$FormulaClass' sign='true'><text>1</text></item>
+<item name='$TITLE' sign='true'><text>Loot Tiers by Level</text></item>
+<item name='$Index' sign='true'><text/></item>
+<item name='$Formula' summary='true' sign='true'><formula compiled='true'>
+egACACAACgBJdGVtTGV2ZWxzBQAKAEl0ZW1MZXZlbHMDAAUALAAnAAQACgAEAAkABABJdGVtTGV2
+ZWxzTmFtZSRDb25mbGljdCRSRUYABAAEAAAAHgAFAAQARm9ybQEACQBMb290IFRpZXIACgIDAAcA
+CgAEAAlMMVM=
+</formula></item>
+<item name='$Collation' summary='true'>
+<rawitemdata type='2'>
+FwABAABEiGYAAAAKAEl0ZW1MZXZlbHM=
+</rawitemdata></item>
+<item name='$ViewFormat' summary='true' sign='true'>
+<rawitemdata type='5'>
+AQACAAkACEAAAFZDAQAKAAsAIgAAAFAAAQAACgABAAAAAAAAAAICAAAgVkMAAAQABAAAAAAA4gAB
+AAAKAAAAAAAAAAAAAgIAAABJdGVtTGV2ZWxzSXRlbSBMZXZlbHMiAAIAIAAKAEl0ZW1MZXZlbHMF
+AAoASXRlbUxldmVscwMATmFtZU5hbWUmAAEAAAABAQAJAQAACgEBDgoAAAEArSsBAAEAAQAAAAAA
+AAAAAFdDAQUACQAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAP//AAAAAAAAAAAAAAAAAABXQwEBAAkA
+AAAAAAAAAAAAAAAAAAAAAAAEAAAAAAD//wAAAAAAAAAAAAAAAAAAQgAAAAAAAQD///8ABQD///8A
+AQAAAAAAAAAAAAAAAAABAP///wABAP///wAAAAEAAAAAAAEAAAAAAAEAAAAAAAAACAAAAAAAAQA=
+</rawitemdata></item>
+<item name='$Comment' sign='true'><text/></item>
+<item name='$DesignerVersion'><text>8.5</text></item>
+<item name='$V5ACTIONS' sign='true'>
+<rawitemdata type='1'>
+vRwjAAAAAQABAAAAAQAAAAAAAAAAAAAACAACAHn/bAABANTQyAABAAAAAAAJAAAAAAABANTQyAAA
+AB8AAAAAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAPz/OgAAAAAAAQAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAEAAAAAAAAAAAAAAAAAAAA=
+</rawitemdata></item>
+<item name='$Flags'><text>Y</text></item></note>
+

@@ -1,0 +1,17 @@
+.item { min-height: 22px }
+.item .heroic, table.loot .heroic {
+	color: #1EFF00;
+	font-size: 95%;
+	font-style: italic;
+}
+.item img { float: left }
+.item p { margin-left: 23px }
+.item .level { float: right }
+
+table.loot .item { width: 275px }
+table.loot .heroic { float: right }
+
+table.loot .delete { width: 15px }
+table.loot .delete a { color: red; font-weight: bold }
+
+.ratio { width: 75px; text-align: right }

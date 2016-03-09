@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom" xmlns:xe="http://www.ibm.com/xsp/coreex"
+	beforePageLoad="#{pageController.beforePageLoad}" afterPageLoad="#{pageController.afterPageLoad}"
+	pageTitle="Home">
+	
+	<xp:this.data>
+		<xp:dominoView var="shoutboxEntriesView" ignoreRequestParams="true" viewName="Shoutbox Entries" sortColumn="DateTime" sortOrder="descending"/>
+	</xp:this.data>
+	
+	<xp:eventHandler event="onClientLoad" submit="false">
+		<xp:this.script><![CDATA[
+			if(dojo.byId("#{id:shoutboxInput}")) {
+				dojo.byId("#{id:shoutboxInput}").placeholder = "type your message here";
+				dojo.byId("#{id:shoutboxInput}").onkeypress = function(event) {
+					var code = event.charCode ? event.charCode : event.keyCode;
+					if(code == 13) {
+						dojo.byId("#{id:submitShout}").click();
+						return false;
+					}
+				}
+			}
+		]]></xp:this.script>
+	</xp:eventHandler>
+	
+	<xc:Layout contentStyleClass="homePage">
+	
+		<div class="containerBox homeBox" title="Welcome">
+			<xp:text escape="false" value="#{javascript:Configuration.getItemValue('ForumHomeWelcomeText')[0]}"/>
+			<xp:link value="/Application.xsp" text="Click Here to Apply" styleClass="airstripButton applyButton"/>
+		</div>
+		<div class="containerBox homeBox" title="A Little Video About Us">
+			<h1>A Little Video About Us</h1>
+			<iframe width="382" height="255" src="http://www.youtube.com/embed/f-weTULhgq4" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+		</div>
+		<xp:div styleClass="containerBox homeBox" title="Shoutbox" id="shoutboxBox">
+			<h1>Shoutbox</h1>
+			<xp:repeat styleClass="shoutbox-list" id="shoutboxList" value="#{shoutboxEntriesView}" rows="30" var="shout">
+				<div class="shout">
+					<xc:RelativeDateTime value="#{shout.dateTime}"/>&#160;-&#160;<xc:Username value="#{shout.createdBy}" titleBlock="false"/>:&#160;<xp:text value="#{shout.body}"/>
+				</div>
+			</xp:repeat>
+			<xp:inputText styleClass="shoutbox-input" id="shoutboxInput" rendered="#{context.user.name != 'anonymous'}"/>
+			<xp:button value="Submit" id="submitShout" style="display: none">
+				<xp:eventHandler event="onclick" submit="true" refreshMode="partial" refreshId="shoutboxBox"
+					action="#{pageController.submitShout}">
+					<xp:this.onComplete><![CDATA[
+						document.getElementById("#{id:shoutboxInput}").value = "";
+						//XSP.partialRefreshGet("#{id:shoutboxList}");
+					]]></xp:this.onComplete>
+				</xp:eventHandler>
+			</xp:button>
+		</xp:div>
+		<div class="containerBox homeBox" title="Recent Screenshots">
+			<xp:text tagName="h1" value="Recent Screenshots"/>
+			
+			<xp:repeat styleClass="photos" value="#{Posts.screenshotPosts}" var="post" rows="1" first="0" id="photos">
+				<xp:this.facets>
+					<xp:text xp:key="header" escape="false" disableTheme="true" value="&lt;ol&gt;" />
+					<xp:text xp:key="footer" escape="false" disableTheme="true" value="&lt;/ol&gt;" />
+				</xp:this.facets>
+
+				<li>
+					<xp:link value="/Topics/#{post.topicId}?showPost=#{post.id}#post-#{post.id}">
+						<xp:image url="#{post.screenshotUrl}" />
+					</xp:link>
+				</li>
+			</xp:repeat>
+		</div>
+	
+		<div class="homeFooter">
+<!--			<div class="newsFeed" title="Recent Guild Achievements">-->
+<!--				<xe:djContentPane partialRefresh="false">-->
+<!--					<xp:repeat var="newsBit" rows="6">-->
+<!--						<xp:this.value><![CDATA[#{javascript:-->
+<!--							BnetWoWAPI.getNews("Thorium Brotherhood", "The Risen")-->
+<!--						}]]></xp:this.value>-->
+<!--						<xp:this.facets>-->
+<!--							<xp:text xp:key="header" disableTheme="true" escape="false" value="&lt;ol&gt;"/>-->
+<!--							<xp:text xp:key="footer" disableTheme="true" escape="false" value="&lt;/ol&gt;"/>-->
+<!--						</xp:this.facets>-->
+<!--						-->
+<!--						<li>-->
+<!--							<xp:span rendered="#{newsBit.type == 'itemPurchase'}">-->
+<!--								<xc:characterName value="#{newsBit.characterName}"/>&#160;purchased&#160;<xc:itemLink value="#{newsBit.item}" showIcon="false" />-->
+<!--							</xp:span>-->
+<!--							<xp:span rendered="#{newsBit.type == 'itemLoot'}">-->
+<!--								<xc:characterName value="#{newsBit.characterName}"/>&#160;obtained&#160;<xc:itemLink value="#{newsBit.item}" showIcon="false" />-->
+<!--							</xp:span>-->
+<!--							<xp:span rendered="#{newsBit.type == 'playerAchievement'}">-->
+<!--								<xc:characterName value="#{newsBit.characterName}"/>&#160;earned&#160;<xc:achievementLink value="#{newsBit.achievement}" showIcon="false" />-->
+<!--							</xp:span>-->
+<!--						</li>-->
+<!--					</xp:repeat>-->
+<!--				</xe:djContentPane>-->
+<!--			</div>-->
+			<div class="newsFeed" title="Recent WoW News">
+				<xe:djContentPane partialRefresh="true">
+					<xp:repeat value="#{pageController.newsEntries}" var="newsBit" rows="6">
+						<xp:this.facets>
+							<xp:text xp:key="header" disableTheme="true" escape="false" value="&lt;ol&gt;"/>
+							<xp:text xp:key="footer" disableTheme="true" escape="false" value="&lt;/ol&gt;"/>
+						</xp:this.facets>
+						
+						<li><span><xp:link value="#{newsBit.uri}" text="#{newsBit.title}" title="#{newsBit.title}"/></span></li>
+					</xp:repeat>
+				</xe:djContentPane>
+			</div>
+			
+		</div>
+	</xc:Layout>
+</xp:view>

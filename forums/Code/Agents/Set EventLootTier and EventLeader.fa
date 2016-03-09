@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='utf-8'?>
+<note class='filter' xmlns='http://www.lotus.com/dxl' version='9.0' maintenanceversion='1.4'
+ replicaid='05257F710059B13D'>
+<noteinfo noteid='8ce' unid='EEE78C14FF411BA485257908007A7B20' sequence='12'>
+<created><datetime dst='true'>20110911T181749,12-04</datetime></created>
+<modified><datetime>20160309T112000,98-05</datetime></modified>
+<revised><datetime dst='true'>20141110T172632,31-04</datetime></revised>
+<lastaccessed><datetime>20160309T112000,97-05</datetime></lastaccessed>
+<addedtofile><datetime>20160309T112000,97-05</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Jesse Gallagher/O=Frost</name><name>CN=Jesse Gallagher/O=IKSG</name></updatedby>
+<wassignedby><name>CN=Jesse Gallagher/O=IKSG</name></wassignedby>
+<item name='$TITLE' sign='true'><text>Set EventLootTier and EventLeader</text></item>
+<item name='$AssistType' sign='true'><number>65412</number></item>
+<item name='$AssistLastRun' sign='true'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='$AssistDocCount' sign='true'><number>0</number></item>
+<item name='$FlagsExt' sign='true'><text/></item>
+<item name='$AssistFlags' sign='true'><text>Es</text></item>
+<item name='$AssistTrigger'><text>4</text></item>
+<item name='$AssistInfo' sign='true'>
+<rawitemdata type='11'>
+AQAEAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+</rawitemdata></item>
+<item name='$AssistQuery' sign='true'>
+<rawitemdata type='f'>
+gQYAAAAAiP8PAAAAAAAFAExvb3RzAA==
+</rawitemdata></item>
+<item name='$AssistAction' sign='true'>
+<rawitemdata type='10'>
+gQKE/z4BAAAAADQBNAEIADIABQAEAEZvcm0BAAQATG9vdAsCrwAYAAwAAQAAAMIBrgAMAAEAAACu
+AAQAtQMDAAcAEAAKAAkzUzRTNlMxMVMIAFYAAQANAEV2ZW50TG9vdFRpZXIAAQAAAAEAAAABAAYA
+VG9waWNzBQAHAFRvcGljSUQAAQANAEV2ZW50TG9vdFRpZXIAAgAMAQAAAAAAAIMGxAIDAAcAGgAU
+AAkwUlI0UzhTMTBTMTJTMTRTMTZTCABSAAEACwBFdmVudExlYWRlcgABAAAAAQAAAAEABgBUb3Bp
+Y3MFAAcAVG9waWNJRAABAAsARXZlbnRMZWFkZXIAAgAMAQAAAAAAAIMGxAIDAAcAGgATAAkwUjRT
+OFMxMFMxMlMxNFMxNlMAAAAIAGYAAwAHAAwABgAJMFJMMVM=
+</rawitemdata></item>
+<item name='$AssistAction_Ex' sign='true'>
+<rawitemdata type='14'>
+gQI=
+</rawitemdata></item>
+<item name='$Restricted' sign='true'><number>1</number></item>
+<item name='$Flags'><text>f3</text></item>
+<item name='$DesignerVersion'><text>8.5.2</text></item>
+<item name='$AssistRunInfo' summary='true'>
+<rawitemdata type='3'>
+BgAAAgAACADKCAAAAAAAAAUAAAAwAAAAAAAAAAAAAAAAAAAAOwEAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAArt56AAh5JYVzBAAAwNt6AAh5JYUJdVgAR3clhQAAAAAAAAAAAAAAAAAAAAAAAAAAU3RhcnRl
+ZCBydW5uaW5nIGFnZW50ICdTZXQgRXZlbnRMb290VGllciBhbmQgRXZlbnRMZWFkZXInIG9uIDA5
+LzExLzIwMTEgMDY6MjE6NTggUE0NClJ1bm5pbmcgb24gYWxsIGRvY3VtZW50cyBpbiBkYXRhYmFz
+ZTogNDc0MDUgdG90YWwNCkZvdW5kIDExMzkgZG9jdW1lbnQocykgdGhhdCBtYXRjaCBzZWFyY2gg
+Y3JpdGVyaWENCjExMzkgZG9jdW1lbnQocykgd2VyZSBtb2RpZmllZCBieSBmb3JtdWxhDQpEb25l
+IHJ1bm5pbmcgYWdlbnQgJ1NldCBFdmVudExvb3RUaWVyIGFuZCBFdmVudExlYWRlcicgb24gMDkv
+MTEvMjAxMSAwNjoyMjowMyBQTQ0KAA0KiqcInE7dAUdNUJwDLqy1WHOBB6cQCZ7kGebNzzE2q/B5
+CIatGqtjj/xcerDJ2AQ4NxKYQkZG0DAWTsLJmeEuAxMnjewgypNJB9JkeLSSRmUOPigotD2A4YAE
+ti3knJFZF6XHAIAFfCRmTBZEVEDCSBo2Zaak0VMGIKmASBg6YVkFTsK0KTMHIMAARTdHAaALsago
+1ST91xU6fFFGAERCmmgkfuJB4UxUEtZEI/ET5zmRRmgTW3E9kUlIE53ET9SRPIrXk5SwJjqJnwgE
+wIlCQpvYluiJVEKaaCV+opGQJmoJa6KV+Im7/+YktIntyZ5YzLYQAO8EAABe9CAAICnTZqLYo3UD
+Mn4A/nglhQIAAAAOMn4A/nglhQ8yfgD+eCWF7wQAAAAAAAAAAAAAHTtyZgMAAAAAAKoCAAAUBgAG
+AAAAAAAASGACAUmFZAEAYABIVoktOkZWgjJ/unyrAhkANhwAIPCKB3PcpIEDpwydF1NZhCsQXAGC
+mjB2wrxgE8bNmRdPxKgpM4buCQZ4pHGTho7PCQagSGG1AQJD3pApowDAAAAJGAAoAMCgImEaRBkn
+ddqIKSOHShgxbMqWIIHJmzFh2FgJIyetQ6QrEKCDJs2cAAAiMEW/s1OntAl76AMWUGxhivlnCt0/
+3JzZeW5MEbUsZoYicuS8kYMAwMQVfFVxI6fMnDds7JQhA2LMmzZw0rAJQyfNGzcg4A6piNrM0QFC
+QYIpedzQCYMHRFmvwQJEGjdzK6ADQkSQOXPSnHHTpmwOT+COEIbuKCCK4H1zk7kKRATIEEkobMrQ
+KYuKEd4mO7FjCGHzZszavlcp
+</rawitemdata></item>
+<item name='$POID'><datetime dst='true'>20130112T165801,04-04</datetime></item>
+<item name='$AssistVersion'><datetime dst='true'>20141110T172632,53-04</datetime></item></note>
+

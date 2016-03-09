@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><note class="filter" maintenanceversion="1.4" replicaid="05257F710059A2B6" version="9.0" xmlns="http://www.lotus.com/dxl">
+<noteinfo noteid="1fe" sequence="2" unid="3258D69833180CB98525776200643DFE">
+<created><datetime dst="true">20100716T141454,70-04</datetime></created>
+<modified><datetime>20160309T111906,04-05</datetime></modified>
+<revised><datetime dst="true">20121219T070557,16-04</datetime></revised>
+<lastaccessed><datetime>20160309T111906,03-05</datetime></lastaccessed>
+<addedtofile><datetime>20160309T111906,03-05</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Troy Reimer/O=SNA</name><name>CN=Jesse Gallagher/O=MTC</name><name>CN=Jesse Gallagher/O=Frost</name></updatedby>
+<wassignedby><name>CN=Jesse Gallagher/O=Frost</name></wassignedby>
+<item name="$DesignerVersion" sign="true"><text>7</text></item>
+<item name="$TITLE" sign="true"><text>ls.snapps.JSONObject</text></item>
+<item name="$Flags"><text>s34Q</text></item>
+<item name="$PublicAccess" sign="true"><text>1</text></item>
+
+</note>

@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<note default='true' class='icon' xmlns='http://www.lotus.com/dxl' version='9.0'
+ maintenanceversion='1.4' replicaid='05257F710059A2B6'>
+<noteinfo noteid='122' unid='4F24D54C9B584F9A8525775800649661' sequence='1'>
+<created><datetime dst='true'>20100706T141840,97-04</datetime></created>
+<modified><datetime>20160309T111913,73-05</datetime></modified>
+<revised><datetime>20160309T111913,72-05</datetime></revised>
+<lastaccessed><datetime>20160309T111913,72-05</datetime></lastaccessed>
+<addedtofile><datetime>20160309T111903,88-05</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Jesse Gallagher/O=MTC</name><name>CN=Invidia/O=MTC</name><name
+>CN=Arcturus/O=Frost</name><name>CN=Ceres/O=Frost</name><name>CN=Jesse Gallagher/O=Frost</name><name
+>CN=Arcturus/O=Frost</name><name>CN=Ceres/O=Frost</name><name>CN=Jesse Gallagher/O=IKSG</name></updatedby>
+<item name='IconBitmap' summary='true' sign='true'>
+<rawitemdata type='6'>
+AiAgAQAA///////wD///gAH//gAAf/wAAD/4AAAf8AAAD+AAAAfgAAAHwAAAA8AAAAPAAAADgAAA
+AYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAHAAAADwAAAA8AAAAPgAAAH4AAAB/AAAA/4AAAf
+/AAAP/4AAH//gAH///AP//////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAiIiIiAAAAAAAAAAAAAAI
+jPZmZm/IgAAAAAAAAAAIjGZmZmZmZsiAAAAAAAAAjGZmZmZmZmZmyAAAAAAACMZmZmZmZmZmZmyA
+AAAAAIxmZmZmZmZmZmZmyAAAAAjGZmZmZmZmZmZmZmyAAAAIZmbyL2byL2byL2ZmgAAAjGZmIiJm
+IiJmIiJmZsgAAIZmZiIiZiIiZiIiZmZoAADGZmYiImYiImYiImZmbAAI9mZmIiJmIiJmIiJmZm+A
+CGZmZiIiZiIiZiIiZmZmgAhmZmYiImYiImYiImZmZoAIZmZmIiJmIiJmIiJmZmaACGZvIiIiZiIi
+ZiIiIvZmgAhmYiIiImYiImYiIiImZoAIZm8iIi9m8i9m8iIi9maACPZmZmZmZmZmZmZmZmZvgADG
+ZmbyL2byL2byL2ZmbAAAj2ZmIiJmIiJmIiJmZvgAAIxmZiIiZiIiZiIiZmbIAAAI9mbyL2byL2by
+L2ZvgAAACMZmZmZmZmZmZmZmbIAAAACMZmZmZmZmZmZmZsgAAAAACMZmZmZmZmZmZmyAAAAAAACM
+9mZmZmZmZm/IAAAAAAAACIz2ZmZmZm/IgAAAAAAAAAAIiMZmZmyIgAAAAAAAAAAAAACIiIiIAAAA
+AAAAUEECICABAAD/////+A4DgA==
+</rawitemdata></item>
+<item name='$DefaultFrameset' sign='true'><text>Outer Frame</text></item>
+<item name='$DBTheme' sign='true'><text>Lookup.theme</text></item>
+<item name='$AllowPost8HTML' sign='true'><text>1</text></item>
+<item name='$FlagsNoRefresh'><text/></item>
+<item name='$Flags'><text>FKzqN74J21Z</text></item>
+<item name='$Daos'><text>1</text></item>
+<item name='$TITLE'><text>Common Data</text></item></note>
+

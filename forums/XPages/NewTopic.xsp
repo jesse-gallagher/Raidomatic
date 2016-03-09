@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom"
+	beforePageLoad="#{pageController.beforePageLoad}" afterPageLoad="#{pageController.afterPageLoad}"
+	pageTitle="New Topic">
+	
+	<xp:this.dataContexts>
+		<xp:dataContext var="post" value="#{pageController.post}"/>
+		<xp:dataContext var="forum" value="#{pageController.forum}"/>
+		<xp:dataContext var="category" value="#{pageController.category}"/>
+	</xp:this.dataContexts>
+
+	<xp:this.resources>
+		<xp:script src="/JSON.jss" clientSide="false"></xp:script>
+		<xp:script src="/EditorButtons.jss" clientSide="false"></xp:script>
+		<xp:dojoModule name="dijit.Editor" />
+	</xp:this.resources>
+	<xc:Layout contentStyleClass="newTopicPage">
+		<div class="topicHeader">
+			<xp:text value="#{forum.category.title}: #{forum.title}" tagName="h1"/>
+			<xp:text value="New Topic" tagName="h2" />
+		</div>
+
+		<xp:inputText id="postTitle" value="#{post.title}"
+			defaultValue="" style="width: 90%" />
+		<xp:br />
+
+		<xp:checkBoxGroup value="#{viewScope.attributes}"
+			style="border: 0" id="topicAttributes">
+			<xp:selectItem itemLabel="Sticky" />
+			<xp:selectItem itemLabel="Event" />
+			<xp:eventHandler event="onchange" submit="true"
+				refreshMode="partial" refreshId="eventInfoBox">
+			</xp:eventHandler>
+		</xp:checkBoxGroup>
+		
+		<xp:div id="eventInfoBox">
+			<xc:eventSetup value="#{viewScope.topicData}" editable="true">
+				<xp:this.rendered><![CDATA[#{javascript:
+					viewScope.attributes != null && viewScope.attributes.contains('Event')
+				}]]></xp:this.rendered>
+			</xc:eventSetup>
+		</xp:div>
+
+		<xp:inputTextarea id="html" value="#{post.body}"
+			style="width: 70em; height: 20em"
+			dojoType="ibm.xsp.widget.layout.CKEditorWrapper">
+			<xp:this.dojoAttributes>
+				<xp:dojoAttribute name="toolbar">
+					<xp:this.value><![CDATA[#{javascript:
+						JSON.serialize(getRichTextEditorButtons())
+					}]]></xp:this.value>
+				</xp:dojoAttribute>
+				<xp:dojoAttribute name="mode" value="source" />
+			</xp:this.dojoAttributes>
+		</xp:inputTextarea>
+		
+		<table class="fields">
+			<tr>
+				<th scope="row">Tags:</th>
+				<td><xc:postTags value="#{post}"/></td>
+			</tr>
+			<tr>
+				<th scope="row">Photo URL:</th>
+				<td><xp:inputText value="#{post.screenshotUrl}" styleClass="url" /></td>
+			</tr>
+		</table>
+
+		<xp:br />
+		<xp:button id="savePost" value="Save Topic">
+			<xp:eventHandler event="onclick" submit="true" refreshMode="complete" immediate="false" save="true"
+				action="#{pageController.saveTopic}">
+				<xp:this.script><![CDATA[
+					spinner(thisEvent, { disableCaller: true });
+				]]></xp:this.script>
+			</xp:eventHandler>
+		</xp:button>
+	</xc:Layout>
+</xp:view>

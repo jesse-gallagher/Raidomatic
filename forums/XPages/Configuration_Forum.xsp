@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core"
+	xmlns:xc="http://www.ibm.com/xsp/custom" pageTitle="Preferences">
+	<xp:this.navigationRules>
+		<xp:navigationRule outcome="xsp-success" viewId="/Forums.xsp" />
+	</xp:this.navigationRules>
+
+	<xp:this.acl>
+		<xp:acl>
+			<xp:this.entries>
+				<xp:aclEntry name="-Default-" right="NOACCESS"
+					type="DEFAULT">
+				</xp:aclEntry>
+				<xp:aclEntry right="EDITOR" type="ROLE">
+					<xp:this.name><![CDATA[[Admin]]]></xp:this.name>
+				</xp:aclEntry>
+			</xp:this.entries>
+		</xp:acl>
+	</xp:this.acl>
+	
+	<xc:Layout>
+		<h1>Configuration</h1>
+
+		<xp:table styleClass="vertTable">
+			<!--			<xp:tr>-->
+			<!--				<xp:td>Title:</xp:td>-->
+			<!--				<xp:td>-->
+			<!--					<xp:inputText id="forumTitle" defaultValue="#{javascript:Configuration.getDocumentItemValue('Forum Options', 'ForumTitle')[0]}"/>-->
+			<!--				</xp:td>-->
+			<!--			</xp:tr>-->
+			<xp:tr>
+				<xp:td>Posts per Topic Page:</xp:td>
+				<xp:td>
+					<xp:inputText id="postsPerTopicPage"
+						defaultValue="#{javascript:Configuration.getDocumentItemValue('Forum Options', 'ForumPostsPerTopicPage')[0]}">
+						<xp:this.converter>
+							<xp:convertNumber type="number"
+								integerOnly="true" />
+						</xp:this.converter>
+					</xp:inputText>
+				</xp:td>
+			</xp:tr>
+			<xp:tr>
+				<xp:td>Topic Pager Pages:</xp:td>
+				<xp:td>
+					<xp:inputText id="topicPagerPages"
+						defaultValue="#{javascript:Configuration.getDocumentItemValue('Forum Options', 'ForumTopicPagerPages')[0]}">
+						<xp:this.converter>
+							<xp:convertNumber type="number"
+								integerOnly="true" />
+						</xp:this.converter>
+					</xp:inputText>
+				</xp:td>
+			</xp:tr>
+			<xp:tr>
+				<xp:td>Rows per Data Table Page:</xp:td>
+				<xp:td>
+					<xp:inputText id="dataTableRows"
+						defaultValue="#{javascript:Configuration.getDocumentItemValue('Forum Options', 'ForumDataTableRows')[0]}">
+						<xp:this.converter>
+							<xp:convertNumber type="number"
+								integerOnly="true" />
+						</xp:this.converter>
+					</xp:inputText>
+				</xp:td>
+			</xp:tr>
+		</xp:table>
+
+		<xp:button value="Save Configuration" id="save">
+			<xp:eventHandler event="onclick" submit="true"
+				refreshMode="complete" immediate="false" save="false">
+				<xp:this.action><![CDATA[#{javascript:
+					//Configuration.setDocumentItemValue("Forum Options", "ForumTitle", getComponent("forumTitle").getValue())
+					Configuration.setDocumentItemValue("Forum Options", "ForumPostsPerTopicPage", getComponent("postsPerTopicPage").getValue());
+					Configuration.setDocumentItemValue("Forum Options", "ForumTopicPagerPages", getComponent("topicPagerPages").getValue());
+					Configuration.setDocumentItemValue("Forum Options", "ForumDataTableRows", getComponent("dataTableRows").getValue());
+				}]]></xp:this.action>
+			</xp:eventHandler>
+		</xp:button>
+	</xc:Layout>
+
+</xp:view>

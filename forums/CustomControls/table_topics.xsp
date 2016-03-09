@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom">
+	
+	<xp:repeat id="topics" value="#{compositeData.source}" var="topic" rows="#{compositeData.count}">
+		<xp:this.facets>
+			<xp:panel xp:key="header" disableTheme="true">
+				<xp:text escape="false" disableTheme="true"><xp:this.value><![CDATA[
+					<table class="topics recentTopics">
+				]]></xp:this.value></xp:text>
+			</xp:panel>
+			<xp:panel xp:key="footer" disableTheme="true">
+				<xp:text escape="false" disableTheme="true"><xp:this.value><![CDATA[
+					</table>
+				]]></xp:this.value></xp:text>
+				
+				<xc:pager loaded="${compositeData.showPager}" id="pager2" for="topics" pageCount="20" baseURL="#{baseURL}" styleClass="bottomPager"/>
+			</xp:panel>
+		</xp:this.facets>
+		<tr class="#{javascript: @Trim((compositeData.showSticky &amp;&amp; topic.sticky ? 'stickyForum' : '') + ' ' + (topic.read ? '' : 'unreadForum')) }">
+			<td class="unread"><xp:image url="/tango/internet-group-chat.png" rendered="#{!topic.isRead}" styleClass="unreadIcon" /></td>
+			<td class="name">
+				<xp:link value="/Topics/#{topic.id}?page=last#post-#{topic.latestPost.id}">
+					<xp:span rendered="#{topic.eventDate != null}">
+						[Event:&#160;
+						<xp:text value="#{topic.eventDate}">
+							<xp:this.converter>
+								<xp:convertDateTime type="both"
+									dateStyle="short" timeStyle="short">
+								</xp:convertDateTime>
+							</xp:this.converter>
+						</xp:text>
+						]&#160;
+					</xp:span>
+					<xp:text value="#{topic.title}"/>
+				</xp:link>
+				<br/>
+				Last Post:&#160;<xc:DateTime value="#{topic.latestPost.dateTime}"/>&#160;by&#160;<xc:Username value="#{topic.latestPost.createdBy}" titleBlock="false"/>
+			</td>
+			<td class="replies">
+				Replies:&#160;<xc:integer value="#{topic.postCount - 1}"/>
+			</td>
+			<td class="userInfo">
+				Started by&#160;<xc:Username value="#{topic.posts[0].createdBy}" titleBlock="false"/>&#160;<xc:DateTime value="#{topic.posts[0].dateTime}"/>
+				<br/>
+				Forum:&#160;<xp:link value="/Forums/#{topic.forumId}" text="#{topic.forum.title}"/>
+			</td>
+		</tr>
+	</xp:repeat>
+	
+	<xp:pager layout="Previous Group Next" id="pager1" for="topics"></xp:pager>
+	<p class="clear"></p>
+</xp:view>

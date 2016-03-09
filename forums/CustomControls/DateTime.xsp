@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core">
+	<xp:text tagName="#{compositeData.tagName}" styleClass="#{compositeData.styleClass}"
+		disableTheme="${compositeData.disableTheme}" rendered="#{compositeData.value != null}">
+		<xp:this.value><![CDATA[#{javascript:
+			if(compositeData.value.getClass().getName() == "lotus.domino.DateTime" || compositeData.value.getClass().getName() == "lotus.domino.local.DateTime") {
+				return compositeData.value.toJavaDate()
+			}
+			return compositeData.value
+		}]]></xp:this.value>
+		<xp:this.title><![CDATA[#{javascript:
+			var version
+			if(compositeData.value.getClass().getName() == "lotus.domino.DateTime" || compositeData.value.getClass().getName() == "lotus.domino.local.DateTime") {
+				version = WoWVersions.versionForDate(compositeData.value.toJavaDate())
+			} else {
+				version = WoWVersions.versionForDate(compositeData.value)
+			}
+			return "Patch " + version.getVersionNumber() + " (" + version.getPatchName() + ")"
+		}]]></xp:this.title>
+		<xp:this.converter>
+			<xp:convertDateTime type="both" timeStyle="short"/>
+		</xp:this.converter>
+	</xp:text>
+</xp:view>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core">
+	<div class="search">
+		<h2>Search</h2>
+	
+		<xp:inputText id="searchQuery" value="#{viewScope.searchQuery}" defaultValue="#{param.query}" styleClass="query">
+			<xp:eventHandler event="onkeypress" submit="false">
+				<xp:this.script><![CDATA[
+					if(thisEvent.keyCode == 13) {
+						document.getElementById("#{id:searchButton}").click()
+						return false
+					}
+				]]></xp:this.script>
+			</xp:eventHandler>
+		</xp:inputText>
+		<xp:comboBox id="searchScope" value="#{viewScope.searchScope}" defaultValue="*">
+			<xp:selectItem itemLabel="Entire Post" itemValue="*"/>
+			<xp:selectItem itemLabel="Title" itemValue="Title"/>
+			<xp:selectItem itemLabel="Body" itemValue="Body"/>
+			<xp:selectItem itemLabel="Author" itemValue="CreatedBy"/>
+		</xp:comboBox>
+		<xp:button id="searchButton" value="Search">
+			<xp:eventHandler event="onclick" submit="true"
+				refreshMode="complete">
+				<xp:this.action><![CDATA[#{javascript:
+					facesContext.getExternalContext().redirect("/" + database.getFilePath().replace("\\", "/") + "/Search/" + java.net.URLEncoder.encode(viewScope.searchQuery, 'UTF-8') + "?scope=" + java.net.URLEncoder.encode(viewScope.searchScope, 'UTF-8'))
+				}]]></xp:this.action>
+			</xp:eventHandler>
+		</xp:button>
+	</div>
+</xp:view>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core">
+	<xp:text tagName="#{compositeData.tagName}" styleClass="#{compositeData.styleClass}"
+		disableTheme="${compositeData.disableTheme}" rendered="#{compositeData.value != null}">
+		<xp:this.value><![CDATA[#{javascript:
+			var date;
+			if(compositeData.value.getClass().getName() == "lotus.domino.DateTime" || compositeData.value.getClass().getName() == "lotus.domino.local.DateTime") {
+				date = compositeData.value.toJavaDate();
+			}
+			date = compositeData.value;
+			
+			var diff = (@Now().getTime() - date.getTime()) / 1000;
+			var seconds = diff % 60;
+			diff = (diff / 60).intValue();
+			var minutes = diff % 60;
+			diff = (diff / 60).intValue();
+			var hours = diff % 24;
+			diff = (diff / 24).intValue();
+			var days = diff % 365;
+			diff = diff / 365;
+			years = diff.intValue();
+			
+			(
+				years > 0 ? (years + " yr" + (years == 1 ? "" : "s")) :
+				days > 0 ? (days + " day" + (days == 1 ? "" : "s")) :
+				hours > 0 ? (hours + " hr" + (hours == 1 ? "" : "s")) :
+				minutes > 0 ? (minutes + " min" + (minutes == 1 ? "" : "s")) :
+				(seconds.toFixed(0) + " sec")
+			) + " ago"
+		}]]></xp:this.value>
+		<xp:this.title><![CDATA[#{javascript:
+			var version
+			if(compositeData.value.getClass().getName() == "lotus.domino.DateTime" || compositeData.value.getClass().getName() == "lotus.domino.local.DateTime") {
+				version = WoWVersions.versionForDate(compositeData.value.toJavaDate())
+			} else {
+				version = WoWVersions.versionForDate(compositeData.value)
+			}
+			return "Patch " + version.getVersionNumber() + " (" + version.getPatchName() + ")"
+		}]]></xp:this.title>
+	</xp:text>
+</xp:view>

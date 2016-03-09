@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom">
+	<xp:this.dataContexts>
+		<xp:dataContext var="LootTiers" value="#{javascript: new com.raidomatic.model.LootTiers()}"/>
+	</xp:this.dataContexts>
+
+	<xp:this.beforePageLoad><![CDATA[#{javascript:
+		viewScope.currentLoot = new com.raidomatic.model.Loot()
+		viewScope.currentLoot.setTopicId(topic.getId())
+	}]]></xp:this.beforePageLoad>
+	
+	<xp:table styleClass="lineup loot">
+		<xp:tr>
+			<th></th>
+			<th>Item Name</th>
+			<th>ilvl</th>
+			<th>Result</th>
+			<th>Character</th>
+			<th>Tier</th>
+		</xp:tr>
+		
+		<xp:repeat var="loot" indexVar="lootIndex" value="#{topic.loots}">
+			<xp:tr styleClass="#{javascript:lootIndex % 2 == 1 ? 'even' : 'odd'}">
+				<xp:td styleClass="delete" id="td1">
+					<xp:link id="editLoot" rendered="#{loot.isEditable}" styleClass="inPlaceEditButton">
+						E
+						<xp:eventHandler event="onclick" submit="true"
+							refreshMode="partial" execMode="partial" refreshId="#{compositeData.refreshId}">
+							<xp:this.action><![CDATA[#{javascript:
+								viewScope.currentLoot = loot
+								viewScope.lootItemName = loot.itemName
+								viewScope.lootResult = loot.result
+								viewScope.lootCharacterName = loot.characterName
+								viewScope.lootOutOfGuild = loot.outOfGuildCharacter
+								viewScope.lootTierId = loot.lootTierId
+							}]]></xp:this.action>
+						</xp:eventHandler>
+					</xp:link>
+				</xp:td>
+				<xp:td styleClass="item">
+<!--					<xp:image-->
+<!--						url="http://static.wowhead.com/images/wow/icons/small/#{javascript:loot.item.iconName.toLowerCase()}.jpg"-->
+<!--						width="18" height="18" />-->
+<!--					<xp:link-->
+<!--						value="/items/#{loot.item.id}"-->
+<!--						rel="http://www.wowhead.com/item=#{loot.item.id}"-->
+<!--						styleClass="#{loot.item.qualityName}">-->
+<!--						<xp:text value="#{loot.item.name}" />-->
+<!--					</xp:link>-->
+					<xc:itemLink value="#{loot.item}"/>
+<!--					<xp:text styleClass="heroic"-->
+<!--						rendered="#{loot.item.Difficulty == 'h'}" value="Heroic" />-->
+				</xp:td>
+				<xp:td>
+					<xp:text value="#{loot.item.level}">
+						<xp:this.converter>
+							<xp:convertNumber integerOnly="true"></xp:convertNumber>
+						</xp:this.converter>
+					</xp:text>
+				</xp:td>
+				<xp:td>
+					<xp:text value="#{loot.result}" />
+				</xp:td>
+				<xp:td>
+					<xp:text value="#{javascript:loot.characterName == '' ? loot.outOfGuildCharacter : loot.characterName}" />
+				</xp:td>
+				<xp:td>
+					<xp:text value="#{javascript:loot.lootTierId == '' ? '' : loot.lootTier.name}" />
+				</xp:td>
+			</xp:tr>
+		</xp:repeat>
+	</xp:table>
+
+	<xp:div rendered="#{compositeData.topic.isEditable}">
+		<xp:br />
+		<hr />
+		<xp:br />
+	
+		<xp:text tagName="h3">
+			<xp:this.value><![CDATA[#{javascript:
+				viewScope.currentLoot.docExists ? "Modify Loot" : "Add Loot"
+			}]]></xp:this.value>
+		</xp:text>
+	
+		<xp:div id="addLoot">
+			<xp:table styleClass="fields">
+				<xp:tr>
+					<xp:td>Item:</xp:td>
+					<xp:td>
+						<xp:inputText style="width: 20em"
+							value="#{viewScope.lootItemName}" autocomplete="off"
+							id="lootItemName">
+							<xp:typeAhead var="iname" valueMarkup="true"
+								mode="partial" minChars="2" ignoreCase="true">
+								<xp:this.valueList><![CDATA[#{javascript:
+									try {
+										var items = Items.search("FIELD Name=*" + iname + "*").toVector()
+										
+										try {
+											items.sort(function(a, b) { return a.name < b.name ? -1 : a.name == b.name ? 0 : 1 })
+										} catch(e) {
+											print("Error while sorting items in raidcomp_loot.xsp")
+										}
+										
+										var result = "<ul class='itemlist'>"
+										for(var i = 0; i < items.size(); i++) {
+												
+											result += "<li><div class='item " + items[i].qualityName + "'>" +
+												"<img src='http://static.wowhead.com/images/wow/icons/small/" + items[i].iconName + ".jpg' width='18' height='18' class='icon' />" +
+												"<p><a href='javascript:void(0)' rel='item=" + items[i].id + "'>" + 
+												"<span class='informal'><span class='level'>" + items[i].level + "</span></span>" +
+												items[i].name +
+												(items[i].heroic ? "<br /><span style='display: none'> (</span><span class='heroic'>Heroic</span><span style='display: none'>)</span>" : "") +
+												(items[i].raidFinder ? "<br /><span style='display: none'> (</span><span class='heroic'>Raid Finder</span><span style='display: none'>)</span>" : "") +
+												
+												"</a></p>" +
+											"</div></li>"
+										}
+										result += "</ul>"
+										
+										return result
+									} catch(e) { e.printStackTrace() }
+								}]]></xp:this.valueList>
+							</xp:typeAhead>
+							<xp:eventHandler event="onkeypress"
+								submit="false">
+								<xp:this.script><![CDATA[if(thisEvent.keyCode == 13) { document.getElementById("#{id:lootAdd}").click(); return false }]]></xp:this.script>
+							</xp:eventHandler>
+							<xp:eventHandler event="onchange" submit="true" refreshMode="partial" refreshId="lootLineupBox"/>
+						</xp:inputText>
+					</xp:td>
+				</xp:tr>
+		
+				<xp:tr>
+					<xp:td>Result:</xp:td>
+					<xp:td>
+						<xp:comboBox id="lootResult"
+							value="#{viewScope.lootResult}">
+							<xp:selectItem itemLabel="- Choose -" itemValue="" />
+							<xp:selectItem itemLabel="Need"></xp:selectItem>
+							<xp:selectItem itemLabel="Greed"></xp:selectItem>
+							<xp:selectItem itemLabel="Bank"></xp:selectItem>
+							<xp:selectItem itemLabel="Shard"></xp:selectItem>
+							<xp:selectItem itemLabel="Vendor"></xp:selectItem>
+							<xp:selectItem itemLabel="Out-of-Guild Need" />
+							<xp:selectItem itemLabel="Out-of-Guild Greed" />
+							<xp:selectItem itemLabel="Banked Need"/>
+							<xp:selectItem itemLabel="Banked Greed"/>
+							<xp:eventHandler event="onchange" submit="true" refreshMode="partial" refreshId="#{compositeData.refreshId}">
+								<xp:this.script><![CDATA[
+									spinner(thisEvent)
+								]]></xp:this.script>
+							</xp:eventHandler>
+						</xp:comboBox>
+					</xp:td>
+				</xp:tr>
+		
+				<xp:tr rendered="#{viewScope.lootResult == 'Out-of-Guild Need' || viewScope.lootResult == 'Out-of-Guild Greed'}">
+					<xp:td>Out-of-Guild Character</xp:td>
+					<xp:td>
+						<xp:inputText value="#{viewScope.lootOutOfGuild}" />
+					</xp:td>
+				</xp:tr>
+				
+				<xp:tr rendered="#{viewScope.lootResult == 'Banked Need' || viewScope.lootResult == 'Banked Greed'}">
+					<xp:td>Removed:</xp:td>
+					<xp:td>
+						<xp:inputText value="#{viewScope.lootBankRemoval}" defaultValue="#{javascript:@Today()}">
+							<xp:this.converter>
+								<xp:convertDateTime type="date"
+									dateStyle="short">
+								</xp:convertDateTime>
+							</xp:this.converter>
+						</xp:inputText>
+					</xp:td>
+				</xp:tr>
+				<xp:tr rendered="#{viewScope.lootResult == 'Banked Need' || viewScope.lootResult == 'Banked Greed'}">
+					<xp:td>Removed By:</xp:td>
+					<xp:td>
+						<xp:inputText value="#{viewScope.lootBankRemovalBy}" defaultValue="#{context.user.name}" />
+					</xp:td>
+				</xp:tr>
+		
+				<xp:tr>
+					<xp:td>Loot Tier:</xp:td>
+					<xp:td>
+						<xp:comboBox id="lootTier" value="#{viewScope.lootTierId}"
+							defaultValue="#{topic.eventLootTier}">
+							<xp:selectItem itemLabel="- Choose -" itemValue="" />
+							<xp:selectItems>
+								<xp:this.value><![CDATA[#{javascript:
+									var result = []
+									var tiers = LootTiers.getLootTiersByName().toVector()
+									for(var i = 0; i < tiers.length; i++) {
+										result.push(tiers[i].name + "|" + tiers[i].id)
+									}
+									return result
+								}]]></xp:this.value>
+							</xp:selectItems>
+							<xp:eventHandler event="onchange" submit="true" refreshMode="partial" refreshId="addLoot">
+								<xp:this.script><![CDATA[
+									spinner(thisEvent)
+								]]></xp:this.script>
+							</xp:eventHandler>
+						</xp:comboBox>
+					</xp:td>
+				</xp:tr>
+				
+				<xp:tr rendered="#{viewScope.lootResult == 'Need' || viewScope.lootResult == 'Greed' || viewScope.lootResult == 'Banked Need' || viewScope.lootResult == 'Banked Greed'}">
+					<xp:td>Show:</xp:td>
+					<xp:td>
+						<xp:radioGroup id="lootSignupListFilter" value="#{viewScope.lootSignupListFilter}" defaultValue="Eligible">
+							<xp:selectItem itemLabel="Eligible"/>
+							<xp:selectItem itemLabel="All"/>
+							
+							<xp:eventHandler event="onchange" submit="true" refreshMode="partial" refreshId="lootLineupBox"/>
+						</xp:radioGroup>
+					</xp:td>
+				</xp:tr>
+		
+				<xp:tr>
+					<xp:td style="background-color: transparent" />
+					<xp:td />
+				</xp:tr>
+			</xp:table>
+		
+			<xp:div id="lootLineupBox">
+				<xp:dataTable styleClass="lineup striped" var="charLine" indexVar="charLineIndex"
+					rendered="#{viewScope.lootResult == 'Need' || viewScope.lootResult == 'Greed' || viewScope.lootResult == 'Banked Need' || viewScope.lootResult == 'Banked Greed'}">
+					<xp:this.value><![CDATA[#{javascript:
+						try {
+							var list = compositeData.topic.getSignupsSorted()
+							var item = viewScope.lootItemName == "" ? null : Items.getByLookupName(viewScope.lootItemName)
+							if(item != null && viewScope.lootSignupListFilter != "All") {
+								return item.filterSignupList(list)
+							} else {
+								return list
+							}
+						} catch(e) {
+							print("Error while sorting signups in raidcomp_loot.xsp")
+							print(e)
+						} 
+					}]]></xp:this.value>
+					
+					<xp:column>
+						<xp:radio groupName="lootCharacterName"
+							id="charName" value="#{viewScope.lootCharacterName}"
+							selectedValue="#{charLine.assignedCharacter}" skipContainers="2" />
+					</xp:column>
+					<xp:column>
+						<xp:this.facets><xp:text xp:key="header" value="Name"/></xp:this.facets>
+						<xc:Username titleBlock="false" value="#{charLine.player.shortName}"/>
+					</xp:column>
+					<xp:column>
+						<xp:this.facets><xp:text xp:key="header" value="Character"/></xp:this.facets>
+						<xc:charlist_character name="#{charLine.character.name}" className="#{charLine.character.className}" spec="#{charLine.spec.name}" hideTag="true" />
+					</xp:column>
+					<xp:column styleClass="ratio">
+						<xp:this.facets><xp:text xp:key="header" value="Attendances"/></xp:this.facets>
+						<xc:integer rendered="#{viewScope.lootTierId != null &amp;&amp; viewScope.lootTierId != ''}">
+							<xp:this.value><![CDATA[#{javascript:
+								if(viewScope.lootTierId == "" || viewScope.lootTierId == null) { return; }
+								
+								return charLine.player.getAttendanceCountForLootTier(LootTiers.getById(viewScope.lootTierId));
+							}]]></xp:this.value>
+						</xc:integer>
+					</xp:column>
+					<xp:column styleClass="ratio">
+						<xp:this.facets><xp:text xp:key="header" value="Needs"/></xp:this.facets>
+						<xc:integer rendered="#{viewScope.lootTierId != null &amp;&amp; viewScope.lootTierId != ''}">
+							<xp:this.value><![CDATA[#{javascript:
+								if(viewScope.lootTierId == "" || viewScope.lootTierId == null) { return; }
+								
+								return charLine.player.getNeedCountForLootTier(LootTiers.getById(viewScope.lootTierId));
+							}]]></xp:this.value>
+						</xc:integer>
+					</xp:column>
+					<xp:column styleClass="ratio">
+						<xp:this.facets><xp:text xp:key="header" value="Ratio"/></xp:this.facets>
+						<xp:text rendered="#{javascript:viewScope.lootTierId != null &amp;&amp; viewScope.lootTierId != ''}">
+							<xp:this.value><![CDATA[#{javascript:
+								if(viewScope.lootTierId == "" || viewScope.lootTierId == null) { return; }
+								
+								var needs = charLine.player.getNeedCountForLootTier(LootTiers.getById(viewScope.lootTierId));
+								var attendance = charLine.player.getAttendanceCountForLootTier(LootTiers.getById(viewScope.lootTierId));
+								if(attendance == 0) { return ""; }
+								var tier = RaidSupport.getLootTier((needs / attendance * 100).toFixed(0))
+		 						tier.min + (tier.max ? "-" + tier.max : "+")
+	 						}]]></xp:this.value>
+						</xp:text>
+					</xp:column>
+					<xp:column>
+						<xp:this.facets><xp:text xp:key="header" value="Category"/></xp:this.facets>
+						<xp:text rendered="#{javascript:viewScope.lootTierId != null &amp;&amp; viewScope.lootTierId != ''}">
+							<xp:this.value><![CDATA[#{javascript:
+								if(viewScope.lootTierId == "" || viewScope.lootTierId == null) { return; }
+								
+								var needs = charLine.player.getNeedCountForLootTier(LootTiers.getById(viewScope.lootTierId));
+								var attendance = charLine.player.getAttendanceCountForLootTier(LootTiers.getById(viewScope.lootTierId));
+								
+								if(attendance == 0) { return ""; }
+								var tier = RaidSupport.getLootTier((needs / attendance * 100).toFixed(0))
+		 						tier.name
+	 						}]]></xp:this.value>
+						</xp:text>
+					</xp:column>
+					<xp:column>
+						<xp:this.facets><xp:text xp:key="header" value="Main Spec"/></xp:this.facets>
+						<xp:text><xp:this.value><![CDATA[#{javascript:
+							var item = viewScope.lootItemName == "" ? null : Items.getByLookupName(viewScope.lootItemName);
+							var spec = charLine.character.primarySpecObject;
+							if(spec == null || item == null) { return ""; }
+							if(item.matchesMainFormula(spec)) {
+								return "Yes";
+							} else if(item.matchesOffFormula(spec)) {
+								return "Maybe";
+							}
+							return "-";
+						}]]></xp:this.value></xp:text>
+					</xp:column>
+					<xp:column>
+						<xp:this.facets><xp:text xp:key="header" value="Secondary Spec"/></xp:this.facets>
+						<xp:text><xp:this.value><![CDATA[#{javascript:
+							var item = viewScope.lootItemName == "" ? null : Items.getByLookupName(viewScope.lootItemName);
+							var spec = charLine.character.secondarySpecObject;
+							if(spec == null || item == null) { return ""; }
+							if(item.matchesMainFormula(spec)) {
+								return "Yes";
+							} else if(item.matchesOffFormula(spec)) {
+								return "Maybe";
+							}
+							return "-";
+						}]]></xp:this.value></xp:text>
+					</xp:column>
+				</xp:dataTable>
+			</xp:div>
+		
+			<p>
+				<xp:button id="lootAdd">
+					<xp:this.value><![CDATA[#{javascript:
+						viewScope.currentLoot.docExists ? "Save" : "Add"
+					}]]></xp:this.value>
+					<xp:eventHandler event="onclick" submit="true"
+						refreshMode="partial" refreshId="#{compositeData.refreshId}">
+						<xp:this.action><![CDATA[#{javascript:
+							if(viewScope.lootItemName == '') { return }
+							
+							//var item = Items.getByName(viewScope.lootItemName)
+							//if(item == null) { return }
+							
+							var newLoot = viewScope.currentLoot
+							newLoot.setItemName(viewScope.lootItemName)
+							newLoot.setLootTierId(topic.getEventLootTier())
+							newLoot.setResult(viewScope.lootResult)
+							newLoot.setLootTierId(viewScope.lootTierId)
+							if(newLoot.result == "Need" || newLoot.result == "Greed" || viewScope.lootResult == 'Banked Need' || viewScope.lootResult == 'Banked Greed') {
+								newLoot.setCharacterName(viewScope.lootCharacterName)
+							} else {
+								newLoot.setCharacterName("")
+							}
+							if(newLoot.result == "Out-of-Guild Need" || newLoot.result == "Out-of-Guild Greed") {
+								newLoot.setOutOfGuildCharacter(viewScope.lootOutOfGuild)
+							} else {
+								newLoot.setOutOfGuildCharacter("")
+							}
+							if(newLoot.result == "Banked Need" || newLoot.result == "Banked Greed") {
+								newLoot.setBankRemoval(viewScope.lootBankRemoval);
+								newLoot.setBankRemovalBy(viewScope.lootBankRemovalBy);
+							} else {
+								newLoot.setBankRemoval(null);
+								newLoot.setBankRemovalBy("");
+							}
+							viewScope.currentLoot.save()
+							
+							viewScope.lootItemName = ""
+							viewScope.lootCharacterName = ""
+							viewScope.lootOutOfGuild = ""
+							viewScope.lootResult = ""
+							viewScope.lootBankRemoval = ""
+							viewScope.lootBankRemovalBy = ""
+							
+							viewScope.currentLoot = new com.raidomatic.model.Loot()
+							viewScope.currentLoot.setTopicId(topic.getId())
+						}]]></xp:this.action>
+						<xp:this.script><![CDATA[
+							spinner(thisEvent)
+						]]></xp:this.script>
+					</xp:eventHandler>
+				</xp:button>
+				<xp:button id="lootCancel" value="Cancel">
+					<xp:eventHandler event="onclick" submit="true"
+						refreshMode="partial" refreshId="#{compositeData.refreshId}">
+						<xp:this.action><![CDATA[#{javascript:
+							
+							viewScope.lootItemName = ""
+							viewScope.lootCharacterName = ""
+							viewScope.lootOutOfGuild = ""
+							viewScope.lootResult = ""
+							viewScope.lootBankRemoval = ""
+							viewScope.lootBankRemovalBy = ""
+							
+							viewScope.currentLoot = new com.raidomatic.model.Loot()
+							viewScope.currentLoot.setTopicId(topic.getId())
+						}]]></xp:this.action>
+						<xp:this.script><![CDATA[
+							spinner(thisEvent)
+						]]></xp:this.script>
+					</xp:eventHandler>
+				</xp:button>
+				
+				<xp:button id="button1" value="Delete" styleClass="red" rendered="#{viewScope.currentLoot.docExists}">
+					<xp:eventHandler event="onclick" submit="true"
+						refreshMode="partial" refreshId="#{compositeData.refreshId}">
+						<xp:this.action><![CDATA[#{javascript:
+							viewScope.currentLoot.remove()
+							
+							viewScope.lootItemName = ""
+							viewScope.lootCharacterName = ""
+							viewScope.lootOutOfGuild = ""
+							viewScope.lootResult = ""
+							viewScope.lootBankRemoval = ""
+							viewScope.lootBankRemovalBy = ""
+							
+							viewScope.currentLoot = new com.raidomatic.model.Loot()
+							viewScope.currentLoot.setTopicId(topic.getId())
+						}]]></xp:this.action>
+						<xp:this.script><![CDATA[
+							if(confirm("Are you sure you want to delete this loot?")) {
+								spinner(thisEvent, true)
+								return true
+							}
+							return false
+						]]></xp:this.script>
+					</xp:eventHandler>
+				</xp:button>
+			</p>
+		</xp:div>
+	</xp:div>
+</xp:view>
